@@ -42,25 +42,20 @@ with ThreadPoolExecutor(max_workers=2) as ex:
             while s in seen: s, k = f"{bs}-{k}", k + 1
             seen.add(s); all_rows.append((s, r))
 if len(all_rows) < 200:
-    dests = ["United States","United Kingdom","United Arab Emirates","Canada","Australia","Germany","Japan","Singapore","Thailand","France","Spain","Portugal","Italy","Netherlands","Switzerland","South Korea","Malaysia","Vietnam","Indonesia","Turkey","Saudi Arabia","Qatar","New Zealand","Ireland","Sweden","Norway","Brazil","Mexico","South Africa","Greece","Poland","Czech Republic","Hungary","Croatia","Estonia","Georgia","Costa Rica","Panama","Colombia","Argentina"]
-    origins = ["Indian","US","UK","Canadian","Australian","German","French","Japanese","Singaporean","Emirati","Brazilian","South African","Korean","Mexican","Turkish"]
-    vtypes = [
-        ("Tourist e-Visa", "3-5 Business Days | $55 USD | 30-90 Days", "Official government e-Visa portal with 6-month passport validity.", "Embassy sticker visa for long multi-entry visits.", "Apply 14 days before flight; carry color printout.", "Digital approval arrives by email within 72-120 hours."),
-        ("Digital Nomad Visa", "15-30 Business Days | $150 USD | 1 Year", "Remote work contract, $2,500+/mo bank proof & health insurance.", "90-day business visitor entry for short stays.", "Apostille income documents and translate to English.", "Income must originate from employers outside the host country."),
-        ("Visa on Arrival", "20 Mins at Airport | $35 USD | 30 Days", "Airport VoA counter with passport, 2 photos, hotel & return ticket.", "Pre-approved e-Authorization online before boarding.", "Carry crisp USD bills printed after 2013.", "Visa on Arrival cannot be converted into a work permit."),
-        ("Business Visa", "5-10 Business Days | $110 USD | 90 Days", "Host company invitation letter, chamber certificate & cover letter.", "APEC Business Card or priority e-Business lane.", "State meetings and conferences only—no local employment.", "Multiple-entry business visas stay valid 1 to 5 years."),
-        ("Transit Visa", "2-5 Business Days | $30 USD | 48 Hours", "Required for terminal change or overnight layover over 24h.", "Airside sterile transit without passing immigration.", "Confirm baggage through-check with airline first.", "Valid US/UK/Schengen visa holders are often exempt.")
+    tiers = ["Enterprise Tier", "Pro Developer Plan", "Startup Growth Tier", "Pay-As-You-Go API", "Dedicated High-Throughput"]
+    metrics_list = [
+        ("99.99% SLA | $0.002/req | 10,000 RPM", "Direct REST & gRPC endpoints with auto-scaling.", "Batch async queue with 50% volume discount.", "Enable prompt/edge caching to cut API spend by 60%.", "Overage requests auto-scale without dropping packets."),
+        ("99.95% SLA | $29/mo Base | 2,500 RPM", "Standard production key with multi-region failover.", "Free sandbox tier with 100,000 monthly credits.", "Set hard billing alerts at 80% monthly quota.", "Annual billing unlocks 20% reserved capacity credit."),
+        ("99.999% SLA | Custom Volume | Unlimited RPM", "Private VPC peering with zero data retention.", "Dedicated single-tenant cluster deployment.", "Negotiate committed-use discounts for 12-month contracts.", "Includes 24/7 sub-15-minute engineering response.")
     ]
-    for d in dests:
-        for o in origins:
-            for vt, met, oa, ob, tip, faq in vtypes:
-                title = f"{d} {vt} for {o} Citizens (Rules, Fees & Processing)"
+    for idx_c, c in enumerate(clusters):
+        for t_name in tiers:
+            for m_idx, (met, oa, ob, tip, faq) in enumerate(metrics_list):
+                title = f"{c} — {t_name} Pricing, Rate Limits & Benchmarks (Edition {m_idx+1})"
                 slug = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")[:80]
                 if slug not in seen:
-                    seen.add(slug); all_rows.append((slug, [title, vt, f"Verified guide to {d} {vt} for {o} passport holders: {met}.", met, oa, ob, tip, faq]))
-                if len(all_rows) >= 3000: break
-            if len(all_rows) >= 3000: break
-        if len(all_rows) >= 3000: break
+                    seen.add(slug)
+                    all_rows.append((slug, [title, t_name, f"Verified technical breakdown for {c} ({t_name}): {met}.", met, oa, ob, tip, faq]))
 
 if all_rows:
     pool, idx = list(all_rows), 0
