@@ -8,9 +8,6 @@ from google.genai import types
 from pydantic import BaseModel
 
 api_key = os.environ.get("GEMINI_API_KEY", "").strip()
-if not api_key:
-    raise RuntimeError("❌ GEMINI_API_KEY secret is empty or missing in GitHub Secrets!")
-
 client = genai.Client(api_key=api_key)
 site_url = os.environ["SITE_URL"].rstrip("/")
 kingdom_topic = os.environ["KINGDOM_TOPIC"]
@@ -40,7 +37,7 @@ Each entry must have a clean URL-friendly slug (lowercase letters and hyphens on
 
 response = None
 last_err = None
-for model_name in ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"]:
+for model_name in ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-4-hydrogen"]:
     try:
         print(f"Trying model: {model_name}...")
         response = client.models.generate_content(
