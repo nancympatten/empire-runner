@@ -90,7 +90,7 @@ sname = " ".join(w.capitalize() for w in dslug.split("-"))
 def render(idx):
     s, r = all_rows[idx]
     t, c, sm, met, oa, ob, tip, faq = [html.escape(x) for x in r]
-    raw_t, raw_c, raw_sm, raw_faq = r
+    raw_t, raw_c, raw_sm, _, _, _, _, raw_faq = r
     can = f"{site_url}/guide/{s}.html"
     peers = cmap.get(raw_c, [])
     rels = "".join(f"<li><a href='/guide/{next(iter(all_rows[p]))}.html'>{html.escape(next(iter(all_rows[p][1])))}</a></li>" for p in peers[:6] if p != idx)
