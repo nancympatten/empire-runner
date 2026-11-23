@@ -1,32 +1,46 @@
-name: Cloud-to-Cloud Empire Builder
+name: Cloud-to-Cloud Empire Factory
 
 on:
-  workflow_dispatch: # Lets you trigger it from Termux
-  schedule:
-    - cron: '0 0 * * *' # Also runs automatically every day at midnight UTC
+  workflow_dispatch:
+    inputs:
+      kingdom_name:
+        description: 'Netlify Site Name (e.g. kingdom5-airports)'
+        required: true
+      kingdom_topic:
+        description: 'Empire Niche & Instructions'
+        required: true
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout Factory
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python & Node
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install Gemini SDK
-        run: pip install google-genai pydantic requests
+      - name: Install Gemini SDK & Netlify CLI
+        run: |
+          pip install google-genai pydantic
+          npm install -g netlify-cli
 
-      - name: Download CSV, Process with Gemini & Compress in Cloud
+      - name: Generate Empire via Gemini AI in Cloud
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          KINGDOM_NAME: ${{ github.event.inputs.kingdom_name }}
+          KINGDOM_TOPIC: ${{ github.event.inputs.kingdom_topic }}
         run: python build.py
 
-      - name: Save Compressed Output to Cloud Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: empire-outputs
-          path: output.zip
+      - name: Create Netlify Site & Deploy Live (Zero-Touch)
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          KINGDOM_NAME: ${{ github.event.inputs.kingdom_name }}
+        run: |
+          SITE_ID=$(netlify api createSite --data "{\"name\": \"$KINGDOM_NAME\"}" | python3 -c "import sys, json; print(json.load(sys.stdin).get('id', ''))")
+          if [ -z "$SITE_ID" ]; then
+            SITE_ID=$(netlify api listSites | python3 -c "import sys, json; sites=json.load(sys.stdin); print(next((s['id'] for s in sites if s['name']=='$KINGDOM_NAME'), ''))")
+          fi
+          netlify deploy --prod --dir=dist --site="$SITE_ID"
