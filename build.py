@@ -33,7 +33,7 @@ while len(clusters) < 25:
 def fetch(ic):
     i, c = ic
     p = (
-        f"Generate 400 unique, high-intent long-tail SEO directory entries for '{topic}' focused on '{c}'. "
+        f"Generate 250 unique, high-intent long-tail SEO directory entries for '{topic}' focused on '{c}'. "
         "Output STRICTLY pipe-separated lines (NO header, NO markdown), exact 11 fields per line:\n"
         "Title | Category | Summary | Metric1_Time | Metric2_Cost | Metric3_Validity | "
         "PrimaryOption | AlternativeOption | ExpressOption | InsiderTip | FAQ_Answer"
@@ -41,9 +41,9 @@ def fetch(ic):
     cfg = types.GenerateContentConfig(
         system_instruction=SYS_PROMPT,
         temperature=0.35,
-        max_output_tokens=65536
+        max_output_tokens=32768
     )
-    for m in ["gemini-3.5-flash-lite", "gemini-3.8-flash"]:
+    for m in ["gemini-3.5-flash-lite", "gemini-4-hydrogen", "gemini-3.8-flash"]:
         try:
             r = client.models.generate_content(model=m, contents=p, config=cfg)
             rows = []
@@ -59,7 +59,7 @@ def fetch(ic):
     return []
 
 all_rows, seen = [], set()
-with ThreadPoolExecutor(max_workers=6) as ex:
+with ThreadPoolExecutor(max_workers=4) as ex:
     for f in as_completed([ex.submit(fetch, x) for x in enumerate(clusters)]):
         for r in f.result():
             bs = re.sub(r"[^a-z0-9]+", "-", r[0].lower()).strip("-")[:80] or "guide"
@@ -94,7 +94,7 @@ cmap = {}
 for idx, (s, r) in enumerate(all_rows):
     cmap.setdefault(r, []).append(idx)
 
-dslug = site_url.split("//")[-1].split(".")
+dslug = next(iter(site_url.split("//")[-1].split(".")))
 sname = " ".join(w.capitalize() for w in dslug.split("-"))
 
 def render(idx):
