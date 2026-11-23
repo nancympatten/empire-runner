@@ -9,9 +9,13 @@ on:
       kingdom_topic:
         description: 'Empire Niche & Detailed Instructions'
         required: true
+      dry_run:
+        description: 'true = Test & Verify Only (0 Netlify Credits) | false = Live Deploy'
+        required: false
+        default: 'true'
 
 jobs:
-  build-and-deploy:
+  build-and-verify:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Factory
@@ -22,13 +26,36 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Gemini SDK & Netlify CLI
+      - name: Install Dependencies
         run: |
           pip install google-genai pydantic
-          npm install -g netlify-cli
+          if [ "${{ github.event.inputs.dry_run }}" = "false" ]; then
+            npm install -g netlify-cli
+          fi
 
-      - name: Lock Exact Subdomain & Clean Empty Sites on Netlify
-        id: lock_domain
+      - name: Build & Audit Full SEO Directory in Cloud (0 Netlify Credits)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SITE_URL: https://${{ github.event.inputs.kingdom_name }}.netlify.app
+          KINGDOM_TOPIC: ${{ github.event.inputs.kingdom_topic }}
+        run: |
+          python build.py
+          echo "=== 🔍 SEO & CANONICAL AUDIT ==="
+          grep -i "canonical" dist/index.html
+          head -n 12 dist/sitemap.xml
+          cat dist/robots.txt
+          echo "Total Pages Built: $(find dist -name '*.html' | wc -l)"
+
+      - name: Save Preview Bundle to GitHub (0 Credits Used)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.inputs.kingdom_name }}-audit
+          path: |
+            dist/
+            data.csv
+
+      - name: Lock Exact Subdomain & Deploy Live (Only when dry_run=false)
+        if: github.event.inputs.dry_run == 'false'
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           KINGDOM_NAME: ${{ github.event.inputs.kingdom_name }}
@@ -50,21 +77,6 @@ jobs:
           else:
               created = json.loads(subprocess.check_output(["netlify", "api", "createSite", "--data", json.dumps({"body": {"name": name}})]))
               site_id = created["id"]
-          site_url = f"https://{name}.netlify.app"
-          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
-              f.write(f"site_id={site_id}\n")
-              f.write(f"site_url={site_url}\n")
-          print("🔒 Locked Exact Subdomain:", site_url)
+          subprocess.check_call(["netlify", "deploy", "--prod", "--dir=dist", "--site=" + site_id])
+          print("👑 LIVE AT: https://" + name + ".netlify.app")
           '
-
-      - name: Build Full SEO Directory, Pages, Sitemap & Canonical Tags
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          SITE_URL: ${{ steps.lock_domain.outputs.site_url }}
-          KINGDOM_TOPIC: ${{ github.event.inputs.kingdom_topic }}
-        run: python build.py
-
-      - name: Deploy Production Empire to Locked Subdomain
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        run: netlify deploy --prod --dir=dist --site="${{ steps.lock_domain.outputs.site_id }}"
