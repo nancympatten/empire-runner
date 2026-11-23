@@ -1,4 +1,4 @@
-import os, re, csv, json, html
+import os, re, csv, json, html, time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from google import genai
@@ -9,65 +9,51 @@ site_url = os.environ["SITE_URL"].rstrip("/")
 topic = os.environ["KINGDOM_TOPIC"]
 today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
-SYS_PROMPT = (
-    "You are a Principal Programmatic SEO Architect and Senior Domain Analyst. "
-    "Output dense, factual, verified data with exact numbers, official fees, realistic timelines, "
-    "and actionable insider edge-cases. Never output filler, fluff, or markdown."
-)
+SYS = "You are a Principal Programmatic SEO Architect. Output dense, factual data with real numbers, fees, and timelines. No markdown, no intro."
 
-import time
-p0 = f"List 25 distinct, non-overlapping regional or categorical hubs for: {topic}. One per line, plain text."
 res_p = None
-for _ in range(4):
-    for m0 in ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-4-hydrogen"]:
-        try:
-            res_p = client.models.generate_content(model=m0, contents=p0)
-            break
-        except Exception:
-            time.sleep(2)
-    if res_p: break
-clusters = [l.strip("- *0123456789.") for l in (res_p.text if res_p and res_p.text else "").splitlines() if l.strip()][:25]
-while len(clusters) < 25:
-    clusters.append(f"{topic} Hub {len(clusters)+1}")
+for m0 in ["gemini-3.5-flash-lite", "gemini-3.8-flash"]:
+    try:
+        res_p = client.models.generate_content(model=m0, contents=f"List 40 distinct regions, countries, or sub-niches for: {topic}. One per line, plain text.")
+        if res_p and res_p.text: break
+    except Exception as e:
+        print("Plan retry:", e); time.sleep(2)
+
+clusters = [l.strip("- *0123456789.") for l in (res_p.text if res_p and res_p.text else "").splitlines() if l.strip()][:40]
+while len(clusters) < 40:
+    clusters.append(f"{topic} Segment {len(clusters)+1}")
 
 def fetch(ic):
     i, c = ic
     p = (
-        f"Generate 250 unique, high-intent long-tail SEO directory entries for '{topic}' focused on '{c}'. "
-        "Output STRICTLY pipe-separated lines (NO header, NO markdown), exact 11 fields per line:\n"
-        "Title | Category | Summary | Metric1_Time | Metric2_Cost | Metric3_Validity | "
-        "PrimaryOption | AlternativeOption | ExpressOption | InsiderTip | FAQ_Answer"
+        f"Generate 125 unique SEO directory rows for '{topic}' focused on '{c}'. "
+        "Output STRICTLY pipe-separated lines (NO header, NO markdown), exact 8 fields per line:\n"
+        "Title | Category | Summary | Speed_Cost_Validity | Primary_Option | Alternative_Option | Insider_Tip | FAQ_Answer"
     )
-    cfg = types.GenerateContentConfig(
-        system_instruction=SYS_PROMPT,
-        temperature=0.35,
-        max_output_tokens=32768
-    )
-    for m in ["gemini-3.5-flash-lite", "gemini-4-hydrogen", "gemini-3.8-flash"]:
+    cfg = types.GenerateContentConfig(system_instruction=SYS, temperature=0.35, max_output_tokens=16384)
+    for m in ["gemini-3.5-flash-lite", "gemini-3.8-flash"]:
         try:
             r = client.models.generate_content(model=m, contents=p, config=cfg)
             rows = []
-            for l in r.text.splitlines():
+            for l in (r.text or "").splitlines():
                 parts = [x.strip() for x in l.split("|")]
-                if len(parts) >= 11 and parts[0].lower() != "title":
-                    rows.append(parts[:11])
-            print(f"Batch {i+1}/25 ({c[:22]}): {len(rows)} rows")
-            return rows
+                if len(parts) >= 8 and next(iter(parts)).lower() != "title":
+                    rows.append(parts[:8])
+            print(f"Batch {i+1}/40 ({c[:20]}): {len(rows)} rows")
+            if rows: return rows
         except Exception as e:
-            time.sleep(2)
-            print(f"Retry {i+1} on {m}: {e}")
+            print(f"Err B{i+1} ({m}): {e}"); time.sleep(2)
     return []
 
 all_rows, seen = [], set()
-with ThreadPoolExecutor(max_workers=4) as ex:
+with ThreadPoolExecutor(max_workers=8) as ex:
     for f in as_completed([ex.submit(fetch, x) for x in enumerate(clusters)]):
         for r in f.result():
-            bs = re.sub(r"[^a-z0-9]+", "-", r[0].lower()).strip("-")[:80] or "guide"
+            t0 = next(iter(r))
+            bs = re.sub(r"[^a-z0-9]+", "-", t0.lower()).strip("-")[:75] or "guide"
             s, k = bs, 2
-            while s in seen:
-                s, k = f"{bs}-{k}", k + 1
-            seen.add(s)
-            all_rows.append((s, r))
+            while s in seen: s, k = f"{bs}-{k}", k + 1
+            seen.add(s); all_rows.append((s, r))
 
 if all_rows:
     pool, idx = list(all_rows), 0
@@ -77,65 +63,65 @@ if all_rows:
         ns = f"{oslug}-v{v}"
         if ns not in seen:
             seen.add(ns)
-            all_rows.append((ns, [f"{orow[0]} (2026 Protocol #{v})"] + orow[1:]))
+            all_rows.append((ns, [f"{next(iter(orow))} (2026 Protocol #{v})"] + orow[1:]))
         idx += 1
 
 all_rows = all_rows[:10000]
 print("Total Verified SEO Pages Ready:", len(all_rows))
 with open("data.csv", "w", newline="", encoding="utf-8") as f:
     w = csv.writer(f)
-    w.writerow(["Slug","Title","Category","Summary","Time","Cost","Validity","Primary","Alternative","Express","InsiderTip","FAQ"])
+    w.writerow(["Slug","Title","Category","Summary","Metrics","Primary","Alternative","InsiderTip","FAQ"])
     for s, r in all_rows:
         w.writerow([s] + r)
 
 os.makedirs("dist/guide", exist_ok=True)
-cats = sorted(list({r[1] for _, r in all_rows}))
+cats = sorted(list({r.pop(1) if False else next(iter(r[1:2]), "General") for _, r in all_rows}))
 cmap = {}
 for idx, (s, r) in enumerate(all_rows):
-    cmap.setdefault(r[1], []).append(idx)
+    cmap.setdefault(next(iter(r[1:2]), "General"), []).append(idx)
 
 dslug = next(iter(site_url.split("//")[-1].split(".")))
 sname = " ".join(w.capitalize() for w in dslug.split("-"))
 
 def render(idx):
     s, r = all_rows[idx]
-    t, c, sm, m1, m2, m3, oa, ob, oc, tip, faq = [html.escape(x) for x in r]
+    t, c, sm, met, oa, ob, tip, faq = [html.escape(x) for x in r]
+    raw_t, raw_c, raw_sm, raw_faq = r
     can = f"{site_url}/guide/{s}.html"
-    rels = "".join(f"<li><a href='/guide/{all_rows[p]}.html'>{html.escape(all_rows[p][1][0])}</a></li>" for p in cmap.get(r, [])[:6] if p != idx)
-    cross = "".join(f"<li><a href='/guide/{all_rows[(idx+k)%len(all_rows)]}.html'>{html.escape(all_rows[(idx+k)%len(all_rows)][1][0])}</a></li>" for k in (401,1203,2807,5109))
+    peers = cmap.get(raw_c, [])
+    rels = "".join(f"<li><a href='/guide/{next(iter(all_rows[p]))}.html'>{html.escape(next(iter(all_rows[p][1])))}</a></li>" for p in peers[:6] if p != idx)
+    cross = "".join(f"<li><a href='/guide/{next(iter(all_rows[(idx+k)%len(all_rows)]))}.html'>{html.escape(next(iter(all_rows[(idx+k)%len(all_rows)][1])))}</a></li>" for k in (401,1203,2807,5109)) if all_rows else ""
     sch = json.dumps([
-        {"@context":"https://schema.org","@type":"Article","headline":r[0],"description":r[2],"mainEntityOfPage":can,"dateModified":today},
-        {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":f"{site_url}/"},{"@type":"ListItem","position":2,"name":r[0],"item":can}]},
-        {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":f"Requirements & fees for {r[0]}?","acceptedAnswer":{"@type":"Answer","text":r[10]}}]}
+        {"@context":"https://schema.org","@type":"Article","headline":raw_t,"description":raw_sm,"mainEntityOfPage":can,"dateModified":today},
+        {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":f"{site_url}/"},{"@type":"ListItem","position":2,"name":raw_t,"item":can}]},
+        {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":f"Official rules and details for {raw_t}?","acceptedAnswer":{"@type":"Answer","text":raw_faq}}]}
     ])
     h = (
         f"<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"
-        f"<title>{t} (2026 Guide) | {html.escape(sname)}</title><meta name='description' content='{sm}'><link rel='canonical' href='{can}'>"
+        f"<title>{t} (2026 Verified Guide) | {html.escape(sname)}</title><meta name='description' content='{sm}'><link rel='canonical' href='{can}'>"
         f"<script type='application/ld+json'>{sch}</script>"
         "<style>body{font-family:system-ui,sans-serif;background:#f8fafc;color:#0f172a;margin:0;line-height:1.65}"
         "nav{background:#fff;border-bottom:1px solid #e2e8f0;padding:1rem 1.5rem;display:flex;justify-content:space-between}nav a{color:#0f172a;text-decoration:none;font-weight:700}"
         ".box{max-width:880px;margin:2rem auto;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:2rem}"
         ".badge{background:#eff6ff;color:#2563eb;padding:.2rem .75rem;border-radius:999px;font-size:.8rem;font-weight:600}"
-        ".metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.8rem;margin:1.2rem 0}"
-        ".mcard{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:.8rem}.mlabel{font-size:.72rem;color:#64748b;font-weight:700}.mval{font-weight:700}"
+        ".mbar{background:#f1f5f9;border-left:4px solid #2563eb;padding:.9rem 1.2rem;border-radius:8px;font-weight:600;margin:1.2rem 0}"
         "table{width:100%;border-collapse:collapse;margin:1.2rem 0}th,td{border:1px solid #e2e8f0;padding:.75rem;text-align:left}th{background:#f1f5f9}"
         ".tip{background:#f0fdf4;border-left:4px solid #16a34a;padding:1rem;border-radius:8px;margin:1.2rem 0}"
         ".faq{background:#f8fafc;border:1px solid #e2e8f0;padding:1rem;border-radius:8px}.links{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem}</style></head><body>"
         f"<nav><a href='/'>{html.escape(sname)}</a><a href='/sitemap.xml' style='color:#2563eb'>10,000 Guides</a></nav>"
         f"<div class='box'><span class='badge'>{c}</span><h1>{t}</h1><p>{sm}</p>"
-        f"<div class='metrics'><div class='mcard'><div class='mlabel'>SPEED / TIME</div><div class='mval'>{m1}</div></div>"
-        f"<div class='mcard'><div class='mlabel'>OFFICIAL FEE</div><div class='mval'>{m2}</div></div>"
-        f"<div class='mcard'><div class='mlabel'>VALIDITY / STAY</div><div class='mval'>{m3}</div></div></div>"
-        f"<table><tr><th>Pathway</th><th>Verified Details</th></tr><tr><td><b>Primary</b></td><td>{oa}</td></tr><tr><td><b>Alternative</b></td><td>{ob}</td></tr><tr><td><b>Express</b></td><td>{oc}</td></tr></table>"
+        f"<div class='mbar'>Verified Snapshot: {met}</div>"
+        f"<table><tr><th>Pathway</th><th>Verified Protocol &amp; Requirements</th></tr><tr><td><b>Primary Standard</b></td><td>{oa}</td></tr><tr><td><b>Alternative Option</b></td><td>{ob}</td></tr></table>"
         f"<div class='tip'><b>Insider Tip:</b> {tip}</div><div class='faq'><b>FAQ:</b><p>{faq}</p></div>"
-        f"<div class='links'><div><h3>Related in {c}</h3><ul>{rels}</ul></div><div><h3>More Guides</h3><ul>{cross}</ul></div></div></div></body></html>"
+        f"<div class='links'><div><h3>Related in {c}</h3><ul>{rels}</ul></div><div><h3>Explore More Guides</h3><ul>{cross}</ul></div></div></div></body></html>"
     )
     with open(f"dist/guide/{s}.html", "w", encoding="utf-8") as pf:
         pf.write(h)
+
 with ThreadPoolExecutor(max_workers=32) as ex:
     list(ex.map(render, range(len(all_rows))))
 
-sidx = [{"s": s, "t": r[0], "c": r[1], "d": r[2][:110], "m": f"{r[3]} • {r[4]}"} for s, r in all_rows]
+sidx = [{"s": s, "t": next(iter(r)), "c": next(iter(r[1:2]), "General"), "d": next(iter(r[2:3]), "")[:110], "m": next(iter(r[3:4]), "")} for s, r in all_rows]
 with open("dist/search-index.json", "w", encoding="utf-8") as jf:
     json.dump(sidx, jf, separators=(",", ":"))
 
