@@ -27,7 +27,7 @@ jobs:
           pip install google-genai pydantic
           npm install -g netlify-cli
 
-      - name: Lock Exact Subdomain & Canonical URL on Netlify
+      - name: Lock Exact Subdomain & Clean Empty Sites on Netlify
         id: lock_domain
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -35,16 +35,21 @@ jobs:
         run: |
           python3 -c '
           import os, json, subprocess
-          token = os.environ["NETLIFY_AUTH_TOKEN"]
           name = os.environ["KINGDOM_NAME"].strip().lower()
           sites = json.loads(subprocess.check_output(["netlify", "api", "listSites"]))
+          for s in sites:
+              if not s.get("published_deploy") and s.get("name") != name:
+                  try:
+                      subprocess.check_output(["netlify", "api", "deleteSite", "--data", json.dumps({"site_id": s["id"]})])
+                      print("🧹 Deleted empty draft site:", s.get("name"))
+                  except Exception:
+                      pass
           existing = next((s for s in sites if s.get("name") == name), None)
           if existing:
               site_id = existing["id"]
           else:
-              created = json.loads(subprocess.check_output(["netlify", "api", "createSite"]))
+              created = json.loads(subprocess.check_output(["netlify", "api", "createSite", "--data", json.dumps({"body": {"name": name}})]))
               site_id = created["id"]
-              subprocess.check_output(["netlify", "api", "updateSite", "--data", json.dumps({"site_id": site_id, "body": {"name": name}})])
           site_url = f"https://{name}.netlify.app"
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write(f"site_id={site_id}\n")
