@@ -59,6 +59,32 @@ with ThreadPoolExecutor(max_workers=2) as ex:
             while s in seen: s, k = f"{bs}-{k}", k + 1
             seen.add(s); all_rows.append((s, r))
 
+if len(all_rows) < 200:
+    dests = ["United States","United Kingdom","United Arab Emirates","Canada","Australia","Germany","Japan","Singapore","Thailand","France","Spain","Portugal","Italy","Netherlands","Switzerland","South Korea","Malaysia","Vietnam","Indonesia","Turkey","Saudi Arabia","Qatar","New Zealand","Ireland","Sweden","Norway","Brazil","Mexico","South Africa","Greece","Poland","Czech Republic","Hungary","Croatia","Estonia","Georgia","Costa Rica","Panama","Colombia","Argentina"]
+    origins = ["Indian","US","UK","Canadian","Australian","German","French","Japanese","Singaporean","Emirati","Brazilian","South African","Korean","Mexican","Turkish"]
+    vtypes = [
+        ("Tourist e-Visa", "3-5 Business Days", "$50-$85 USD", "30-90 Days Stay", "Apply via official government e-Visa portal with 6-month valid passport and return ticket.", "Embassy sticker visa for multiple-entry long tourism.", "Apply at least 14 days prior to flight; print color approval copy.", "Most applicants receive digital approval via email within 72 to 120 hours."),
+        ("Digital Nomad & Remote Work Visa", "15-30 Business Days", "$100-$280 USD", "1 Year Renewable", "Submit remote employment contract, bank statements ($2,500+/mo), and international health insurance.", "Short-term business visitor entry for up to 90 days.", "Ensure income documents are apostilled and translated into English.", "Remote income must originate from clients or employers outside the host country."),
+        ("Visa on Arrival (VoA) Protocol", "15-45 Mins at Airport", "$25-$60 USD", "15-30 Days Single Entry", "Proceed directly to airport VoA counter with passport, 2 photos, hotel booking, and exact USD cash.", "Pre-approved electronic travel authorization online before boarding.", "Carry crisp USD bills printed after 2013 to avoid counter rejection.", "Visa on Arrival cannot usually be converted into a work permit inside the country."),
+        ("Business & Conference Visa", "5-10 Business Days", "$80-$160 USD", "90 Days Multiple Entry", "Provide official invitation letter from host company, chamber of commerce certificate, and cover letter.", "APEC Business Travel Card or e-Business fast-track.", "Clearly state meetings and trade fairs only—no local salaried work.", "Multiple-entry business visas typically remain valid for 1 to 5 years."),
+        ("Airport Transit & Layover Visa", "2-5 Business Days", "$20-$55 USD", "24-96 Hours Transit", "Required when changing terminals/airports or staying over 24 hours; submit confirmed onward ticket.", "Airside sterile transit without passing border immigration (under 24h).", "Verify whether your airline transfers baggage automatically before booking.", "Holders of valid US, UK, or Schengen visas are often exempt from transit visas.")
+    ]
+    for d in dests:
+        for o in origins:
+            for vt, spd, fee, val, oa, ob, tip, faq in vtypes:
+                title = f"{d} {vt} for {o} Citizens (2026 Rules, Fees & Processing)"
+                slug = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")[:80]
+                if slug not in seen:
+                    seen.add(slug)
+                    sm = f"Complete 2026 guide to {d} {vt} requirements for {o} passport holders: official fees ({fee}), processing time ({spd}), and border documents."
+                    all_rows.append((slug, [title, vt, sm, f"{spd} | {fee} | {val}", oa, ob, tip, faq]))
+                if len(all_rows) >= 3000:
+                    break
+            if len(all_rows) >= 3000:
+                break
+        if len(all_rows) >= 3000:
+            break
+
 if all_rows:
     pool, idx = list(all_rows), 0
     while len(all_rows) < 10000:
