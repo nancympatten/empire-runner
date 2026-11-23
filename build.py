@@ -26,7 +26,7 @@ for _ in range(4):
         except Exception:
             time.sleep(2)
     if res_p: break
-clusters = [l.strip("- *0123456789.") for l in res_p.text.splitlines() if l.strip()][:25]
+clusters = [l.strip("- *0123456789.") for l in (res_p.text if res_p and res_p.text else "").splitlines() if l.strip()][:25]
 while len(clusters) < 25:
     clusters.append(f"{topic} Hub {len(clusters)+1}")
 
