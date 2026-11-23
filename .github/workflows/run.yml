@@ -1,0 +1,32 @@
+name: Cloud-to-Cloud Empire Builder
+
+on:
+  workflow_dispatch: # Lets you trigger it from Termux
+  schedule:
+    - cron: '0 0 * * *' # Also runs automatically every day at midnight UTC
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Gemini SDK
+        run: pip install google-genai pydantic requests
+
+      - name: Download CSV, Process with Gemini & Compress in Cloud
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python build.py
+
+      - name: Save Compressed Output to Cloud Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: empire-outputs
+          path: output.zip
