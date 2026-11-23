@@ -25,27 +25,28 @@ while len(clusters) < 14:
 
 def fetch(ic):
     i, c = ic
+    time.sleep((i % 2) * 3)
     p = (
         f"Generate 125 unique SEO directory rows for '{topic}' focused on '{c}'. "
         "Output STRICTLY pipe-separated lines (NO header, NO markdown), exact 8 fields per line:\n"
         "Title | Category | Summary | Speed_Cost_Validity | Primary_Option | Alternative_Option | Insider_Tip | FAQ_Answer"
     )
     cfg = types.GenerateContentConfig(system_instruction=SYS, temperature=0.35, max_output_tokens=16384)
-    time.sleep((i % 2) * 3)
     for _ in range(3):
-      for m in ["gemini-3.5-flash-lite", "gemini-4-hydrogen", "gemini-3.8-flash"]:
-        try:
-            r = client.models.generate_content(model=m, contents=p, config=cfg)
-            rows = []
-            for l in (r.text or "").splitlines():
-                parts = [x.strip() for x in l.split("|")]
-                if len(parts) >= 8 and next(iter(parts)).lower() != "title":
-                    rows.append(parts[:8])
-            print(f"Batch {i+1}/14 ({c[:20]}): {len(rows)} rows")
-            if rows: return rows
-      time.sleep(8)
-        except Exception as e:
-            print(f"Err B{i+1} ({m}): {e}"); time.sleep(2)
+        for m in ["gemini-3.5-flash-lite", "gemini-4-hydrogen", "gemini-3.8-flash"]:
+            try:
+                r = client.models.generate_content(model=m, contents=p, config=cfg)
+                rows = []
+                for l in (r.text or "").splitlines():
+                    parts = [x.strip() for x in l.split("|")]
+                    if len(parts) >= 8 and next(iter(parts)).lower() != "title":
+                        rows.append(parts[:8])
+                print(f"Batch {i+1}/14 ({c[:20]}): {len(rows)} rows")
+                if rows:
+                    return rows
+            except Exception as e:
+                print(f"Err B{i+1} ({m}): {e}")
+                time.sleep(6)
     return []
 
 all_rows, seen = [], set()
