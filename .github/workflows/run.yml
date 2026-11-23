@@ -1,13 +1,13 @@
-name: Cloud-to-Cloud Empire Factory
+name: Cloud-to-Cloud SEO Empire Factory
 
 on:
   workflow_dispatch:
     inputs:
       kingdom_name:
-        description: 'Netlify Site Name (e.g. kingdom5-airports)'
+        description: 'Exact Subdomain (e.g. global-airport-transfers-atlas)'
         required: true
       kingdom_topic:
-        description: 'Empire Niche & Instructions'
+        description: 'Empire Niche & Detailed Instructions'
         required: true
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
       - name: Checkout Factory
         uses: actions/checkout@v4
 
-      - name: Setup Python & Node
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -27,20 +27,31 @@ jobs:
           pip install google-genai pydantic
           npm install -g netlify-cli
 
-      - name: Generate Empire via Gemini AI in Cloud
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          KINGDOM_NAME: ${{ github.event.inputs.kingdom_name }}
-          KINGDOM_TOPIC: ${{ github.event.inputs.kingdom_topic }}
-        run: python build.py
-
-      - name: Create Netlify Site & Deploy Live (Zero-Touch)
+      - name: Lock Exact Subdomain & Canonical URL on Netlify
+        id: lock_domain
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           KINGDOM_NAME: ${{ github.event.inputs.kingdom_name }}
         run: |
-          SITE_ID=$(netlify api createSite --data "{\"name\": \"$KINGDOM_NAME\"}" | python3 -c "import sys, json; print(json.load(sys.stdin).get('id', ''))")
+          SITE_JSON=$(netlify api createSite --data "{\"name\": \"$KINGDOM_NAME\"}" 2>/dev/null || true)
+          SITE_ID=$(echo "$SITE_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin).get('id', ''))" 2>/dev/null || true)
           if [ -z "$SITE_ID" ]; then
-            SITE_ID=$(netlify api listSites | python3 -c "import sys, json; sites=json.load(sys.stdin); print(next((s['id'] for s in sites if s['name']=='$KINGDOM_NAME'), ''))")
+            SITE_JSON=$(netlify api listSites | python3 -c "import sys, json; sites=json.load(sys.stdin); print(json.dumps(next((s for s in sites if s['name']=='$KINGDOM_NAME'), {})))")
+            SITE_ID=$(echo "$SITE_JSON" | python3 -c "import sys, json; print(json.load(sys.stdin).get('id', ''))")
           fi
-          netlify deploy --prod --dir=dist --site="$SITE_ID"
+          SITE_URL=$(echo "$SITE_JSON" | python3 -c "import sys, json; d=json.load(sys.stdin); print(d.get('ssl_url') or 'https://' + d.get('name', '$KINGDOM_NAME') + '.netlify.app')")
+          echo "site_id=$SITE_ID" >> $GITHUB_OUTPUT
+          echo "site_url=$SITE_URL" >> $GITHUB_OUTPUT
+          echo "🔒 Locked Canonical Domain: $SITE_URL"
+
+      - name: Build Full SEO Directory, Pages, Sitemap & Canonical Tags
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SITE_URL: ${{ steps.lock_domain.outputs.site_url }}
+          KINGDOM_TOPIC: ${{ github.event.inputs.kingdom_topic }}
+        run: python build.py
+
+      - name: Deploy Production Empire to Locked Subdomain
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: netlify deploy --prod --dir=dist --site="${{ steps.lock_domain.outputs.site_id }}"
