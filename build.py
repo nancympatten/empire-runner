@@ -89,10 +89,10 @@ with open("data.csv", "w", newline="", encoding="utf-8") as f:
         w.writerow([s] + r)
 
 os.makedirs("dist/guide", exist_ok=True)
-cats = sorted(list({r for _, r in all_rows}))
+cats = sorted(list({r[1] for _, r in all_rows}))
 cmap = {}
 for idx, (s, r) in enumerate(all_rows):
-    cmap.setdefault(r, []).append(idx)
+    cmap.setdefault(r[1], []).append(idx)
 
 dslug = next(iter(site_url.split("//")[-1].split(".")))
 sname = " ".join(w.capitalize() for w in dslug.split("-"))
@@ -101,12 +101,12 @@ def render(idx):
     s, r = all_rows[idx]
     t, c, sm, m1, m2, m3, oa, ob, oc, tip, faq = [html.escape(x) for x in r]
     can = f"{site_url}/guide/{s}.html"
-    rels = "".join(f"<li><a href='/guide/{all_rows[p]}.html'>{html.escape(all_rows[p])}</a></li>" for p in cmap.get(r, [])[:6] if p != idx)
-    cross = "".join(f"<li><a href='/guide/{all_rows[(idx+k)%len(all_rows)]}.html'>{html.escape(all_rows[(idx+k)%len(all_rows)])}</a></li>" for k in (401,1203,2807,5109))
+    rels = "".join(f"<li><a href='/guide/{all_rows[p]}.html'>{html.escape(all_rows[p][1][0])}</a></li>" for p in cmap.get(r, [])[:6] if p != idx)
+    cross = "".join(f"<li><a href='/guide/{all_rows[(idx+k)%len(all_rows)]}.html'>{html.escape(all_rows[(idx+k)%len(all_rows)][1][0])}</a></li>" for k in (401,1203,2807,5109))
     sch = json.dumps([
-        {"@context":"https://schema.org","@type":"Article","headline":r,"description":r,"mainEntityOfPage":can,"dateModified":today},
-        {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":f"{site_url}/"},{"@type":"ListItem","position":2,"name":r,"item":can}]},
-        {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":f"Requirements & fees for {r}?","acceptedAnswer":{"@type":"Answer","text":r}}]}
+        {"@context":"https://schema.org","@type":"Article","headline":r[0],"description":r[2],"mainEntityOfPage":can,"dateModified":today},
+        {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":f"{site_url}/"},{"@type":"ListItem","position":2,"name":r[0],"item":can}]},
+        {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":f"Requirements & fees for {r[0]}?","acceptedAnswer":{"@type":"Answer","text":r[10]}}]}
     ])
     h = (
         f"<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"
@@ -135,7 +135,7 @@ def render(idx):
 with ThreadPoolExecutor(max_workers=32) as ex:
     list(ex.map(render, range(len(all_rows))))
 
-sidx = [{"s": s, "t": r, "c": r, "d": r[:110], "m": f"{r} • {r}"} for s, r in all_rows]
+sidx = [{"s": s, "t": r[0], "c": r[1], "d": r[2][:110], "m": f"{r[3]} • {r[4]}"} for s, r in all_rows]
 with open("dist/search-index.json", "w", encoding="utf-8") as jf:
     json.dump(sidx, jf, separators=(",", ":"))
 
