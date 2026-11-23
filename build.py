@@ -14,13 +14,13 @@ SYS = "You are a Principal Programmatic SEO Architect. Output dense, factual dat
 res_p = None
 for m0 in ["gemini-3.5-flash-lite", "gemini-3.8-flash"]:
     try:
-        res_p = client.models.generate_content(model=m0, contents=f"List 40 distinct regions, countries, or sub-niches for: {topic}. One per line, plain text.")
+        res_p = client.models.generate_content(model=m0, contents=f"List 14 distinct regions, countries, or sub-niches for: {topic}. One per line, plain text.")
         if res_p and res_p.text: break
     except Exception as e:
         print("Plan retry:", e); time.sleep(2)
 
-clusters = [l.strip("- *0123456789.") for l in (res_p.text if res_p and res_p.text else "").splitlines() if l.strip()][:40]
-while len(clusters) < 40:
+clusters = [l.strip("- *0123456789.") for l in (res_p.text if res_p and res_p.text else "").splitlines() if l.strip()][:14]
+while len(clusters) < 14:
     clusters.append(f"{topic} Segment {len(clusters)+1}")
 
 def fetch(ic):
@@ -31,7 +31,9 @@ def fetch(ic):
         "Title | Category | Summary | Speed_Cost_Validity | Primary_Option | Alternative_Option | Insider_Tip | FAQ_Answer"
     )
     cfg = types.GenerateContentConfig(system_instruction=SYS, temperature=0.35, max_output_tokens=16384)
-    for m in ["gemini-3.5-flash-lite", "gemini-3.8-flash"]:
+    time.sleep((i % 2) * 3)
+    for _ in range(3):
+      for m in ["gemini-3.5-flash-lite", "gemini-4-hydrogen", "gemini-3.8-flash"]:
         try:
             r = client.models.generate_content(model=m, contents=p, config=cfg)
             rows = []
@@ -39,14 +41,15 @@ def fetch(ic):
                 parts = [x.strip() for x in l.split("|")]
                 if len(parts) >= 8 and next(iter(parts)).lower() != "title":
                     rows.append(parts[:8])
-            print(f"Batch {i+1}/40 ({c[:20]}): {len(rows)} rows")
+            print(f"Batch {i+1}/14 ({c[:20]}): {len(rows)} rows")
             if rows: return rows
+      time.sleep(8)
         except Exception as e:
             print(f"Err B{i+1} ({m}): {e}"); time.sleep(2)
     return []
 
 all_rows, seen = [], set()
-with ThreadPoolExecutor(max_workers=8) as ex:
+with ThreadPoolExecutor(max_workers=2) as ex:
     for f in as_completed([ex.submit(fetch, x) for x in enumerate(clusters)]):
         for r in f.result():
             t0 = next(iter(r))
