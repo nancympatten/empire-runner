@@ -7,7 +7,11 @@ from google import genai
 from google.genai import types
 from pydantic import BaseModel
 
-client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+if not api_key:
+    raise RuntimeError("❌ GEMINI_API_KEY secret is empty or missing in GitHub Secrets!")
+
+client = genai.Client(api_key=api_key)
 site_url = os.environ["SITE_URL"].rstrip("/")
 kingdom_topic = os.environ["KINGDOM_TOPIC"]
 today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -30,19 +34,32 @@ class EmpireBlueprint(BaseModel):
 
 prompt = f"""
 Build an authoritative, SEO-optimized directory dataset for: {kingdom_topic}
-Generate 40 comprehensive, accurate, real-world entries.
+Generate 30 comprehensive, accurate, real-world entries.
 Each entry must have a clean URL-friendly slug (lowercase letters and hyphens only), detailed overview, 4 actionable bullet points in key_details, and a practical pro_tip.
 """
 
-response = client.models.generate_content(
-    model="gemini-3.5-flash-lite",
-    contents=prompt,
-    config=types.GenerateContentConfig(
-        response_mime_type="application/json",
-        response_schema=EmpireBlueprint,
-        temperature=0.2,
-    ),
-)
+response = None
+last_err = None
+for model_name in ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"]:
+    try:
+        print(f"Trying model: {model_name}...")
+        response = client.models.generate_content(
+            model=model_name,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                response_schema=EmpireBlueprint,
+                temperature=0.2,
+            ),
+        )
+        print(f"✅ Success with {model_name}!")
+        break
+    except Exception as e:
+        print(f"⚠️ Model {model_name} failed: {e}")
+        last_err = e
+
+if response is None:
+    raise RuntimeError(f"All models failed. Last error: {last_err}")
 
 data = json.loads(response.text)
 
