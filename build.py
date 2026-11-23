@@ -15,8 +15,17 @@ SYS_PROMPT = (
     "and actionable insider edge-cases. Never output filler, fluff, or markdown."
 )
 
+import time
 p0 = f"List 25 distinct, non-overlapping regional or categorical hubs for: {topic}. One per line, plain text."
-res_p = client.models.generate_content(model="gemini-3.5-flash-lite", contents=p0)
+res_p = None
+for _ in range(4):
+    for m0 in ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-4-hydrogen"]:
+        try:
+            res_p = client.models.generate_content(model=m0, contents=p0)
+            break
+        except Exception:
+            time.sleep(2)
+    if res_p: break
 clusters = [l.strip("- *0123456789.") for l in res_p.text.splitlines() if l.strip()][:25]
 while len(clusters) < 25:
     clusters.append(f"{topic} Hub {len(clusters)+1}")
@@ -45,11 +54,12 @@ def fetch(ic):
             print(f"Batch {i+1}/25 ({c[:22]}): {len(rows)} rows")
             return rows
         except Exception as e:
+            time.sleep(2)
             print(f"Retry {i+1} on {m}: {e}")
     return []
 
 all_rows, seen = [], set()
-with ThreadPoolExecutor(max_workers=12) as ex:
+with ThreadPoolExecutor(max_workers=6) as ex:
     for f in as_completed([ex.submit(fetch, x) for x in enumerate(clusters)]):
         for r in f.result():
             bs = re.sub(r"[^a-z0-9]+", "-", r[0].lower()).strip("-")[:80] or "guide"
