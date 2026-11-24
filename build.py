@@ -14,61 +14,63 @@ def slugify(txt):
     return "-".join(out.strip("-").split("-")[:11])
 
 hubs = (
-    "California (USA)", "Texas (USA)", "New York (USA)", "Florida (USA)",
-    "Bhubaneswar & Odisha (India)", "Delhi NCR (India)", "Mumbai & Pune (India)",
-    "Bengaluru (India)", "Chennai (India)", "Hyderabad (India)",
-    "London & South East (UK)", "Manchester (UK)",
-    "Berlin & Munich (Germany)", "Oslo (Norway)",
-    "Amsterdam (Netherlands)", "Paris (France)",
-    "Toronto (Canada)", "Vancouver (Canada)",
-    "Sydney (Australia)", "Melbourne (Australia)",
-    "Dubai & Abu Dhabi (UAE)", "Singapore",
-    "Tokyo (Japan)", "Seoul (South Korea)",
-    "Zurich (Switzerland)"
+    "Hetzner Cloud (Germany & US)", "DigitalOcean Droplets",
+    "Vultr High Frequency NVMe", "Linode Akamai Cloud",
+    "AWS Lightsail & EC2", "Google Cloud Compute Engine",
+    "Microsoft Azure Virtual Machines", "Cloudways Managed Cloud",
+    "Hostinger KVM VPS", "Contabo Cloud VPS",
+    "OVHcloud Bare Metal & VPS", "UpCloud MaxIOPS",
+    "Kamatera Custom Cloud", "Oracle Cloud Ampere ARM",
+    "Scaleway Europe Cloud", "IONOS Cloud VPS",
+    "DreamHost Managed VPS", "Bluehost NVMe VPS",
+    "A2 Hosting Turbo VPS", "SiteGround Cloud Hosting",
+    "Liquid Web Managed Dedicated", "Fly.io Edge MicroVMs",
+    "Railway App Hosting", "Render Cloud Services",
+    "Cloudflare Workers & Pages"
 )
 roles = (
-    "Tesla Model Y Long Range", "Tesla Model 3 RWD",
-    "BYD Atto 3 & Seal", "Hyundai Ioniq 5 & 6",
-    "Kia EV6 & EV9", "Tata Nexon EV & Curvv EV",
-    "Mahindra BE 6 & XEV 9e", "MG ZS EV & Windsor EV",
-    "BMW i4 & iX1", "Mercedes EQB & EQS",
-    "Volvo EX30 & XC40 Recharge", "Rivian R1S & R1T",
-    "Ford Mustang Mach-E", "Volkswagen ID.4",
-    "Porsche Taycan", "Polestar 2 & 4"
+    "2 vCPU / 4GB RAM Starter", "4 vCPU / 8GB RAM Production",
+    "8 vCPU / 16GB RAM Scale", "16 vCPU / 32GB RAM Enterprise",
+    "High-Traffic WordPress & WooCommerce", "Next.js & Node.js SaaS Backend",
+    "Docker & Kubernetes Cluster", "PostgreSQL & Redis Database Node",
+    "n8n & AI Automation Self-Hosting", "Game Server & Low-Latency UDP",
+    "Forex & Algo Trading Low-Ping", "Video Streaming & FFmpeg Node",
+    "CyberPanel & cPanel Reseller", "Python & FastAPI Microservices",
+    "Arm64 Ampere Cost-Optimized", "Dedicated Ryzen 9 Bare Metal"
 )
 cats8 = (
-    ("5-Year Fuel vs EV Charging Savings", "Save $6,800 / 5 Yrs", "$0.03/km Home Charge", "78% Running Cost Cut",
-     "Home overnight off-peak electricity charging vs petrol/gasoline commuter running cost.",
-     "Public DC fast-charging commuter profile comparing highway kWh tariffs against fuel.",
-     "TIP: Charging overnight on Time-of-Use (ToU) residential tariffs cuts per-km energy cost by 80%. || FAQ: How much cheaper is home EV charging than petrol? Typically 4x to 5x cheaper per kilometer driven."),
-    ("Scheduled Maintenance & Brake Wear", "55% Lower Service Cost", "$180/yr Avg Upkeep", "Zero Oil Changes",
-     "No engine oil, spark plugs, timing belts, or transmission fluid; regenerative braking extends pads to 100k km.",
-     "Annual cabin HEPA filter, brake fluid flush, and tire rotation maintenance schedule.",
-     "TIP: Regenerative braking saves 70% on brake pad replacements, though EV-rated tires need rotation every 10,000 km. || FAQ: Do EVs need annual servicing? Yes, primarily for brake fluid, coolant checks, and cabin filters."),
-    ("Comprehensive EV Auto Insurance", "$95 – $185/mo Rate", "Battery Protect Rider", "Zero-Depreciation Cover",
-     "Full bumper-to-bumper comprehensive policy with dedicated HV battery pack and wall-charger cover.",
-     "Usage-based pay-as-you-drive telematics insurance saving low-mileage drivers up to 30%.",
-     "TIP: Always add a Battery Protect & Hydrostatic Lock rider to cover accidental waterlogging or surge damage. || FAQ: Is EV insurance more expensive than petrol cars? Slightly higher (~10–15%) due to sensor and battery repair costs."),
-    ("Battery Degradation & 8-Yr Warranty", "91% Health at 160k km", "8-Yr / 160,000 km", "LFP vs NMC Chemistry",
-     "Manufacturer 8-year warranty guaranteeing minimum 70%–80% battery state-of-health (SoH).",
-     "LFP (Lithium Iron Phosphate) battery pack engineered for daily 100% charging and 3,000+ cycles.",
-     "TIP: Keep NMC batteries between 20% and 80% for daily driving, while LFP packs can safely charge to 100% weekly. || FAQ: How long does an EV battery last? Modern EV batteries routinely outlast 250,000+ km."),
-    ("Home Level-2 Wallbox Installation", "$450 – $1,100 Setup", "7.4kW – 11kW AC Speed", "6-Hr Overnight Full",
-     "Dedicated 7.4kW or 11kW smart wallbox charger with scheduled solar/off-peak load balancing.",
-     "Portable 3.3kW 15A/16A socket trickle charging suitable for under 50 km daily city commutes.",
-     "TIP: Install a 7.4kW smart charger with dynamic load management to avoid upgrading main home sanctioned load. || FAQ: How fast does a 7.4kW charger fill a 60kWh EV? Roughly 7.5 to 8 hours overnight."),
-    ("Road Tax, Registration & EV Subsidies", "$0 – $4,500 Tax Waiver", "100% Road Tax Exempt", "Green Plate Perks",
-     "Zero road tax, discounted registration fees, and city congestion/toll exemptions for zero-emission EVs.",
-     "Corporate fleet accelerated depreciation benefit writing off 40% vehicle value in Year 1.",
-     "TIP: Business owners registering an EV under company assets save up to 30% in corporate tax deductions. || FAQ: Are EVs exempt from road tax? Many states and countries waive 50% to 100% of road tax."),
-    ("5-Year Resale Value & Depreciation", "54% – 62% Residual", "Certified SoH Report", "Strong Used Demand",
-     "5-year residual value retention backed by verified battery health certificate and OTA software updates.",
-     "3-year corporate lease buyback option locking guaranteed future resale value upfront.",
-     "TIP: Maintain official dealer service records and battery health reports to command 12% higher resale value. || FAQ: Which EVs hold value best? Long-range models with LFP batteries and fast-charging networks."),
-    ("Total Cost of Ownership (TCO) Calculator", "Net Winner in 2.8 Yrs", "5-Yr All-In Audit", "Live Fuel vs EV",
-     "Interactive daily distance, fuel price, and electricity tariff 5-year net savings estimator.",
-     "High-mileage rideshare/commercial TCO comparison exceeding 120 km daily driving.",
-     "TIP: The more kilometers you drive daily, the faster the higher upfront EV price pays for itself. || FAQ: At what daily distance does an EV beat petrol? Usually above 35–40 km per day.")
+    ("NVMe Storage & Disk IOPS", "145,000+ Read IOPS", "Gen4 Enterprise NVMe", "3.2 GB/s Sequential",
+     "Local RAID-10 enterprise NVMe SSD storage delivering sub-millisecond database query latency.",
+     "Network-attached block storage with live snapshot backups and instant volume resizing.",
+     "TIP: Local NVMe storage delivers 4x higher database IOPS than network-attached block volumes. || FAQ: Does higher IOPS speed up WordPress and SQL? Yes, database-heavy apps load 2x–3x faster on Gen4 NVMe."),
+    ("CPU Single-Core & Geekbench Score", "1,850+ Single-Core", "AMD EPYC / Ryzen 9", "Dedicated vCPU Thread",
+     "Dedicated physical CPU threads with zero noisy-neighbor throttling during peak traffic spikes.",
+     "Shared burstable vCPU instance optimized for low-cost staging and lightweight APIs.",
+     "TIP: Always choose Dedicated vCPU over Shared vCPU for production databases and checkout APIs. || FAQ: What is the difference between shared and dedicated vCPU? Dedicated vCPUs guarantee 100% core time without host contention."),
+    ("Monthly Pricing & Renewal Transparency", "$6 – $48/mo Flat", "0% Renewal Hike", "Hourly Billing Cap",
+     "Transparent flat monthly and hourly utility pricing with zero hidden 3x renewal price jumps.",
+     "Introductory 12-to-36 month promotional discount with upfront annual billing lock-in.",
+     "TIP: Cloud providers like Hetzner, DigitalOcean, and Vultr charge the exact same rate forever with zero renewal hikes. || FAQ: Are VPS plans billed hourly or monthly? Most developer clouds bill hourly up to a fixed monthly cap."),
+    ("Bandwidth, Port Speed & DDoS Protection", "4TB – 20TB Egress", "10 Gbps Network Port", "Always-On L3/L4 DDoS",
+     "Generous monthly outbound bandwidth allowance with free unlimited inbound traffic and DDoS mitigation.",
+     "Unmetered 1 Gbps port bandwidth plan engineered for high-media and file-download workloads.",
+     "TIP: Put Cloudflare CDN in front of your VPS to offload 85% of static bandwidth egress for free. || FAQ: Is inbound traffic counted toward bandwidth limits? Almost all cloud providers offer free unlimited inbound traffic."),
+    ("Global Data Center Latency & Peering", "<18 ms Regional Ping", "99.99% Uptime SLA", "Anycast BGP Routing",
+     "Tier-3+ ISO-27001 certified data centers across US, EU, India, Singapore, and Japan.",
+     "Multi-region private VPC networking with sub-5ms internal cross-server communication.",
+     "TIP: Host your VPS in the exact city or region where 70%+ of your target users live. || FAQ: How much does server location affect SEO? Lower Time-to-First-Byte (TTFB) directly improves Core Web Vitals."),
+    ("Automated Backups, Snapshots & Recovery", "Daily Off-Site Backup", "1-Click Point-in-Time", "20% Backup Add-On",
+     "Automated daily incremental off-site backups with 7-to-30 day retention and 60-second restore.",
+     "Manual on-demand disk snapshots billed per GB stored for pre-deployment safety.",
+     "TIP: Automate off-site S3/Backblaze backups in addition to provider snapshots for total disaster immunity. || FAQ: Do snapshots work while the server is running? Yes, live snapshots capture disk state with zero downtime."),
+    ("Managed vs Unmanaged Control Panel", "Root SSH + Cloud-Init", "1-Click Docker / WP", "Zero Sysadmin Overhead",
+     "Full root SSH access with Ubuntu/Debian images, firewall rules, and API/Terraform automation.",
+     "Managed server stack handling OS security patches, Nginx/LiteSpeed tuning, and SSL renewals.",
+     "TIP: Pair an unmanaged $10/mo VPS with a lightweight panel like Coolify or CloudPanel to save $50/mo. || FAQ: Is unmanaged VPS hard to secure? Enabling SSH keys, UFW firewall, and Fail2Ban takes under 5 minutes."),
+    ("Annual Cloud TCO & Savings Calculator", "Save $1,440+/yr", "AWS vs VPS Audit", "Live Bandwidth Math",
+     "Interactive vCPU, RAM, storage, and egress bandwidth annual cloud spend comparison.",
+     "Reserved multi-server cluster calculation comparing hyperscalers against independent NVMe clouds.",
+     "TIP: Migrating steady workloads from AWS EC2 to high-frequency NVMe VPS providers cuts cloud bills by 60%. || FAQ: How accurate is the cloud TCO slider? It models compute, NVMe storage, backups, and bandwidth overage.")
 )
 
 all_rows, seen = list(), set()
@@ -79,7 +81,7 @@ for h_name in hubs:
             s = slugify(t)
             if s not in seen:
                 seen.add(s)
-                sm = f"Verified {year} 5-year running savings, insurance, and total ownership cost for {r_name} in {h_name} ({cn}): {m1} ({m2})."
+                sm = f"Verified {year} NVMe IOPS, Geekbench CPU score, and monthly pricing benchmark for {h_name} ({r_name}) under {cn}: {m1} ({m2})."
                 all_rows.append((s, (t, cn, sm, m1, m2, m3, oa, ob, tf)))
 
 pool, idx = tuple(all_rows), 0
@@ -90,7 +92,7 @@ while len(all_rows) < 10000:
     if ns not in seen:
         seen.add(ns)
         rt, rc, rsm, m1, m2, m3, oa, ob, tf = orow
-        all_rows.append((ns, (f"{rt} (Trim #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
+        all_rows.append((ns, (f"{rt} (Node #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
     idx += 1
 all_rows = tuple(islice(all_rows, 10000))
 os.makedirs("dist/guide", exist_ok=True)
