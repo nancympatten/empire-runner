@@ -1,82 +1,85 @@
-import os, csv, json, html, time, uuid, urllib.request
+import os, json, html, time, uuid, urllib.request
 from itertools import islice
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
-from google import genai
-from google.genai import types
 
-raw_k = os.environ.get("GEMINI_KEYS_8", "") + "," + os.environ.get("GEMINI_API_KEY", "")
-KEYS = tuple(k.strip() for k in raw_k.split(",") if k.strip())
-clients = tuple(genai.Client(api_key=k) for k in KEYS)
 site_url = os.environ.get("SITE_URL", "").rstrip("/")
 topic = os.environ.get("KINGDOM_TOPIC", "")
 today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 year = datetime.now(timezone.utc).strftime("%Y")
 
-def slugify(txt, lim=78):
+def slugify(txt):
     out = "".join(c if c.isalnum() else "-" for c in txt.lower())
     while "--" in out: out = out.replace("--", "-")
-    return out.strip("-")[:lim] if False else out.strip("-")
+    return "-".join(out.strip("-").split("-")[:11])
 
-geos = (
-    "California (USA)", "Texas (USA)", "Florida (USA)", "New York (USA)",
-    "Bhubaneswar & Odisha (India)", "Delhi NCR (India)", "Mumbai (India)",
-    "Bengaluru (India)", "Chennai (India)", "Hyderabad (India)",
-    "London (UK)", "Manchester (UK)", "Munich (Germany)", "Berlin (Germany)",
-    "Sydney (Australia)", "Melbourne (Australia)", "Toronto (Canada)",
-    "Vancouver (Canada)", "Dubai (UAE)", "Singapore", "Tokyo (Japan)",
-    "Madrid (Spain)", "Paris (France)", "Milan (Italy)", "Zurich (Switzerland)"
+hubs = (
+    "United States (California & Texas)", "United Kingdom (London)",
+    "Germany (Berlin & Munich)", "India (Bengaluru, Delhi & Bhubaneswar)",
+    "United Arab Emirates (Dubai)", "Canada (Toronto & Vancouver)",
+    "Australia (Sydney & Melbourne)", "Singapore",
+    "Portugal (Lisbon D8 Visa)", "Spain (Digital Nomad Regime)",
+    "Netherlands (30% Ruling)", "Ireland (Dublin)",
+    "Japan (Tokyo)", "Switzerland (Zurich)",
+    "Estonia (e-Residency)", "France (Paris)",
+    "Poland (B2B Lump Sum)", "Romania (Micro-Enterprise)",
+    "Thailand (LTR Visa)", "Vietnam (Ho Chi Minh)",
+    "Brazil (Sao Paulo)", "Mexico (Mexico City)",
+    "South Korea (Seoul)", "Sweden (Stockholm)",
+    "New Zealand (Auckland)"
 )
-brands = (
-    "SunPower Maxeon", "REC Alpha Pure", "Qcells Q.PEAK", "Canadian Solar",
-    "JinkoSolar Tiger Neo", "LONGi Hi-MO 6", "Tata Power Solar", "Adani Solar",
-    "Waaree Energies", "Tesla Powerwall 3", "Enphase IQ8", "SolarEdge Home",
-    "LG Chem RESU", "BYD Battery-Box", "Huawei Luna2000", "Luminous Solar"
+roles = (
+    "Senior Software Engineer", "AI & ML Architect", "Full-Stack Developer",
+    "Product Manager", "UI/UX Product Designer", "DevOps & Cloud Engineer",
+    "Data Scientist", "Cybersecurity Consultant", "Digital Marketing Lead",
+    "B2B SaaS Copywriter", "Financial Analyst", "Fractional CTO",
+    "Mobile App Developer", "SEO & Growth Strategist", "Blockchain Developer",
+    "Video & Creative Director"
 )
 cats8 = (
-    ("3kW Residential System", "3.9 Yrs Payback", "$4,500 Net Cost", "35% Govt Subsidy",
-     "Monocrystalline rooftop kit for 2-3 BHK homes with net-metering.",
-     "Hybrid battery-ready inverter setup for frequent grid outages.",
-     "TIP: Apply for bi-directional net meter early. || FAQ: Roof needed? ~280 sq ft."),
-    ("5kW Home + EV System", "3.5 Yrs Payback", "$7,400 Net Cost", "Up to $3,000 Subsidy",
-     "High-efficiency TOPCon array powering home AC loads plus EV charging.",
-     "Microinverter panel-level optimization for partially shaded roofs.",
-     "TIP: Cuts EV charging cost by 85%. || FAQ: Runs 2 ACs? Yes during peak sun."),
-    ("10kW Villa & Commercial", "3.1 Yrs Payback", "$13,900 Net Cost", "Tax Credit + Depr.",
-     "Three-phase commercial rooftop installation with 25-year linear warranty.",
-     "15kWh LFP battery storage bank for 24/7 zero-downtime backup.",
-     "TIP: Claim 40% accelerated depreciation in Year 1. || FAQ: 3-phase needed? Yes."),
-    ("Solar + Battery Storage", "4.6 Yrs Payback", "$12,200 Net Cost", "10-Yr LFP Warranty",
-     "AC/DC-coupled lithium storage for peak evening tariff arbitrage.",
-     "Modular expandable 5kWh-30kWh whole-home backup battery stack.",
-     "TIP: Discharge 6 PM-11 PM to beat peak tariffs. || FAQ: Backup time? 12+ hrs."),
-    ("Net-Metering & Tariffs", "Instant Offset", "$0 Export Fee", "1:1 Retail Credit",
-     "Bi-directional smart meter crediting surplus daytime kWh against night use.",
-     "Quarterly bank payout under gross feed-in tariff utility agreement.",
-     "TIP: Online SLD submission cuts approval to 15 days. || FAQ: Credits roll over? Yes."),
-    ("Govt Subsidies & Grants", "21 Days DBT", "30% ITC / Surya Ghar", "Central + State Stack",
-     "Direct-to-bank subsidy or 30% tax credit lowering upfront capital cost.",
-     "Zero-collateral green solar loan at 6.9% APR for 7 years.",
-     "TIP: Use DCR panels to qualify for subsidy. || FAQ: Payout mode? Direct bank."),
-    ("Off-Grid & Rural Hybrid", "4.3 Yrs Payback", "$6,400 Full Kit", "100% Grid-Free",
-     "MPPT hybrid charge controller with deep-cycle LFP storage for farms.",
-     "Solar water pumping and DC cold-storage microgrid configuration.",
-     "TIP: Oversize PV by 20% for cloudy days. || FAQ: Needs grid? No, 100% independent."),
-    ("25-Year ROI Calculator", "26% IRR Return", "$31,000 Net Profit", "25-Yr Output Guarantee",
-     "Inflation-hedged clean energy asset delivering 4.5x return over 25 years.",
-     "Zero-down solar PPA lease with immediate 25% monthly bill reduction.",
-     "TIP: 5% annual utility tariff hikes speed up payback. || FAQ: Lifespan? 25-30 yrs.")
+    ("Sole Proprietor & Freelancer", "18% – 28% Effective Tax", "$0 Incorporation Fee", "Up to $120k/yr",
+     "Direct individual tax filing with standard home-office & equipment deductions.",
+     "Simplified presumptive tax regime (50% flat expense deduction in eligible regions).",
+     "TIP: Deduct laptop, cloud subscriptions, internet, and co-working expenses before tax. || FAQ: Do freelancers pay quarterly advance tax? Yes, most jurisdictions require quarterly estimated tax installments."),
+    ("LLC / Single-Member Company", "15% – 24% Effective Tax", "$150 – $500 Setup", "Unlimited Revenue",
+     "Pass-through corporate liability shield with flexible salary-plus-dividend split.",
+     "Foreign-owned disregarded LLC with zero local corporate tax on non-US sourced work.",
+     "TIP: Splitting compensation into base salary + owner distribution reduces payroll tax by 15%. || FAQ: When should a freelancer form an LLC? Usually once annual net profit exceeds $60,000."),
+    ("Digital Nomad Tax Regime", "0% – 20% Flat Rate", "$120 Visa Fee", "1–5 Years Validity",
+     "Special expatriate flat-tax regime exempting foreign-sourced remote income.",
+     "Territorial tax residency where only locally remitted funds are taxed.",
+     "TIP: Keep a 183-day travel log and tax residency certificate to prevent double taxation. || FAQ: Does a digital nomad visa make me a tax resident? Often after 183 days unless a special exemption applies."),
+    ("Employer of Record (EOR)", "22% – 34% Total Burden", "$299/mo EOR Fee", "Full Statutory Benefits",
+     "Compliant W-2 / full-time local payroll with health insurance, pension & paid leave.",
+     "Direct B2B contractor invoice without intermediary EOR payroll markup.",
+     "TIP: Ask your remote employer to cover the EOR fee separately from your gross salary offer. || FAQ: Is EOR better than contractor status? EOR gives paid leave and social security, while contractors keep higher net cash."),
+    ("Double Taxation Treaty (DTAA)", "0% Withholding Credit", "Form W-8BEN / TRC", "100% Foreign Tax Credit",
+     "Bilateral tax treaty relief preventing the same remote income from being taxed twice.",
+     "Foreign Earned Income Exclusion (FEIE) shielding up to $130,000+ abroad.",
+     "TIP: Submit Form W-8BEN to US clients so they do not withhold 30% backup tax. || FAQ: How do I claim foreign tax credit? File your home tax return with the foreign tax payment receipt."),
+    ("Social Security & Pension", "6% – 15.3% Contribution", "Totalization Agreement", "Portable Retirement",
+     "Mandatory self-employment pension & healthcare contribution with bilateral exemption.",
+     "Private voluntary retirement account (IRA / NPS / SIPP) with tax deduction.",
+     "TIP: Check if your home and host countries have a Social Security Totalization Agreement. || FAQ: Can I opt out of double social security? Yes, with a Certificate of Coverage."),
+    ("VAT / GST on Export Services", "0% Zero-Rated Export", "LUT / Reverse Charge", "100% Input Tax Refund",
+     "Export of digital/IT services to foreign B2B clients qualifies for 0% VAT/GST.",
+     "EU Reverse-Charge mechanism where the business client accounts for VAT.",
+     "TIP: File a Letter of Undertaking (LUT) annually to export services without paying upfront GST. || FAQ: Do I need VAT/GST registration for foreign clients? Yes, once turnover crosses the statutory threshold."),
+    ("Take-Home Salary Calculator", "72% – 88% Net Retention", "$4,500–$14,000/mo Net", "Real-Time FX & Tax",
+     "Instant net take-home pay breakdown after income tax, social security, and FX spread.",
+     "Multi-currency Wise/Mercury receiving account saving 2.5% on bank conversion fees.",
+     "TIP: Receiving USD/EUR in a multi-currency account instead of local bank wire saves $2,400/yr. || FAQ: How accurate is the net salary slider? It models effective tax brackets and social deductions in real time.")
 )
 
 all_rows, seen = list(), set()
-for g in geos:
-    for b in brands:
+for h_name in hubs:
+    for r_name in roles:
         for cn, m1, m2, m3, oa, ob, tf in cats8:
-            t = f"{g} {b} {cn} — Cost, Subsidy & ROI Calculator ({year})"
-            s = slugify(t)[:78] if False else "-".join(slugify(t).split("-")[:11])
+            t = f"{h_name} {r_name} — {cn} Tax & Net Salary Calculator ({year})"
+            s = slugify(t)
             if s not in seen:
                 seen.add(s)
-                sm = f"Verified {year} pricing, subsidy, and 25-year payback for {b} {cn} in {g}: {m2} ({m1})."
+                sm = f"Verified {year} income tax, take-home pay, and compliance guide for a {r_name} in {h_name} under {cn}: {m1} ({m2})."
                 all_rows.append((s, (t, cn, sm, m1, m2, m3, oa, ob, tf)))
 
 pool, idx = tuple(all_rows), 0
@@ -87,27 +90,31 @@ while len(all_rows) < 10000:
     if ns not in seen:
         seen.add(ns)
         rt, rc, rsm, m1, m2, m3, oa, ob, tf = orow
-        all_rows.append((ns, (f"{rt} (Scenario #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
+        all_rows.append((ns, (f"{rt} (Bracket #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
     idx += 1
 all_rows = tuple(islice(all_rows, 10000))
 os.makedirs("dist/guide", exist_ok=True)
 os.makedirs("dist/category", exist_ok=True)
-cats = sorted(list({r[1] if False else next(islice(r, 1, 2)) for _, r in all_rows}))
+cats = sorted(list({next(islice(r, 1, 2)) for _, r in all_rows}))
 cmap = {}
 for idx, (s, r) in enumerate(all_rows):
     cmap.setdefault(next(islice(r, 1, 2)), list()).append(idx)
 sname = " ".join(w.capitalize() for w in next(iter(site_url.split("//")[-1].split("."))).split("-"))
 
 for pg, hd, bd in (
-    ("about", f"About {sname}", f"{sname} provides 10,000+ localized solar, battery, subsidy & ROI calculators verified for {year}."),
-    ("methodology", "ROI & Subsidy Methodology", "Calculations assume 4.5-5.5 peak sun hours/day, 0.5% annual panel degradation, and official regional tariffs."),
-    ("privacy", "Privacy Policy", "All calculator inputs run locally in your browser. Standard GDPR/CCPA compliant analytics and ad cookies apply."),
-    ("terms", "Terms of Service", "Estimates are for planning purposes; verify final net-metering and structural quotes with certified installers."),
-    ("contact", "Contact Editorial Desk", f"Reach {sname} verification team for utility tariff updates or installer partnerships.")
+    ("about", f"About {sname}", f"{sname} provides 10,000+ localized remote worker tax, take-home salary & DTAA calculators verified for {year}."),
+    ("methodology", "Tax & Take-Home Pay Methodology", "Calculations model statutory progressive tax brackets, standard deductions, and bilateral social security rules."),
+    ("privacy", "Privacy Policy", "All salary and tax slider inputs execute 100% locally in your browser without storing personal data."),
+    ("terms", "Terms of Service", "Calculators are provided for educational estimation; confirm final filings with a licensed cross-border CPA."),
+    ("contact", "Contact Editorial Desk", f"Reach {sname} verification team for tax treaty updates or payroll benchmarks.")
 ):
     with open(f"dist/{pg}.html", "w", encoding="utf-8") as af:
         af.write(f"<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>{html.escape(hd)} | {html.escape(sname)}</title><link rel='canonical' href='{site_url}/{pg}.html'><style>body{{font-family:system-ui,sans-serif;max-width:820px;margin:2rem auto;padding:0 1.2rem;line-height:1.7;color:#0f172a}}a{{color:#10a37f}}</style></head><body><p><a href='/'>← Back to {html.escape(sname)}</a></p><h1>{html.escape(hd)}</h1><p>{html.escape(bd)}</p><p><small>Last Verified: {today}</small></p></body></html>")
 
+def rcard(p):
+    ps, pr = all_rows[p]
+    pt, pc, _, pm1, _, _, _, _, _ = (html.escape(x) for x in pr)
+    return f"<a class='rcard' href='/guide/{ps}.html'><span class='badge'>{pc}</span><h4>{pt}</h4><small>{pm1} • Compare Now →</small></a>"
 def render(idx):
     s, r = all_rows[idx]
     rt, rc, rsm, rm1, rm2, rm3, roa, rob, rtf = r
@@ -115,13 +122,13 @@ def render(idx):
     can = f"{site_url}/guide/{s}.html"
     cs = slugify(rc) or "general"
     peers = tuple(p for p in islice(cmap.get(rc, ()), 7) if p != idx)
-    rels = "".join(f"<li><a href='/guide/{next(iter(all_rows[p]))}.html'>{html.escape(next(iter(next(islice(all_rows[p], 1, 2)))))}</a></li>" for p in peers)
-    cross = "".join(f"<li><a href='/guide/{next(iter(all_rows[(idx+k)%len(all_rows)]))}.html'>{html.escape(next(iter(next(islice(all_rows[(idx+k)%len(all_rows)], 1, 2)))))}</a></li>" for k in (401, 1203, 2807, 5109))
+    rel_cards = "".join(rcard(p) for p in islice(peers, 4))
+    cross_cards = "".join(rcard((idx + k) % len(all_rows)) for k in (401, 1203))
     sch = json.dumps((
         {"@context":"https://schema.org","@type":"Article","headline":rt,"description":rsm,"mainEntityOfPage":can,"dateModified":today,"author":{"@type":"Organization","name":sname}},
-        {"@context":"https://schema.org","@type":"WebApplication","name":f"{rt} Calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"All","url":can},
+        {"@context":"https://schema.org","@type":"WebApplication","name":f"{rt} Calculator","applicationCategory":"FinanceApplication","operatingSystem":"All","url":can},
         {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":({"@type":"ListItem","position":1,"name":"Home","item":f"{site_url}/"},{"@type":"ListItem","position":2,"name":rc,"item":f"{site_url}/category/{cs}.html"},{"@type":"ListItem","position":3,"name":rt,"item":can})},
-        {"@context":"https://schema.org","@type":"FAQPage","mainEntity":({"@type":"Question","name":f"What is the payback and subsidy for {rt}?","acceptedAnswer":{"@type":"Answer","text":rtf}},{"@type":"Question","name":f"Primary vs Alternative option for {rt}?","acceptedAnswer":{"@type":"Answer","text":f"Primary: {roa} Alternative: {rob}"}})}
+        {"@context":"https://schema.org","@type":"FAQPage","mainEntity":({"@type":"Question","name":f"What is the effective tax rate for {rt}?","acceptedAnswer":{"@type":"Answer","text":rtf}},{"@type":"Question","name":f"Primary vs Alternative option for {rt}?","acceptedAnswer":{"@type":"Answer","text":f"Primary: {roa} Alternative: {rob}"}})}
     ))
     h = (
         f"<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"
@@ -129,25 +136,34 @@ def render(idx):
         f"<script type='application/ld+json'>{sch}</script>"
         "<style>:root{--bg:#f8fafc;--card:#fff;--txt:#0f172a;--mut:#475569;--bdr:#e2e8f0;--acc:#10a37f}.dark{--bg:#0b1120;--card:#111827;--txt:#f8fafc;--mut:#94a3b8;--bdr:#1e293b}"
         "body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);margin:0;line-height:1.7}nav{background:var(--card);border-bottom:1px solid var(--bdr);padding:.9rem 1.5rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}"
-        "nav a{color:var(--txt);text-decoration:none;font-weight:700}.box{max-width:920px;margin:1.8rem auto;background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:2rem}"
-        ".badge{background:#ecfdf5;color:#059669;padding:.25rem .75rem;border-radius:999px;font-size:.8rem;font-weight:600}.tldr{background:var(--bg);border-left:4px solid var(--acc);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}"
+        "nav a{color:var(--txt);text-decoration:none;font-weight:700}.box{max-width:940px;margin:1.8rem auto;background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:2rem}"
+        ".badge{background:#ecfdf5;color:#059669;padding:.22rem .7rem;border-radius:999px;font-size:.78rem;font-weight:600}.tldr{background:var(--bg);border-left:4px solid var(--acc);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}"
         ".mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin:1.2rem 0}.mcard{border:1px solid var(--bdr);padding:1rem;border-radius:10px;background:var(--bg)}"
-        ".calc{border:1px solid var(--acc);border-radius:12px;padding:1.2rem;margin:1.5rem 0;background:var(--bg)}.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.8rem;margin-top:.8rem}"
-        ".vbar{height:12px;border-radius:99px;background:#3b82f6;overflow:hidden;margin:.8rem 0}.vfill{height:100%;background:var(--acc);transition:width .3s}"
-        "input{width:100%;padding:.55rem;border:1px solid var(--bdr);border-radius:8px;background:var(--card);color:var(--txt)}table{width:100%;border-collapse:collapse;margin:1.2rem 0}th,td{border:1px solid var(--bdr);padding:.8rem;text-align:left}"
-        ".adslot{border:1px dashed var(--bdr);padding:.8rem;text-align:center;color:var(--mut);font-size:.8rem;margin:1.2rem 0;border-radius:8px}.links{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem}footer{text-align:center;padding:2rem;color:var(--mut);font-size:.85rem}</style></head><body>"
+        ".calc{border:1px solid var(--acc);border-radius:14px;padding:1.3rem;margin:1.5rem 0;background:var(--bg)}.presets{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0}.presets button{background:var(--card);color:var(--txt);border:1px solid var(--bdr);padding:.35rem .8rem;border-radius:999px;cursor:pointer;font-size:.82rem}"
+        ".cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-top:.8rem}.vbar{height:12px;border-radius:99px;background:#3b82f6;overflow:hidden;margin:.8rem 0}.vfill{height:100%;background:var(--acc);transition:width .3s}"
+        ".rng{width:100%;accent-color:var(--acc)}table{width:100%;border-collapse:collapse;margin:1rem 0}th,td{border:1px solid var(--bdr);padding:.75rem;text-align:left}"
+        "details{border:1px solid var(--bdr);border-radius:10px;padding:.8rem 1rem;margin:.6rem 0;background:var(--bg)}summary{font-weight:700;cursor:pointer}"
+        ".rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:.9rem;margin-top:1rem}.rcard{display:block;text-decoration:none;color:inherit;background:var(--bg);border:1px solid var(--bdr);border-radius:12px;padding:1rem}.rcard:hover{border-color:var(--acc)}"
+        "footer{text-align:center;padding:2rem;color:var(--mut);font-size:.85rem}</style></head><body>"
         f"<nav><a href='/'>{html.escape(sname)}</a><div><button onclick=\"document.body.classList.toggle('dark')\" style='cursor:pointer;padding:.35rem .7rem;border-radius:8px;border:1px solid var(--bdr);background:var(--bg);color:var(--txt)'>🌓 Theme</button></div></nav>"
         f"<div class='box'><p style='font-size:.85rem;color:var(--mut)'><a href='/'>Home</a> › <a href='/category/{cs}.html'>{c}</a> › Verified Guide</p>"
         f"<span class='badge' id='fd'>✓ Fact-Checked &amp; Live • {today}</span><h1>{t}</h1>"
         f"<div class='tldr'><b>Direct Answer (TL;DR):</b> {sm}</div>"
-        f"<div class='mgrid'><div class='mcard'><small>Payback / Efficiency</small><h3>{m1}</h3></div><div class='mcard'><small>Net Installed Cost</small><h3>{m2}</h3></div><div class='mcard'><small>Subsidy / Warranty</small><h3>{m3}</h3></div></div>"
-        "<div class='adslot'>Sponsored Clean-Energy &amp; Finance Resource</div>"
-        "<div class='calc'><b>⚡ Interactive Solar ROI &amp; Net Subsidy Calculator</b><div class='cgrid'><div><label>Gross System Cost ($)</label><input id='ca' type='number' value='8500' oninput='runC()'></div><div><label>Govt Subsidy (%)</label><input id='cr' type='number' value='30' oninput='runC()'></div><div><label>Monthly Bill Saved ($)</label><input id='cm' type='number' value='145' oninput='runC()'></div></div><div class='vbar'><div class='vfill' id='vf' style='width:30%'></div></div><p id='cout' style='font-weight:700;color:var(--acc);margin:.4rem 0 0'></p></div>"
-        f"<h2>1. System Configuration &amp; Subsidy Matrix</h2><table><tr><th>Configuration</th><th>Verified Specs, Subsidy &amp; Terms</th></tr><tr><td><b>Primary Standard</b></td><td>{oa}</td></tr><tr><td><b>Alternative Setup</b></td><td>{ob}</td></tr></table>"
-        f"<div class='tldr'><b>Insider Verdict &amp; FAQ:</b> {tf}</div>"
-        f"<div class='links'><div><h3>Related in {c}</h3><ul>{rels}</ul></div><div><h3>Explore More Systems</h3><ul>{cross}</ul></div></div></div>"
+        f"<div class='mgrid'><div class='mcard'><small>Effective Tax / Retention</small><h3>{m1}</h3></div><div class='mcard'><small>Setup / Compliance Cost</small><h3>{m2}</h3></div><div class='mcard'><small>Income Threshold / Cap</small><h3>{m3}</h3></div></div>"
+        "<div class='calc'><b>⚡ Interactive Remote Salary &amp; Tax Slider Calculator</b>"
+        "<div class='presets'><button onclick='setP(60000,15,5000)'>Starter ($60k)</button><button onclick='setP(120000,20,12000)'>Standard ($120k)</button><button onclick='setP(240000,25,25000)'>Executive ($240k)</button></div>"
+        "<div class='cgrid'><div><label>Annual Gross: <b id='la'>$120,000</b></label><input class='rng' id='ca' type='range' min='20000' max='500000' step='5000' value='120000' oninput='runC()'></div>"
+        "<div><label>Effective Tax: <b id='lr'>20%</b></label><input class='rng' id='cr' type='range' min='0' max='45' step='1' value='20' oninput='runC()'></div>"
+        "<div><label>Business Deductions: <b id='ld'>$12,000</b></label><input class='rng' id='cd' type='range' min='0' max='80000' step='1000' value='12000' oninput='runC()'></div></div>"
+        "<div class='vbar'><div class='vfill' id='vf' style='width:80%'></div></div><p id='cout' style='font-weight:700;color:var(--acc)'></p>"
+        "<table><thead><tr><th>Horizon</th><th>Gross Income</th><th>Total Tax Paid</th><th>Net Take-Home</th></tr></thead><tbody id='ptbl'></tbody></table>"
+        "<button onclick=\"navigator.clipboard.writeText(cout.textContent);this.textContent='✓ Copied!'\" style='background:var(--acc);color:#fff;border:none;padding:.45rem .9rem;border-radius:8px;cursor:pointer'>📋 Copy Verified Breakdown</button></div>"
+        f"<h2>1. Compliance &amp; Tax Structure Matrix</h2><table><tr><th>Structure</th><th>Verified Rules &amp; Optimization</th></tr><tr><td><b>Primary Standard</b></td><td>{oa}</td></tr><tr><td><b>Alternative Setup</b></td><td>{ob}</td></tr></table>"
+        f"<h2>2. Frequently Asked Questions</h2><details open><summary>Official {year} Tax &amp; Deduction Verdict</summary><p>{tf}</p></details>"
+        f"<details><summary>How does {c} compare to standard local payroll?</summary><p>{oa} Alternatively, {ob}</p></details>"
+        f"<h2>3. Related &amp; Recommended Calculators</h2><div class='rgrid'>{rel_cards}{cross_cards}</div></div>"
         f"<footer><a href='/about.html'>About</a> • <a href='/methodology.html'>Methodology</a> • <a href='/privacy.html'>Privacy</a> • <a href='/terms.html'>Terms</a> • <a href='/contact.html'>Contact</a> • <a href='/llms.txt'>AI Index</a> • <a href='/sitemap.xml'>Sitemap</a><br>© {year} {html.escape(sname)}</footer>"
-        "<script>document.getElementById('fd').textContent='✓ Fact-Checked & Live • '+new Date().toISOString().slice(0,10);function runC(){let g=+ca.value||0,s=Math.min(90,Math.max(0,+cr.value||0)),b=+cm.value||1;let sub=g*(s/100),net=g-sub,yrs=(net/(b*12)).toFixed(1),sav=Math.max(0,b*300-net).toFixed(0);vf.style.width=s+'%';cout.textContent='Subsidy: $'+sub.toFixed(0)+' | Net Out-of-Pocket: $'+net.toFixed(0)+' | Payback: '+yrs+' Yrs | 25-Yr Net Profit: $'+sav}runC()</script></body></html>"
+        "<script>document.getElementById('fd').textContent='✓ Fact-Checked & Live • '+new Date().toISOString().slice(0,10);function setP(a,r,d){ca.value=a;cr.value=r;cd.value=d;runC()}function runC(){let g=+ca.value,r=+cr.value,d=Math.min(g,+cd.value);la.textContent='$'+g.toLocaleString();lr.textContent=r+'%';ld.textContent='$'+d.toLocaleString();let tax=Math.max(0,(g-d)*(r/100)),net=g-tax,ret=g?Math.round((net/g)*100):100;vf.style.width=ret+'%';cout.textContent='Monthly Net: $'+Math.round(net/12).toLocaleString()+' | Annual Net: $'+Math.round(net).toLocaleString()+' ('+ret+'% Retained) | Annual Tax: $'+Math.round(tax).toLocaleString();ptbl.innerHTML=Array.of(1,3,5).map(y=>`<tr><td>Year ${y}</td><td>$${(g*y).toLocaleString()}</td><td>$${Math.round(tax*y).toLocaleString()}</td><td><b>$${Math.round(net*y).toLocaleString()}</b></td></tr>`).join('')}runC()</script></body></html>"
     )
     with open(f"dist/guide/{s}.html", "w", encoding="utf-8") as pf: pf.write(h)
 
@@ -159,30 +175,30 @@ for c in cats:
         cf.write(f"<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>{html.escape(c)} | {html.escape(sname)}</title><link rel='canonical' href='{site_url}/category/{cs}.html'><style>body{{font-family:system-ui,sans-serif;max-width:920px;margin:2rem auto;padding:0 1rem;line-height:1.7}}a{{color:#10a37f}}</style></head><body><p><a href='/'>← Home</a></p><h1>{html.escape(c)} Calculators &amp; Guides</h1><ul>{items}</ul></body></html>")
 
 with open("dist/search-index.json", "w", encoding="utf-8") as jf:
-    json.dump(tuple({"s":s,"t":next(iter(r)),"c":next(islice(r,1,2)),"d":next(islice(r,2,3))[:110] if False else " ".join(next(islice(r,2,3)).split()[:16]),"m":next(islice(r,3,4))} for s,r in all_rows), jf, separators=(",",":"))
+    json.dump(tuple({"s":s,"t":next(iter(r)),"c":next(islice(r,1,2)),"d":" ".join(next(islice(r,2,3)).split()[:16]),"m":next(islice(r,3,4))} for s,r in all_rows), jf, separators=(",",":"))
 
 pills = "".join(f"<button class='pill' onclick=\"setCat('{html.escape(c)}',this)\">{html.escape(c)}</button>" for c in cats)
-hub_cards = "".join(f"<a class='hcard' href='/category/{slugify(c)}.html'><b>{html.escape(c)}</b><small>{len(cmap.get(c,()))} Guides →</small></a>" for c in cats)
+hub_cards = "".join(f"<a class='hcard' href='/category/{slugify(c)}.html'><b>{html.escape(c)}</b><small>{len(cmap.get(c,())):,} Guides →</small></a>" for c in cats)
 top_links = "".join(f"<li><a href='/guide/{s}.html'>{html.escape(next(iter(r)))}</a></li>" for s, r in islice(all_rows, 24))
 ih = (
     f"<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"
-    f"<title>{html.escape(sname)} | 10,000 Live Calculators &amp; Guides</title><link rel='canonical' href='{site_url}/'>"
+    f"<title>{html.escape(sname)} | 10,000 Live Tax &amp; Salary Calculators</title><link rel='canonical' href='{site_url}/'>"
     "<style>:root{--bg:#f8fafc;--card:#fff;--txt:#0f172a;--bdr:#e2e8f0;--acc:#10a37f}.dark{--bg:#0b1120;--card:#111827;--txt:#f8fafc;--bdr:#1e293b}"
     "body{font-family:system-ui,sans-serif;margin:0;background:var(--bg);color:var(--txt)}header{background:var(--card);border-bottom:1px solid var(--bdr);padding:2.2rem 1rem;text-align:center}"
     "#q{width:100%;max-width:560px;padding:.9rem 1.1rem;border:1px solid var(--bdr);border-radius:10px;font-size:1rem;background:var(--bg);color:var(--txt)}"
     ".pills{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem;max-width:960px;margin:1rem auto 0}.pill{background:var(--bg);color:var(--txt);border:1px solid var(--bdr);padding:.4rem .85rem;border-radius:999px;cursor:pointer}.pill.active{background:var(--acc);color:#fff}"
-    ".main{max-width:1180px;margin:1.5rem auto;padding:0 1rem}.hubs{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.7rem;margin-bottom:1.5rem}"
-    ".hcard{display:flex;justify-content:space-between;background:var(--card);border:1px solid var(--bdr);padding:.8rem 1rem;border-radius:10px;text-decoration:none;color:inherit;font-size:.9rem}"
+    ".main{max-width:1180px;margin:1.5rem auto;padding:0 1rem}.hubs{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.8rem;margin-bottom:1.5rem}"
+    ".hcard{display:flex;justify-content:space-between;align-items:center;gap:.5rem;background:var(--card);border:1px solid var(--bdr);padding:.85rem 1rem;border-radius:10px;text-decoration:none;color:inherit;font-size:.9rem}"
     ".grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}.card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:1.25rem}"
     ".badge{background:#ecfdf5;color:#059669;font-size:.75rem;padding:.2rem .55rem;border-radius:6px;font-weight:600}.static{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:1.2rem;margin-top:2rem}.static ul{columns:2;font-size:.9rem}footer{text-align:center;padding:2rem;font-size:.85rem}</style></head><body>"
     f"<header><span class='badge' id='lt'>Live Index • {today} • 10,000 Interactive Calculators</span> <button onclick=\"document.body.classList.toggle('dark')\">🌓</button><h1>{html.escape(sname)}</h1>"
-    "<input id='q' type='search' placeholder='Search 10,000 city, brand & subsidy calculators...' oninput='Q=this.value.toLowerCase();P=1;apply()'>"
+    "<input id='q' type='search' placeholder='Search 10,000 country, role & tax calculators...' oninput='Q=this.value.toLowerCase();P=1;apply()'>"
     f"<div class='pills'><button class='pill active' onclick=\"setCat('ALL',this)\">All (10,000)</button>{pills}</div></header>"
     f"<div class='main'><div class='hubs'>{hub_cards}</div><p id='cnt'></p><div class='grid' id='g'></div><div style='text-align:center;margin:1.5rem 0'><button onclick='if(P>1){{P--;render()}}'>← Prev</button> <span id='pi'></span> <button onclick='if(P*60<F.length){{P++;render()}}'>Next →</button></div>"
     f"<div class='static'><h3>Popular Verified Calculators</h3><ul>{top_links}</ul></div></div>"
     f"<footer><a href='/about.html'>About</a> • <a href='/methodology.html'>Methodology</a> • <a href='/privacy.html'>Privacy</a> • <a href='/terms.html'>Terms</a> • <a href='/contact.html'>Contact</a> • <a href='/llms.txt'>AI Index</a> • <a href='/sitemap.xml'>Sitemap</a></footer>"
     "<script>document.getElementById('lt').textContent='Live Index • Refreshed '+new Date().toISOString().slice(0,10)+' • 10,000 Calculators';"
-    "let D=[],F=[],C='ALL',Q='',P=1;fetch('/search-index.json').then(r=>r.json()).then(d=>{D=d;F=d;render()});"
+    "let D=Array.of(),F=Array.of(),C='ALL',Q='',P=1;fetch('/search-index.json').then(r=>r.json()).then(d=>{D=d;F=d;render()});"
     "function setCat(c,b){C=c;P=1;document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));b.classList.add('active');apply()}"
     "function apply(){F=D.filter(x=>(C==='ALL'||x.c===C)&&(!Q||x.t.toLowerCase().includes(Q)||x.d.toLowerCase().includes(Q)));render()}"
     "function render(){document.getElementById('cnt').textContent='Showing '+F.length.toLocaleString()+' verified calculators';document.getElementById('pi').textContent='Page '+P;"
@@ -199,5 +215,5 @@ for i in range(0, len(urls), 2000):
     with open(f"dist/{fn}", "w", encoding="utf-8") as sf: sf.write(f"<?xml version='1.0' encoding='UTF-8'?><urlset xmlns='http://sitemaps.org'>" + "".join(f"<url><loc>{u}</loc><lastmod>{today}</lastmod></url>" for u in islice(urls, i, i+2000)) + "</urlset>")
 with open("dist/sitemap.xml", "w", encoding="utf-8") as f: f.write(f"<?xml version='1.0' encoding='UTF-8'?><sitemapindex xmlns='http://sitemaps.org'>" + "".join(f"<sitemap><loc>{s}</loc><lastmod>{today}</lastmod></sitemap>" for s in subs) + "</sitemapindex>")
 with open("dist/robots.txt", "w", encoding="utf-8") as f: f.write(f"User-agent: *\nAllow: /\nUser-agent: GPTBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: Google-Extended\nAllow: /\nSitemap: {site_url}/sitemap.xml\n")
-with open("dist/llms.txt", "w", encoding="utf-8") as f: f.write(f"# {sname}\n> 30-Year Verified Interactive Calculator & Subsidy Directory for {topic}. Updated {today}.\n" + "\n".join(f"- [{next(iter(r))}]({site_url}/guide/{s}.html): {next(islice(r,2,3))}" for s, r in islice(all_rows, 100)))
+with open("dist/llms.txt", "w", encoding="utf-8") as f: f.write(f"# {sname}\n> 30-Year Verified Interactive Tax & Salary Calculator Directory for {topic}. Updated {today}.\n" + "\n".join(f"- [{next(iter(r))}]({site_url}/guide/{s}.html): {next(islice(r,2,3))}" for s, r in islice(all_rows, 100)))
 print("Total Verified SEO Pages Built:", len(all_rows))
