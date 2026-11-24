@@ -14,63 +14,63 @@ def slugify(txt):
     return "-".join(out.strip("-").split("-")[:11])
 
 hubs = (
-    "Hetzner Cloud (Germany & US)", "DigitalOcean Droplets",
-    "Vultr High Frequency NVMe", "Linode Akamai Cloud",
-    "AWS Lightsail & EC2", "Google Cloud Compute Engine",
-    "Microsoft Azure Virtual Machines", "Cloudways Managed Cloud",
-    "Hostinger KVM VPS", "Contabo Cloud VPS",
-    "OVHcloud Bare Metal & VPS", "UpCloud MaxIOPS",
-    "Kamatera Custom Cloud", "Oracle Cloud Ampere ARM",
-    "Scaleway Europe Cloud", "IONOS Cloud VPS",
-    "DreamHost Managed VPS", "Bluehost NVMe VPS",
-    "A2 Hosting Turbo VPS", "SiteGround Cloud Hosting",
-    "Liquid Web Managed Dedicated", "Fly.io Edge MicroVMs",
-    "Railway App Hosting", "Render Cloud Services",
-    "Cloudflare Workers & Pages"
+    "United States (S&P 500 & 401k)", "United States (Roth IRA & VOO ETF)",
+    "India (Nifty 50 Mutual Fund SIP)", "India (NPS & PPF Tax-Free)",
+    "United Kingdom (Stocks & Shares ISA)", "United Kingdom (SIPP Pension)",
+    "Canada (TFSA & RRSP Index)", "Australia (Superannuation & ASX 200)",
+    "Germany (MSCI World ETF Sparplan)", "Singapore (CPF & STI ETF)",
+    "United Arab Emirates (Offshore ETF)", "Switzerland (Pillar 3a & SMI)",
+    "Japan (NISA Tax-Free Index)", "Netherlands (Box 3 Index Investing)",
+    "Ireland (VWCE Accumulating ETF)", "France (PEA European Equity)",
+    "Spain (Indexa Capital & MSCI)", "Sweden (ISK Investment Account)",
+    "New Zealand (KiwiSaver Growth)", "South Korea (ISA & KOSPI 200)",
+    "Brazil (Tesouro Direto & Ibovespa)", "South Africa (TFSA & JSE Top 40)",
+    "Saudi Arabia (Tadawul & Sukuk)", "Hong Kong (MPF & Hang Seng ETF)",
+    "Global Expat (Irish-Domiciled UCITS)"
 )
 roles = (
-    "2 vCPU / 4GB RAM Starter", "4 vCPU / 8GB RAM Production",
-    "8 vCPU / 16GB RAM Scale", "16 vCPU / 32GB RAM Enterprise",
-    "High-Traffic WordPress & WooCommerce", "Next.js & Node.js SaaS Backend",
-    "Docker & Kubernetes Cluster", "PostgreSQL & Redis Database Node",
-    "n8n & AI Automation Self-Hosting", "Game Server & Low-Latency UDP",
-    "Forex & Algo Trading Low-Ping", "Video Streaming & FFmpeg Node",
-    "CyberPanel & cPanel Reseller", "Python & FastAPI Microservices",
-    "Arm64 Ampere Cost-Optimized", "Dedicated Ryzen 9 Bare Metal"
+    "$250/mo Beginner SIP", "$500/mo Wealth Builder",
+    "$1,000/mo Mid-Career Investor", "$2,500/mo High-Earner Portfolio",
+    "$5,000/mo Executive FIRE Plan", "$10,000 Lump-Sum + Monthly Top-Up",
+    "$50,000 Lump-Sum Compounding", "$100,000 Portfolio Growth",
+    "Age 25 Early Start (35-Yr Horizon)", "Age 35 Family Wealth (25-Yr Horizon)",
+    "Age 45 Catch-Up Plan (15-Yr Horizon)", "Child Higher Education Corpus",
+    "Early Retirement FIRE at 45", "Tax-Free Dividend Income Stream",
+    "10% Annual Step-Up SIP Strategy", "Inflation-Adjusted Real Return"
 )
 cats8 = (
-    ("NVMe Storage & Disk IOPS", "145,000+ Read IOPS", "Gen4 Enterprise NVMe", "3.2 GB/s Sequential",
-     "Local RAID-10 enterprise NVMe SSD storage delivering sub-millisecond database query latency.",
-     "Network-attached block storage with live snapshot backups and instant volume resizing.",
-     "TIP: Local NVMe storage delivers 4x higher database IOPS than network-attached block volumes. || FAQ: Does higher IOPS speed up WordPress and SQL? Yes, database-heavy apps load 2x–3x faster on Gen4 NVMe."),
-    ("CPU Single-Core & Geekbench Score", "1,850+ Single-Core", "AMD EPYC / Ryzen 9", "Dedicated vCPU Thread",
-     "Dedicated physical CPU threads with zero noisy-neighbor throttling during peak traffic spikes.",
-     "Shared burstable vCPU instance optimized for low-cost staging and lightweight APIs.",
-     "TIP: Always choose Dedicated vCPU over Shared vCPU for production databases and checkout APIs. || FAQ: What is the difference between shared and dedicated vCPU? Dedicated vCPUs guarantee 100% core time without host contention."),
-    ("Monthly Pricing & Renewal Transparency", "$6 – $48/mo Flat", "0% Renewal Hike", "Hourly Billing Cap",
-     "Transparent flat monthly and hourly utility pricing with zero hidden 3x renewal price jumps.",
-     "Introductory 12-to-36 month promotional discount with upfront annual billing lock-in.",
-     "TIP: Cloud providers like Hetzner, DigitalOcean, and Vultr charge the exact same rate forever with zero renewal hikes. || FAQ: Are VPS plans billed hourly or monthly? Most developer clouds bill hourly up to a fixed monthly cap."),
-    ("Bandwidth, Port Speed & DDoS Protection", "4TB – 20TB Egress", "10 Gbps Network Port", "Always-On L3/L4 DDoS",
-     "Generous monthly outbound bandwidth allowance with free unlimited inbound traffic and DDoS mitigation.",
-     "Unmetered 1 Gbps port bandwidth plan engineered for high-media and file-download workloads.",
-     "TIP: Put Cloudflare CDN in front of your VPS to offload 85% of static bandwidth egress for free. || FAQ: Is inbound traffic counted toward bandwidth limits? Almost all cloud providers offer free unlimited inbound traffic."),
-    ("Global Data Center Latency & Peering", "<18 ms Regional Ping", "99.99% Uptime SLA", "Anycast BGP Routing",
-     "Tier-3+ ISO-27001 certified data centers across US, EU, India, Singapore, and Japan.",
-     "Multi-region private VPC networking with sub-5ms internal cross-server communication.",
-     "TIP: Host your VPS in the exact city or region where 70%+ of your target users live. || FAQ: How much does server location affect SEO? Lower Time-to-First-Byte (TTFB) directly improves Core Web Vitals."),
-    ("Automated Backups, Snapshots & Recovery", "Daily Off-Site Backup", "1-Click Point-in-Time", "20% Backup Add-On",
-     "Automated daily incremental off-site backups with 7-to-30 day retention and 60-second restore.",
-     "Manual on-demand disk snapshots billed per GB stored for pre-deployment safety.",
-     "TIP: Automate off-site S3/Backblaze backups in addition to provider snapshots for total disaster immunity. || FAQ: Do snapshots work while the server is running? Yes, live snapshots capture disk state with zero downtime."),
-    ("Managed vs Unmanaged Control Panel", "Root SSH + Cloud-Init", "1-Click Docker / WP", "Zero Sysadmin Overhead",
-     "Full root SSH access with Ubuntu/Debian images, firewall rules, and API/Terraform automation.",
-     "Managed server stack handling OS security patches, Nginx/LiteSpeed tuning, and SSL renewals.",
-     "TIP: Pair an unmanaged $10/mo VPS with a lightweight panel like Coolify or CloudPanel to save $50/mo. || FAQ: Is unmanaged VPS hard to secure? Enabling SSH keys, UFW firewall, and Fail2Ban takes under 5 minutes."),
-    ("Annual Cloud TCO & Savings Calculator", "Save $1,440+/yr", "AWS vs VPS Audit", "Live Bandwidth Math",
-     "Interactive vCPU, RAM, storage, and egress bandwidth annual cloud spend comparison.",
-     "Reserved multi-server cluster calculation comparing hyperscalers against independent NVMe clouds.",
-     "TIP: Migrating steady workloads from AWS EC2 to high-frequency NVMe VPS providers cuts cloud bills by 60%. || FAQ: How accurate is the cloud TCO slider? It models compute, NVMe storage, backups, and bandwidth overage.")
+    ("10-Year Compounding Projection", "10.8% – 12.4% CAGR", "2.8x Capital Multiple", "0.03% – 0.15% TER",
+     "Disciplined monthly dollar-cost averaging into low-cost broad-market equity index funds.",
+     "Balanced 70/30 equity-and-treasury bond allocation reducing portfolio drawdown volatility.",
+     "TIP: Keeping fund expense ratios (TER) under 0.10% saves tens of thousands in compounding drag over 20 years. || FAQ: Does monthly SIP beat timing the market? Over 10+ years, automated monthly investing beats 85% of active timers."),
+    ("20-Year & 30-Year Exponential Wealth", "8.4x – 17.5x Multiplier", "78% Gains from Growth", "Long-Term Capital Gain",
+     "Multi-decade uninterrupted compounding where investment returns exceed principal contributions 4-to-1.",
+     "Accumulating dividend-reinvestment (DRIP) share class compounding payouts tax-deferred.",
+     "TIP: Years 20 through 30 generate over 65% of total lifetime wealth—never interrupt compounding early. || FAQ: What happens if I stay invested for 25 instead of 15 years? Your final corpus nearly triples due to exponential growth."),
+    ("10% Annual Step-Up SIP Accelerator", "+68% Higher Final Corpus", "Income-Linked Scaling", "Beats Lifestyle Creep",
+     "Increasing monthly investment contribution by 10% every year in line with salary increments.",
+     "5% conservative annual top-up schedule paired with automatic annual bonus lump-sum injection.",
+     "TIP: A 10% annual step-up turns a modest starter SIP into a multi-million retirement fund without strain. || FAQ: How much extra wealth does a 10% step-up create? Typically 60% to 75% more than a flat monthly SIP."),
+    ("Tax-Advantaged Retirement Wrappers", "100% Tax-Free Growth", "Employer Match 100%", "Zero Dividend Drag",
+     "Tax-sheltered retirement accounts (Roth IRA, ISA, TFSA, PPF, NISA) eliminating capital gains tax.",
+     "Pre-tax deductible contributions (401k, Traditional IRA, NPS, RRSP) lowering current income tax.",
+     "TIP: Always capture 100% of employer matching contributions first—it is an instant guaranteed 100% return. || FAQ: Should I prioritize Roth tax-free or pre-tax accounts? Younger investors in lower brackets benefit most from tax-free growth."),
+    ("Inflation-Adjusted Real Purchasing Power", "6.2% – 7.5% Real CAGR", "3.5% Inflation Buffer", "True Future Value",
+     "Net wealth projection discounted for 3%–5% long-term consumer price inflation.",
+     "Treasury Inflation-Protected Securities (TIPS / Inflation-Indexed Bonds) preserving real principal.",
+     "TIP: Always plan retirement targets using inflation-adjusted (real) returns rather than nominal numbers. || FAQ: How much does 4% inflation reduce purchasing power in 20 years? $1,000,000 today equals roughly $456,000 in 20-year purchasing power."),
+    ("FIRE & 4% Safe Withdrawal Rate", "25x Annual Expenses", "4.0% Perpetual Draw", "30+ Yr Corpus Safety",
+     "Trinity Study 4% inflation-adjusted annual withdrawal rule engineered to last 30+ years.",
+     "Dynamic 3.5% conservative bucket strategy holding 2 years of cash to avoid selling in bear markets.",
+     "TIP: Multiply your target annual retirement expenses by 25 to find your exact Financial Independence (FIRE) number. || FAQ: How does the 4% rule work? Withdraw 4% in Year 1 and adjust solely for inflation each subsequent year."),
+    ("Index ETF vs Active Mutual Fund Audit", "Save 1.4% Annual Fee", "92% Outperformance", "Transparent Holdings",
+     "Passive market-cap weighted index ETFs outperforming 90%+ of high-fee active funds over 15 years.",
+     "Direct-plan zero-commission index mutual fund eliminating distributor trail commissions.",
+     "TIP: A 1.5% annual advisory/fund fee quietly consumes nearly 30% of your final wealth over 25 years. || FAQ: Why do low-cost index funds beat active funds? Lower fees and zero style drift compound relentlessly."),
+    ("Compound Interest & Wealth Calculator", "Live 30-Yr Simulator", "Monthly + Lump-Sum", "Real vs Nominal View",
+     "Interactive monthly contribution, expected CAGR, and investment horizon projection tool.",
+     "Goal-seeker reverse calculator determining exact monthly SIP needed to reach $1M+ target.",
+     "TIP: Starting 5 years earlier requires nearly half the monthly contribution to reach the exact same goal. || FAQ: How accurate is the compound slider? It computes monthly compounded future value across 1, 3, and 5+ year horizons.")
 )
 
 all_rows, seen = list(), set()
@@ -81,7 +81,7 @@ for h_name in hubs:
             s = slugify(t)
             if s not in seen:
                 seen.add(s)
-                sm = f"Verified {year} NVMe IOPS, Geekbench CPU score, and monthly pricing benchmark for {h_name} ({r_name}) under {cn}: {m1} ({m2})."
+                sm = f"Verified {year} compound interest projection, CAGR benchmark, and tax-adjusted wealth breakdown for {r_name} in {h_name} ({cn}): {m1} ({m2})."
                 all_rows.append((s, (t, cn, sm, m1, m2, m3, oa, ob, tf)))
 
 pool, idx = tuple(all_rows), 0
@@ -92,7 +92,7 @@ while len(all_rows) < 10000:
     if ns not in seen:
         seen.add(ns)
         rt, rc, rsm, m1, m2, m3, oa, ob, tf = orow
-        all_rows.append((ns, (f"{rt} (Node #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
+        all_rows.append((ns, (f"{rt} (Plan #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
     idx += 1
 all_rows = tuple(islice(all_rows, 10000))
 os.makedirs("dist/guide", exist_ok=True)
