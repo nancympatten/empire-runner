@@ -14,73 +14,70 @@ def slugify(txt):
     return "-".join(out.strip("-").split("-")[:11])
 
 hubs = (
-    "United States (New York & California)", "United States (Texas & Florida)",
-    "United Kingdom (London)", "India (Mumbai, Delhi & Bhubaneswar)",
-    "India (Bengaluru & Chennai)", "United Arab Emirates (Dubai)",
-    "Canada (Toronto & Vancouver)", "Australia (Sydney & Melbourne)",
-    "Singapore", "Germany (Berlin & Munich)",
-    "France (Paris)", "Netherlands (Amsterdam)",
-    "Switzerland (Zurich)", "Japan (Tokyo)",
-    "South Korea (Seoul)", "Spain (Madrid)",
-    "Italy (Milan)", "Ireland (Dublin)",
-    "New Zealand (Auckland)", "Saudi Arabia (Riyadh)",
-    "Qatar (Doha)", "Thailand (Bangkok)",
-    "Malaysia (Kuala Lumpur)", "Brazil (Sao Paulo)",
-    "South Africa (Johannesburg)"
+    "NVIDIA H100 80GB SXM5", "NVIDIA H200 141GB", "NVIDIA B200 Blackwell",
+    "NVIDIA A100 80GB PCIe", "NVIDIA L40S 48GB", "NVIDIA RTX 4090 24GB",
+    "AMD MI300X 192GB", "Google TPU v5p Pod", "AWS Trainium2 Cluster",
+    "OpenAI GPT-4o & o3 API", "Anthropic Claude 3.7 Sonnet", "Google Gemini 2.5 Pro",
+    "DeepSeek R1 & V3 API", "Meta Llama 3.3 70B Hosted", "Mistral Large 2 API",
+    "Groq LPU Ultra-Low Latency", "Together AI Serverless", "Fireworks AI Inference",
+    "RunPod Dedicated GPU", "Lambda Labs Cloud", "CoreWeave Bare Metal",
+    "Vast.ai Spot Marketplace", "AWS Bedrock Enterprise", "Azure OpenAI Provisioned",
+    "Cloudflare Workers AI"
 )
 roles = (
-    "Individual Age 25–30", "Individual Age 31–40", "Individual Age 41–50",
-    "Senior Citizen Age 60+", "Young Couple (No Kids)", "Family of 4 (2 Adults + 2 Kids)",
-    "Parents Senior Care Plan", "International Expat & Nomad",
-    "Frequent Business Traveler", "Schengen Visa Tourist",
-    "Student Studying Abroad", "Self-Employed Founder",
-    "Diabetic & Pre-Existing Care", "Maternity & Newborn Cover",
-    "High-Net-Worth $1M Cover", "Remote Worker Global Cover"
+    "Startup MVP (1M Tokens/Day)", "SaaS Production (10M Tokens/Day)",
+    "Enterprise Scale (100M Tokens/Day)", "RAG Vector Pipeline",
+    "Real-Time Voice & Audio Agent", "Code Generation Copilot",
+    "Fine-Tuning LoRA 7B–70B", "Batch Async Data Processing",
+    "Multimodal Vision & Video", "High-Concurrency Chatbot",
+    "Autonomous Multi-Agent Loop", "On-Prem vs Cloud TCO",
+    "Spot Instance Auto-Scaling", "Dedicated Single-Tenant VPC",
+    "Zero-Data-Retention HIPAA", "Edge Low-Latency Inference"
 )
 cats8 = (
-    ("Comprehensive Health Insurance", "98.4% Claim Ratio", "$45 – $160/mo", "$500,000 Sum Insured",
-     "Zero-deductible inpatient hospitalization, ICU, day-care procedures, and cashless network access.",
-     "High-deductible catastrophic health plan reducing monthly premium by 42%.",
-     "TIP: Choose a plan with No Room-Rent Capping and Restoration Benefit for maximum claim payout. || FAQ: What is the waiting period for pre-existing diseases? Typically 24 to 36 months from policy inception."),
-    ("Term Life Insurance (20–30 Yr)", "99.1% Claim Ratio", "$18 – $55/mo", "$1,000,000 Death Benefit",
-     "Level-premium pure term protection locking fixed rates for 20 to 30 years with critical illness rider.",
-     "Return-of-premium term policy refunding 100% base premiums if you outlive the term.",
-     "TIP: Buy term insurance before age 35 to lock lowest mortality rates for the next 30 years. || FAQ: Are term life payouts tax-free? Yes, death benefits are generally tax-exempt for nominees."),
-    ("International Travel Insurance", "97.8% Claim Ratio", "$22 – $68/trip", "$250,000 Medical Cover",
-     "Schengen & global compliant emergency medical evacuation, flight delay, and lost baggage cover.",
-     "Annual multi-trip executive travel policy covering unlimited 45-day international journeys.",
-     "TIP: Ensure minimum €30,000 medical cover with zero deductible for Schengen visa approval. || FAQ: Does travel insurance cover trip cancellation? Yes, for covered medical emergencies or weather disruptions."),
-    ("Critical Illness & Cancer Cover", "96.9% Claim Ratio", "$15 – $48/mo", "$250,000 Lump-Sum",
-     "100% lump-sum tax-free payout upon first diagnosis of 36+ major critical illnesses.",
-     "Accelerated critical illness rider attached to your primary term life insurance policy.",
-     "TIP: A lump-sum critical illness payout covers income loss during recovery, not just hospital bills. || FAQ: How fast is the lump-sum paid? Typically within 15–30 days after survival period verification."),
-    ("Family Floater Health Plan", "98.2% Claim Ratio", "$85 – $240/mo", "$750,000 Shared Pool",
-     "Single unified annual sum insured covering spouse and children with automatic 100% recharge.",
-     "Multi-individual separate sum insured plan protecting senior members from draining family pool.",
-     "TIP: Add no-claim bonus booster riders to double your coverage amount within 5 claim-free years. || FAQ: Up to what age are children covered? Usually up to 25 years under family floater plans."),
-    ("Senior Citizen Medical Plan", "95.8% Claim Ratio", "$110 – $320/mo", "$300,000 Cover",
-     "Guaranteed lifetime renewal with domiciliary hospitalization, cataract, and annual health checkups.",
-     "Super top-up health plan layered above a $5,000 deductible to cut senior premiums in half.",
-     "TIP: Compare co-payment clauses (0% vs 20%) carefully before buying senior citizen policies. || FAQ: Is pre-policy medical screening required? Usually required above age 50–55."),
-    ("Expat & Digital Nomad Global", "98.6% Claim Ratio", "$95 – $280/mo", "$1,500,000 Worldwide",
-     "Borderless worldwide medical coverage including USA/Europe emergency care and telemedicine.",
-     "Worldwide excluding USA/Canada tier reducing annual expat insurance cost by 45%.",
-     "TIP: Excluding USA elective coverage saves nearly half the premium while keeping global protection. || FAQ: Can I renew while living abroad? Yes, global expat plans renew seamlessly across borders."),
-    ("Premium & Claim Estimator", "24/7 Cashless Network", "15-Min Digital Quote", "100% Transparent APR",
-     "Instant age, deductible, and coverage-adjusted annual and monthly premium projection.",
-     "Direct insurer online purchase avoiding 15%–20% intermediary agent commission markup.",
-     "TIP: Paying annually instead of monthly saves 6%–8% in installment surcharge fees. || FAQ: How accurate is the premium slider? It models standard actuarial age and deductible factors.")
+    ("On-Demand GPU Hourly Rates", "$1.89 – $3.99/hr", "99.99% Uptime SLA", "Instant Pod Boot",
+     "Pay-per-second cloud GPU billing with NVLink interconnect and pre-installed CUDA/vLLM.",
+     "Community spot GPU nodes offering 55% lower hourly compute cost with checkpointing.",
+     "TIP: Use FP8 quantization on H100/L40S to double token throughput at the exact same hourly rate. || FAQ: Is per-second billing available? Yes, leading GPU clouds bill strictly by the second."),
+    ("LLM Token Pricing (Input/Output)", "$0.15 – $15 / 1M Tokens", "128k–2M Context", "50–450 Tokens/Sec",
+     "Serverless pay-as-you-go token API with automatic prompt caching and 90% cached input discount.",
+     "Batch API async queue cutting input and output token spend by exactly 50% within 24 hours.",
+     "TIP: Enable system-prompt prefix caching to reduce repetitive RAG context costs by up to 80%. || FAQ: How are cached tokens billed? Cached prompt prefixes typically cost 75% to 90% less."),
+    ("Reserved 1-Year & 3-Year Clusters", "35% – 58% Discount", "Dedicated InfiniBand", "Zero Queue Wait",
+     "Committed-use multi-node GPU reservation guaranteeing capacity during peak global demand.",
+     "3-month quarterly flexible reservation bridging spot savings and guaranteed availability.",
+     "TIP: Commit only baseline 24/7 steady traffic to reserved nodes and burst spikes to serverless APIs. || FAQ: Can reserved instances switch regions? Most providers allow flexibility within the same GPU family."),
+    ("Fine-Tuning & Training Cost", "$0.80 – $8.00 / 1M Train", "QLoRA / Full Weights", "Custom Model Ownership",
+     "Managed LoRA and full-parameter fine-tuning pipelines with automated eval checkpoints.",
+     "Self-hosted Unsloth + DeepSpeed training on spot A100/H100 pods at 70% lower compute spend.",
+     "TIP: Fine-tuning a compact 8B/70B model often beats frontier APIs at 1/10th the ongoing inference cost. || FAQ: Do I own fine-tuned weights? Self-hosted and open-weight fine-tunes give 100% weight ownership."),
+    ("Latency & Throughput Benchmarks", "18 ms – 140 ms TTFT", "Up to 850 tok/s", "Speculative Decoding",
+     "Time-to-first-token (TTFT) and tokens-per-second benchmarks under 100 concurrent requests.",
+     "Quantized INT4/AWQ inference engine optimized for sub-50ms conversational voice agents.",
+     "TIP: Co-locate your vector database and LLM endpoint in the same US-East or EU-Central zone. || FAQ: What matters more for chat UX? Time-to-first-token (TTFT) under 200ms feels instantaneous."),
+    ("Provisioned Throughput (PTU)", "$2,400 – $9,500/mo", "Guaranteed RPM/TPM", "Zero 429 Rate Limits",
+     "Dedicated model capacity units guaranteeing predictable latency and zero throttling.",
+     "Multi-provider smart router failing over across OpenAI, Anthropic, and Gemini automatically.",
+     "TIP: Implement a 3-provider fallback router before buying expensive Provisioned Throughput units. || FAQ: When are PTUs worth it? Once sustained traffic exceeds 50M+ tokens daily."),
+    ("Enterprise Security & SOC2/HIPAA", "Zero Data Retention", "Private AWS/GCP Link", "BYOK Encryption",
+     "HIPAA, SOC2 Type II, and GDPR compliant endpoints with zero prompt logging.",
+     "Air-gapped VPC deployment running open-weight models inside your own cloud account.",
+     "TIP: Sign a Zero Data Retention (ZDR) addendum before sending customer PII to any LLM API. || FAQ: Are API prompts used for training? Commercial enterprise API tiers do not train on customer data."),
+    ("Monthly AI Spend Calculator", "Up to 74% Cost Cut", "Live Token Estimator", "ROI & Unit Economics",
+     "Interactive daily token volume, cache hit rate, and GPU hourly TCO projection.",
+     "Hybrid small-model routing sending 80% simple queries to Flash/Mini models.",
+     "TIP: Routing simple classification tasks to lightweight models cuts total AI bills by 70%. || FAQ: How accurate is the token estimator? It models input/output ratios and monthly scaling in real time.")
 )
 
 all_rows, seen = list(), set()
 for h_name in hubs:
     for r_name in roles:
         for cn, m1, m2, m3, oa, ob, tf in cats8:
-            t = f"{h_name} {r_name} — {cn} Rates & Claim Estimator ({year})"
+            t = f"{h_name} for {r_name} — {cn} & Cost Calculator ({year})"
             s = slugify(t)
             if s not in seen:
                 seen.add(s)
-                sm = f"Verified {year} insurance premium rates, claim settlement ratio, and coverage breakdown for {r_name} in {h_name} ({cn}): {m2} ({m1})."
+                sm = f"Verified {year} pricing, latency, and monthly cost breakdown for {h_name} ({r_name}) under {cn}: {m1} ({m2})."
                 all_rows.append((s, (t, cn, sm, m1, m2, m3, oa, ob, tf)))
 
 pool, idx = tuple(all_rows), 0
@@ -91,7 +88,7 @@ while len(all_rows) < 10000:
     if ns not in seen:
         seen.add(ns)
         rt, rc, rsm, m1, m2, m3, oa, ob, tf = orow
-        all_rows.append((ns, (f"{rt} (Tier #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
+        all_rows.append((ns, (f"{rt} (Cluster #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
     idx += 1
 all_rows = tuple(islice(all_rows, 10000))
 os.makedirs("dist/guide", exist_ok=True)
@@ -136,13 +133,13 @@ def render(idx):
         f"<title>{t} | {html.escape(sname)}</title><meta name='description' content='{sm}'><link rel='canonical' href='{can}'>"
         f"<script type='application/ld+json'>{sch}</script>"
         "<style>:root{--bg:#f8fafc;--card:#fff;--txt:#0f172a;--mut:#475569;--bdr:#e2e8f0;--acc:#10a37f}.dark{--bg:#0b1120;--card:#111827;--txt:#f8fafc;--mut:#94a3b8;--bdr:#1e293b}"
-        "body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);margin:0;line-height:1.7}nav{background:var(--card);border-bottom:1px solid var(--bdr);padding:.9rem 1.5rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}"
-        "nav a{color:var(--txt);text-decoration:none;font-weight:700}.box{max-width:940px;margin:1.8rem auto;background:var(--card);border:1px solid var(--bdr);border-radius:16px;padding:2rem}"
+        "html{font-size:16px}body{font-family:system-ui,sans-serif;-webkit-tap-highlight-color:transparent;background:var(--bg);color:var(--txt);margin:0;line-height:1.7}nav{background:var(--card);border-bottom:1px solid var(--bdr);padding:.9rem 1.5rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}"
+        "nav a{color:var(--txt);text-decoration:none;font-weight:700}.box{max-width:940px;margin:1rem auto;background:var(--card);border:1px solid var(--bdr);border-radius:14px;padding:1.25rem}@media(min-width:640px){.box{margin:1.8rem auto;padding:2rem}}"
         ".badge{background:#ecfdf5;color:#059669;padding:.22rem .7rem;border-radius:999px;font-size:.78rem;font-weight:600}.tldr{background:var(--bg);border-left:4px solid var(--acc);padding:1rem 1.2rem;border-radius:8px;margin:1.2rem 0}"
         ".mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin:1.2rem 0}.mcard{border:1px solid var(--bdr);padding:1rem;border-radius:10px;background:var(--bg)}"
         ".calc{border:1px solid var(--acc);border-radius:14px;padding:1.3rem;margin:1.5rem 0;background:var(--bg)}.presets{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0}.presets button{background:var(--card);color:var(--txt);border:1px solid var(--bdr);padding:.35rem .8rem;border-radius:999px;cursor:pointer;font-size:.82rem}"
         ".cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-top:.8rem}.vbar{height:12px;border-radius:99px;background:#3b82f6;overflow:hidden;margin:.8rem 0}.vfill{height:100%;background:var(--acc);transition:width .3s}"
-        ".rng{width:100%;accent-color:var(--acc)}table{width:100%;border-collapse:collapse;margin:1rem 0}th,td{border:1px solid var(--bdr);padding:.75rem;text-align:left}"
+        ".rng{width:100%;height:34px;accent-color:var(--acc);cursor:pointer}table{width:100%;border-collapse:collapse;margin:1rem 0}th,td{border:1px solid var(--bdr);padding:.75rem;text-align:left}"
         "details{border:1px solid var(--bdr);border-radius:10px;padding:.8rem 1rem;margin:.6rem 0;background:var(--bg)}summary{font-weight:700;cursor:pointer}"
         ".rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:.9rem;margin-top:1rem}.rcard{display:block;text-decoration:none;color:inherit;background:var(--bg);border:1px solid var(--bdr);border-radius:12px;padding:1rem}.rcard:hover{border-color:var(--acc)}"
         "footer{text-align:center;padding:2rem;color:var(--mut);font-size:.85rem}</style></head><body>"
@@ -185,7 +182,7 @@ ih = (
     f"<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"
     f"<title>{html.escape(sname)} | 10,000 Live Tax &amp; Salary Calculators</title><link rel='canonical' href='{site_url}/'>"
     "<style>:root{--bg:#f8fafc;--card:#fff;--txt:#0f172a;--bdr:#e2e8f0;--acc:#10a37f}.dark{--bg:#0b1120;--card:#111827;--txt:#f8fafc;--bdr:#1e293b}"
-    "body{font-family:system-ui,sans-serif;margin:0;background:var(--bg);color:var(--txt)}header{background:var(--card);border-bottom:1px solid var(--bdr);padding:2.2rem 1rem;text-align:center}"
+    "html{font-size:16px}body{font-family:system-ui,sans-serif;-webkit-tap-highlight-color:transparent;margin:0;background:var(--bg);color:var(--txt)}header{background:var(--card);border-bottom:1px solid var(--bdr);padding:2.2rem 1rem;text-align:center}"
     "#q{width:100%;max-width:560px;padding:.9rem 1.1rem;border:1px solid var(--bdr);border-radius:10px;font-size:1rem;background:var(--bg);color:var(--txt)}"
     ".pills{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem;max-width:960px;margin:1rem auto 0}.pill{background:var(--bg);color:var(--txt);border:1px solid var(--bdr);padding:.4rem .85rem;border-radius:999px;cursor:pointer}.pill.active{background:var(--acc);color:#fff}"
     ".main{max-width:1180px;margin:1.5rem auto;padding:0 1rem}.hubs{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.8rem;margin-bottom:1.5rem}"
