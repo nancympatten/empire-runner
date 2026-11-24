@@ -14,74 +14,74 @@ def slugify(txt):
     return "-".join(out.strip("-").split("-")[:11])
 
 hubs = (
-    "Stripe Payments (USA & Global)", "PayPal Braintree Enterprise",
-    "Square POS & Online", "Adyen Global Acquiring",
-    "Shopify Payments Plus", "Razorpay (India & SEA)",
-    "Cashfree Payments (India)", "PayU Global Merchant",
-    "Checkout.com Enterprise", "Worldpay FIS Global",
-    "Authorize.Net Gateway", "Toast Restaurant POS",
-    "Clover Retail POS", "Mollie Payments (Europe)",
-    "Klarna & Affirm BNPL", "Wise Business International",
-    "Airwallex Cross-Border", "Payoneer B2B Checkout",
-    "GoCardless ACH & SEPA", "2Checkout Verifone SaaS",
-    "Paddle Merchant of Record", "Lemon Squeezy Digital Tax",
-    "Rapyd Global Fintech", "DLocal Emerging Markets",
-    "PhonePe & UPI Payment Gateway"
+    "United States (US CBP Import)", "India (CBIC Customs & IGST)",
+    "United Kingdom (HMRC UKGT)", "European Union (EU TARIC)",
+    "United Arab Emirates (Dubai Customs)", "Canada (CBSA Tariff)",
+    "Australia (ABF Customs)", "Singapore (Singapore Customs)",
+    "Japan (Japan Customs)", "Germany (Zoll Import)",
+    "France (Douanes Import)", "Saudi Arabia (ZATCA Customs)",
+    "South Korea (KCS Import)", "Brazil (Receita Federal)",
+    "Mexico (SAT Aduanas)", "Thailand (Thai Customs)",
+    "Vietnam (Vietnam Customs)", "Malaysia (RMCD Customs)",
+    "Switzerland (BAZG Customs)", "New Zealand (NZ Customs)",
+    "South Africa (SARS Customs)", "Turkey (Turkish Customs)",
+    "Indonesia (Bea Cukai)", "Qatar (Qatar Customs)",
+    "Spain (Aduanas Espana)"
 )
 roles = (
-    "E-Commerce Store ($10k/mo)", "Growing D2C Brand ($50k/mo)",
-    "High-Volume Retailer ($250k/mo)", "B2B SaaS Subscription",
-    "Global Digital Downloads", "Local Cafe & Restaurant POS",
-    "Multi-Vendor Marketplace", "Cross-Border Exporter",
-    "Freelancer & Agency Invoicing", "Nonprofit & Charity Portal",
-    "Mobile App In-App Billing", "High-Ticket Consulting",
-    "Travel & Hospitality Booking", "Healthcare & Clinic POS",
-    "EdTech Course Platform", "Enterprise Custom Interchange"
+    "Smartphones & Consumer Electronics", "Laptops, Servers & GPUs",
+    "Lithium Batteries & Solar Panels", "Textiles, Apparel & Footwear",
+    "Auto Parts & EV Components", "Industrial CNC & Machinery",
+    "Medical Devices & Diagnostics", "Cosmetics & Skincare Goods",
+    "Coffee, Tea & Packaged Foods", "Pharmaceuticals & Supplements",
+    "Luxury Watches & Jewelry", "Furniture & Home Decor",
+    "Plastic & Packaging Materials", "Steel, Aluminum & Metals",
+    "Toys, Sports & Fitness Gear", "E-Commerce Parcel Under $800"
 )
 cats8 = (
-    ("Domestic Card Processing Fees", "2.4% + $0.30 / txn", "T+1 / T+2 Payout", "0% Setup Fee",
-     "Standard blended flat-rate credit and debit card processing with instant fraud screening.",
-     "Interchange-plus transparent pricing saving high-volume merchants 0.45% per transaction.",
-     "TIP: Switch from flat-rate to Interchange-Plus once monthly card volume crosses $50,000. || FAQ: Are debit card fees lower than credit cards? Yes, regulated debit cards often cost under 1.0%."),
-    ("International & FX Conversion Fees", "3.9% + 1.5% FX", "135+ Currencies", "Multi-Currency Settle",
-     "Cross-border card acceptance with automatic currency conversion into local bank account.",
-     "Like-for-like USD/EUR settlement avoiding forced 2% bank foreign exchange conversion spreads.",
-     "TIP: Enable multi-currency settlement to hold USD/EUR balances and save 1.8% on FX markup. || FAQ: Who pays the currency conversion fee? Either the merchant absorbs it or dynamic pricing passes it at checkout."),
-    ("UPI, ACH & Local Bank Transfers", "0% – 0.8% Capped Fee", "Instant / Same-Day", "Zero Chargeback Risk",
-     "Direct account-to-account bank rail (UPI, ACH, SEPA, Faster Payments) with near-zero fee.",
-     "Instant real-time RTP/FedNow bank settlement with automated invoice reconciliation.",
-     "TIP: Promoting UPI/ACH at checkout cuts average payment processing fees by over 75%. || FAQ: Are ACH and UPI payments reversible? Unlike credit cards, bank-push rails have virtually zero chargebacks."),
-    ("POS Hardware & In-Person Tap", "1.6% – 2.6% + $0.10", "$49 – $299 Reader", "Offline Queue Mode",
-     "Contactless NFC Apple Pay, Google Pay, and EMV chip card terminal with cloud inventory sync.",
-     "Tap-to-Pay on iPhone/Android smartphone requiring zero dedicated POS terminal hardware.",
-     "TIP: Card-present in-person taps cost 0.4% to 0.7% less than keyed-in or online card transactions. || FAQ: Does POS work if Wi-Fi drops? Yes, offline mode queues encrypted taps for up to 24 hours."),
-    ("SaaS Subscriptions & Recurring", "2.9% + 0.5% Billing", "Smart Retry AI", "Automated Dunning",
-     "Automated recurring billing engine with smart card-updater and failed-payment retry logic.",
-     "Merchant-of-Record (MoR) checkout handling global VAT, GST, and US sales tax automatically.",
-     "TIP: Network tokenization recovers 3%–5% of expired-card subscription churn automatically. || FAQ: What is a Merchant of Record? An MoR acts as the legal reseller and remits global sales taxes for you."),
-    ("Chargeback & Dispute Protection", "$15 Dispute Fee", "3DS2 Liability Shift", "AI Evidence Builder",
-     "Automated 3D Secure 2.0 authentication shifting fraudulent chargeback liability to card issuer.",
-     "Chargeback guarantee add-on reimbursing disputed transaction amounts and fees automatically.",
-     "TIP: Always enable 3DS2 and AVS/CVV checks on orders over $150 to prevent friendly fraud. || FAQ: Is the $15 chargeback fee refunded if I win? Most processors refund the fee upon winning the dispute."),
-    ("Instant Payouts & Rolling Reserves", "1.0% Instant Fee", "24/7 Weekend Payout", "0% Standard Reserve",
-     "On-demand debit card push payout delivering settled merchant funds in under 30 minutes.",
-     "Standard T+2 business day bank ACH payout with zero additional payout fee.",
-     "TIP: Use free T+2 payouts for routine cash flow and reserve instant payouts for urgent inventory restocks. || FAQ: Why do new accounts get a rolling reserve? High-ticket or new merchants may have a temporary 5%–10% hold."),
-    ("Merchant Fee & Savings Calculator", "Save $4,200+/yr", "Live Margin Estimator", "Effective Rate Audit",
-     "Interactive monthly volume, average ticket size, and domestic/international mix fee breakdown.",
-     "Dual-pricing or cash-discount compliant checkout program offsetting card processing overhead.",
-     "TIP: A high average order value ($150+) drastically reduces the impact of fixed $0.30 per-transaction fees. || FAQ: How accurate is the merchant fee slider? It models blended percentage plus fixed per-transaction cents.")
+    ("Standard MFN Import Duty Rates", "5% – 15% Basic Duty", "HS 8-Digit Code", "CIF Value Basis",
+     "Most-Favored-Nation (MFN) ad-valorem tariff calculated on Cost, Insurance, and Freight (CIF).",
+     "FOB valuation basis used in select jurisdictions excluding international ocean/air freight.",
+     "TIP: Always verify the exact 8-digit HS/HTS subheading before shipping to avoid 25% misclassification penalties. || FAQ: Is import duty calculated on product price or shipping too? Most countries calculate duty on CIF (Product + Insurance + Freight)."),
+    ("Import VAT, GST & IGST Rules", "5% – 20% Import Tax", "Input Tax Credit", "Customs Clearance",
+     "Border Value-Added Tax or IGST levied on (Assessable CIF Value + Basic Customs Duty).",
+     "Deferred VAT accounting scheme allowing registered importers to offset import VAT on returns.",
+     "TIP: Registered B2B importers can reclaim 100% of paid import GST/VAT as Input Tax Credit. || FAQ: Is GST/VAT charged on top of customs duty? Yes, import tax is applied to the duty-paid landed value."),
+    ("De Minimis Duty-Free Threshold", "$0 – $800 Duty-Free", "Express Courier", "Simplified Entry",
+     "Low-value cross-border shipments below the national de minimis cap clear customs duty-free.",
+     "IOSS / DDP pre-collected VAT clearance preventing surprise courier handling fees at delivery.",
+     "TIP: Splitting bulk B2C parcels under the de minimis limit can legally eliminate customs duty. || FAQ: What happens if a parcel exceeds the de minimis value? Full customs duty, VAT, and broker fees apply."),
+    ("Free Trade Agreement (FTA) Relief", "0% Preferential Duty", "Certificate of Origin", "Rules of Origin",
+     "Zero or reduced preferential tariff under bilateral FTAs (USMCA, EU-UK TCA, India-UAE CEPA, RCEP).",
+     "Generalized System of Preferences (GSP) tariff concession for qualifying developing exporters.",
+     "TIP: Attach a signed Certificate of Origin (COO) to claim 0% preferential FTA tariff at port. || FAQ: Does shipping through a third country void FTA benefits? Yes, direct consignment rules usually apply."),
+    ("Air Freight vs Sea Container Clearance", "24–48 Hr Air Express", "5–12 Days Sea FCL", "Bill of Entry / BOL",
+     "Express air cargo EDI pre-arrival customs filing with automated risk-management green channel.",
+     "Full Container Load (FCL) & LCL port clearance with bonded warehouse storage option.",
+     "TIP: File the Bill of Entry 48 hours prior to vessel arrival to avoid daily port demurrage charges. || FAQ: Which clears faster, air or sea freight? Express air parcels usually clear within 24 hours."),
+    ("DDP vs DAP Incoterms Guide", "Delivered Duty Paid", "Zero Buyer Surprises", "Seller Tax Remittance",
+     "Delivered Duty Paid (DDP) where seller pre-pays all import duties, taxes, and broker fees.",
+     "Delivered at Place (DAP/DDU) where recipient pays customs duties directly upon arrival.",
+     "TIP: Offering DDP checkout increases international e-commerce conversion rates by up to 32%. || FAQ: What does DAP mean for buyers? The buyer must pay local import duty and courier disbursement fees before delivery."),
+    ("Restricted Goods & Compliance", "BIS / CE / FDA Cert", "Mandatory Labeling", "Zero Port Hold",
+     "Product safety, wireless type-approval, and country-of-origin labeling required before import.",
+     "Customs bonded warehouse re-labeling facility for non-compliant incoming shipments.",
+     "TIP: Check wireless/battery certifications (FCC, CE, BIS, WPC) before dispatching electronics. || FAQ: What happens if goods lack mandatory certification? Customs may detain, fine, or re-export the cargo."),
+    ("Total Landed Cost Calculator", "True Margin Audit", "Duty + Tax + Freight", "Per-Unit Costing",
+     "Interactive shipment CIF value, duty percentage, and import VAT landed cost estimator.",
+     "Bulk container unit-cost optimization comparing air courier vs ocean LCL economics.",
+     "TIP: Add 2%–3% buffer for customs broker disbursement, port handling, and FX spreads. || FAQ: How accurate is the landed cost slider? It calculates CIF duty, cascading import VAT/GST, and per-unit totals.")
 )
 
 all_rows, seen = list(), set()
 for h_name in hubs:
     for r_name in roles:
         for cn, m1, m2, m3, oa, ob, tf in cats8:
-            t = f"{h_name} for {r_name} — {cn} & Savings Calculator ({year})"
+            t = f"{h_name} Import Duty on {r_name} — {cn} ({year})"
             s = slugify(t)
             if s not in seen:
                 seen.add(s)
-                sm = f"Verified {year} transaction fees, FX markup, and net payout analysis for {h_name} ({r_name}) under {cn}: {m1} ({m2})."
+                sm = f"Verified {year} customs tariff, import GST/VAT, and landed cost rules for importing {r_name} into {h_name}: {m1} ({m2})."
                 all_rows.append((s, (t, cn, sm, m1, m2, m3, oa, ob, tf)))
 
 pool, idx = tuple(all_rows), 0
@@ -92,7 +92,7 @@ while len(all_rows) < 10000:
     if ns not in seen:
         seen.add(ns)
         rt, rc, rsm, m1, m2, m3, oa, ob, tf = orow
-        all_rows.append((ns, (f"{rt} (Volume Tier #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
+        all_rows.append((ns, (f"{rt} (HS Schedule #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
     idx += 1
 all_rows = tuple(islice(all_rows, 10000))
 os.makedirs("dist/guide", exist_ok=True)
