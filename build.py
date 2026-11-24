@@ -14,74 +14,72 @@ def slugify(txt):
     return "-".join(out.strip("-").split("-")[:11])
 
 hubs = (
-    "United States (US CBP Import)", "India (CBIC Customs & IGST)",
-    "United Kingdom (HMRC UKGT)", "European Union (EU TARIC)",
-    "United Arab Emirates (Dubai Customs)", "Canada (CBSA Tariff)",
-    "Australia (ABF Customs)", "Singapore (Singapore Customs)",
-    "Japan (Japan Customs)", "Germany (Zoll Import)",
-    "France (Douanes Import)", "Saudi Arabia (ZATCA Customs)",
-    "South Korea (KCS Import)", "Brazil (Receita Federal)",
-    "Mexico (SAT Aduanas)", "Thailand (Thai Customs)",
-    "Vietnam (Vietnam Customs)", "Malaysia (RMCD Customs)",
-    "Switzerland (BAZG Customs)", "New Zealand (NZ Customs)",
-    "South Africa (SARS Customs)", "Turkey (Turkish Customs)",
-    "Indonesia (Bea Cukai)", "Qatar (Qatar Customs)",
-    "Spain (Aduanas Espana)"
+    "California (USA)", "Texas (USA)", "New York (USA)", "Florida (USA)",
+    "Bhubaneswar & Odisha (India)", "Delhi NCR (India)", "Mumbai & Pune (India)",
+    "Bengaluru (India)", "Chennai (India)", "Hyderabad (India)",
+    "London & South East (UK)", "Manchester (UK)",
+    "Berlin & Munich (Germany)", "Oslo (Norway)",
+    "Amsterdam (Netherlands)", "Paris (France)",
+    "Toronto (Canada)", "Vancouver (Canada)",
+    "Sydney (Australia)", "Melbourne (Australia)",
+    "Dubai & Abu Dhabi (UAE)", "Singapore",
+    "Tokyo (Japan)", "Seoul (South Korea)",
+    "Zurich (Switzerland)"
 )
 roles = (
-    "Smartphones & Consumer Electronics", "Laptops, Servers & GPUs",
-    "Lithium Batteries & Solar Panels", "Textiles, Apparel & Footwear",
-    "Auto Parts & EV Components", "Industrial CNC & Machinery",
-    "Medical Devices & Diagnostics", "Cosmetics & Skincare Goods",
-    "Coffee, Tea & Packaged Foods", "Pharmaceuticals & Supplements",
-    "Luxury Watches & Jewelry", "Furniture & Home Decor",
-    "Plastic & Packaging Materials", "Steel, Aluminum & Metals",
-    "Toys, Sports & Fitness Gear", "E-Commerce Parcel Under $800"
+    "Tesla Model Y Long Range", "Tesla Model 3 RWD",
+    "BYD Atto 3 & Seal", "Hyundai Ioniq 5 & 6",
+    "Kia EV6 & EV9", "Tata Nexon EV & Curvv EV",
+    "Mahindra BE 6 & XEV 9e", "MG ZS EV & Windsor EV",
+    "BMW i4 & iX1", "Mercedes EQB & EQS",
+    "Volvo EX30 & XC40 Recharge", "Rivian R1S & R1T",
+    "Ford Mustang Mach-E", "Volkswagen ID.4",
+    "Porsche Taycan", "Polestar 2 & 4"
 )
 cats8 = (
-    ("Standard MFN Import Duty Rates", "5% – 15% Basic Duty", "HS 8-Digit Code", "CIF Value Basis",
-     "Most-Favored-Nation (MFN) ad-valorem tariff calculated on Cost, Insurance, and Freight (CIF).",
-     "FOB valuation basis used in select jurisdictions excluding international ocean/air freight.",
-     "TIP: Always verify the exact 8-digit HS/HTS subheading before shipping to avoid 25% misclassification penalties. || FAQ: Is import duty calculated on product price or shipping too? Most countries calculate duty on CIF (Product + Insurance + Freight)."),
-    ("Import VAT, GST & IGST Rules", "5% – 20% Import Tax", "Input Tax Credit", "Customs Clearance",
-     "Border Value-Added Tax or IGST levied on (Assessable CIF Value + Basic Customs Duty).",
-     "Deferred VAT accounting scheme allowing registered importers to offset import VAT on returns.",
-     "TIP: Registered B2B importers can reclaim 100% of paid import GST/VAT as Input Tax Credit. || FAQ: Is GST/VAT charged on top of customs duty? Yes, import tax is applied to the duty-paid landed value."),
-    ("De Minimis Duty-Free Threshold", "$0 – $800 Duty-Free", "Express Courier", "Simplified Entry",
-     "Low-value cross-border shipments below the national de minimis cap clear customs duty-free.",
-     "IOSS / DDP pre-collected VAT clearance preventing surprise courier handling fees at delivery.",
-     "TIP: Splitting bulk B2C parcels under the de minimis limit can legally eliminate customs duty. || FAQ: What happens if a parcel exceeds the de minimis value? Full customs duty, VAT, and broker fees apply."),
-    ("Free Trade Agreement (FTA) Relief", "0% Preferential Duty", "Certificate of Origin", "Rules of Origin",
-     "Zero or reduced preferential tariff under bilateral FTAs (USMCA, EU-UK TCA, India-UAE CEPA, RCEP).",
-     "Generalized System of Preferences (GSP) tariff concession for qualifying developing exporters.",
-     "TIP: Attach a signed Certificate of Origin (COO) to claim 0% preferential FTA tariff at port. || FAQ: Does shipping through a third country void FTA benefits? Yes, direct consignment rules usually apply."),
-    ("Air Freight vs Sea Container Clearance", "24–48 Hr Air Express", "5–12 Days Sea FCL", "Bill of Entry / BOL",
-     "Express air cargo EDI pre-arrival customs filing with automated risk-management green channel.",
-     "Full Container Load (FCL) & LCL port clearance with bonded warehouse storage option.",
-     "TIP: File the Bill of Entry 48 hours prior to vessel arrival to avoid daily port demurrage charges. || FAQ: Which clears faster, air or sea freight? Express air parcels usually clear within 24 hours."),
-    ("DDP vs DAP Incoterms Guide", "Delivered Duty Paid", "Zero Buyer Surprises", "Seller Tax Remittance",
-     "Delivered Duty Paid (DDP) where seller pre-pays all import duties, taxes, and broker fees.",
-     "Delivered at Place (DAP/DDU) where recipient pays customs duties directly upon arrival.",
-     "TIP: Offering DDP checkout increases international e-commerce conversion rates by up to 32%. || FAQ: What does DAP mean for buyers? The buyer must pay local import duty and courier disbursement fees before delivery."),
-    ("Restricted Goods & Compliance", "BIS / CE / FDA Cert", "Mandatory Labeling", "Zero Port Hold",
-     "Product safety, wireless type-approval, and country-of-origin labeling required before import.",
-     "Customs bonded warehouse re-labeling facility for non-compliant incoming shipments.",
-     "TIP: Check wireless/battery certifications (FCC, CE, BIS, WPC) before dispatching electronics. || FAQ: What happens if goods lack mandatory certification? Customs may detain, fine, or re-export the cargo."),
-    ("Total Landed Cost Calculator", "True Margin Audit", "Duty + Tax + Freight", "Per-Unit Costing",
-     "Interactive shipment CIF value, duty percentage, and import VAT landed cost estimator.",
-     "Bulk container unit-cost optimization comparing air courier vs ocean LCL economics.",
-     "TIP: Add 2%–3% buffer for customs broker disbursement, port handling, and FX spreads. || FAQ: How accurate is the landed cost slider? It calculates CIF duty, cascading import VAT/GST, and per-unit totals.")
+    ("5-Year Fuel vs EV Charging Savings", "Save $6,800 / 5 Yrs", "$0.03/km Home Charge", "78% Running Cost Cut",
+     "Home overnight off-peak electricity charging vs petrol/gasoline commuter running cost.",
+     "Public DC fast-charging commuter profile comparing highway kWh tariffs against fuel.",
+     "TIP: Charging overnight on Time-of-Use (ToU) residential tariffs cuts per-km energy cost by 80%. || FAQ: How much cheaper is home EV charging than petrol? Typically 4x to 5x cheaper per kilometer driven."),
+    ("Scheduled Maintenance & Brake Wear", "55% Lower Service Cost", "$180/yr Avg Upkeep", "Zero Oil Changes",
+     "No engine oil, spark plugs, timing belts, or transmission fluid; regenerative braking extends pads to 100k km.",
+     "Annual cabin HEPA filter, brake fluid flush, and tire rotation maintenance schedule.",
+     "TIP: Regenerative braking saves 70% on brake pad replacements, though EV-rated tires need rotation every 10,000 km. || FAQ: Do EVs need annual servicing? Yes, primarily for brake fluid, coolant checks, and cabin filters."),
+    ("Comprehensive EV Auto Insurance", "$95 – $185/mo Rate", "Battery Protect Rider", "Zero-Depreciation Cover",
+     "Full bumper-to-bumper comprehensive policy with dedicated HV battery pack and wall-charger cover.",
+     "Usage-based pay-as-you-drive telematics insurance saving low-mileage drivers up to 30%.",
+     "TIP: Always add a Battery Protect & Hydrostatic Lock rider to cover accidental waterlogging or surge damage. || FAQ: Is EV insurance more expensive than petrol cars? Slightly higher (~10–15%) due to sensor and battery repair costs."),
+    ("Battery Degradation & 8-Yr Warranty", "91% Health at 160k km", "8-Yr / 160,000 km", "LFP vs NMC Chemistry",
+     "Manufacturer 8-year warranty guaranteeing minimum 70%–80% battery state-of-health (SoH).",
+     "LFP (Lithium Iron Phosphate) battery pack engineered for daily 100% charging and 3,000+ cycles.",
+     "TIP: Keep NMC batteries between 20% and 80% for daily driving, while LFP packs can safely charge to 100% weekly. || FAQ: How long does an EV battery last? Modern EV batteries routinely outlast 250,000+ km."),
+    ("Home Level-2 Wallbox Installation", "$450 – $1,100 Setup", "7.4kW – 11kW AC Speed", "6-Hr Overnight Full",
+     "Dedicated 7.4kW or 11kW smart wallbox charger with scheduled solar/off-peak load balancing.",
+     "Portable 3.3kW 15A/16A socket trickle charging suitable for under 50 km daily city commutes.",
+     "TIP: Install a 7.4kW smart charger with dynamic load management to avoid upgrading main home sanctioned load. || FAQ: How fast does a 7.4kW charger fill a 60kWh EV? Roughly 7.5 to 8 hours overnight."),
+    ("Road Tax, Registration & EV Subsidies", "$0 – $4,500 Tax Waiver", "100% Road Tax Exempt", "Green Plate Perks",
+     "Zero road tax, discounted registration fees, and city congestion/toll exemptions for zero-emission EVs.",
+     "Corporate fleet accelerated depreciation benefit writing off 40% vehicle value in Year 1.",
+     "TIP: Business owners registering an EV under company assets save up to 30% in corporate tax deductions. || FAQ: Are EVs exempt from road tax? Many states and countries waive 50% to 100% of road tax."),
+    ("5-Year Resale Value & Depreciation", "54% – 62% Residual", "Certified SoH Report", "Strong Used Demand",
+     "5-year residual value retention backed by verified battery health certificate and OTA software updates.",
+     "3-year corporate lease buyback option locking guaranteed future resale value upfront.",
+     "TIP: Maintain official dealer service records and battery health reports to command 12% higher resale value. || FAQ: Which EVs hold value best? Long-range models with LFP batteries and fast-charging networks."),
+    ("Total Cost of Ownership (TCO) Calculator", "Net Winner in 2.8 Yrs", "5-Yr All-In Audit", "Live Fuel vs EV",
+     "Interactive daily distance, fuel price, and electricity tariff 5-year net savings estimator.",
+     "High-mileage rideshare/commercial TCO comparison exceeding 120 km daily driving.",
+     "TIP: The more kilometers you drive daily, the faster the higher upfront EV price pays for itself. || FAQ: At what daily distance does an EV beat petrol? Usually above 35–40 km per day.")
 )
 
 all_rows, seen = list(), set()
 for h_name in hubs:
     for r_name in roles:
         for cn, m1, m2, m3, oa, ob, tf in cats8:
-            t = f"{h_name} Import Duty on {r_name} — {cn} ({year})"
+            t = f"{h_name} {r_name} — {cn} ({year})"
             s = slugify(t)
             if s not in seen:
                 seen.add(s)
-                sm = f"Verified {year} customs tariff, import GST/VAT, and landed cost rules for importing {r_name} into {h_name}: {m1} ({m2})."
+                sm = f"Verified {year} 5-year running savings, insurance, and total ownership cost for {r_name} in {h_name} ({cn}): {m1} ({m2})."
                 all_rows.append((s, (t, cn, sm, m1, m2, m3, oa, ob, tf)))
 
 pool, idx = tuple(all_rows), 0
@@ -92,7 +90,7 @@ while len(all_rows) < 10000:
     if ns not in seen:
         seen.add(ns)
         rt, rc, rsm, m1, m2, m3, oa, ob, tf = orow
-        all_rows.append((ns, (f"{rt} (HS Schedule #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
+        all_rows.append((ns, (f"{rt} (Trim #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
     idx += 1
 all_rows = tuple(islice(all_rows, 10000))
 os.makedirs("dist/guide", exist_ok=True)
