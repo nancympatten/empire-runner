@@ -14,72 +14,73 @@ def slugify(txt):
     return "-".join(out.strip("-").split("-")[:11])
 
 hubs = (
-    "United States (California & Texas)", "United Kingdom (London)",
-    "Germany (Berlin & Munich)", "India (Bengaluru, Delhi & Bhubaneswar)",
-    "United Arab Emirates (Dubai)", "Canada (Toronto & Vancouver)",
-    "Australia (Sydney & Melbourne)", "Singapore",
-    "Portugal (Lisbon D8 Visa)", "Spain (Digital Nomad Regime)",
-    "Netherlands (30% Ruling)", "Ireland (Dublin)",
-    "Japan (Tokyo)", "Switzerland (Zurich)",
-    "Estonia (e-Residency)", "France (Paris)",
-    "Poland (B2B Lump Sum)", "Romania (Micro-Enterprise)",
-    "Thailand (LTR Visa)", "Vietnam (Ho Chi Minh)",
-    "Brazil (Sao Paulo)", "Mexico (Mexico City)",
-    "South Korea (Seoul)", "Sweden (Stockholm)",
-    "New Zealand (Auckland)"
+    "United States (New York & California)", "United States (Texas & Florida)",
+    "United Kingdom (London)", "India (Mumbai, Delhi & Bhubaneswar)",
+    "India (Bengaluru & Chennai)", "United Arab Emirates (Dubai)",
+    "Canada (Toronto & Vancouver)", "Australia (Sydney & Melbourne)",
+    "Singapore", "Germany (Berlin & Munich)",
+    "France (Paris)", "Netherlands (Amsterdam)",
+    "Switzerland (Zurich)", "Japan (Tokyo)",
+    "South Korea (Seoul)", "Spain (Madrid)",
+    "Italy (Milan)", "Ireland (Dublin)",
+    "New Zealand (Auckland)", "Saudi Arabia (Riyadh)",
+    "Qatar (Doha)", "Thailand (Bangkok)",
+    "Malaysia (Kuala Lumpur)", "Brazil (Sao Paulo)",
+    "South Africa (Johannesburg)"
 )
 roles = (
-    "Senior Software Engineer", "AI & ML Architect", "Full-Stack Developer",
-    "Product Manager", "UI/UX Product Designer", "DevOps & Cloud Engineer",
-    "Data Scientist", "Cybersecurity Consultant", "Digital Marketing Lead",
-    "B2B SaaS Copywriter", "Financial Analyst", "Fractional CTO",
-    "Mobile App Developer", "SEO & Growth Strategist", "Blockchain Developer",
-    "Video & Creative Director"
+    "Individual Age 25–30", "Individual Age 31–40", "Individual Age 41–50",
+    "Senior Citizen Age 60+", "Young Couple (No Kids)", "Family of 4 (2 Adults + 2 Kids)",
+    "Parents Senior Care Plan", "International Expat & Nomad",
+    "Frequent Business Traveler", "Schengen Visa Tourist",
+    "Student Studying Abroad", "Self-Employed Founder",
+    "Diabetic & Pre-Existing Care", "Maternity & Newborn Cover",
+    "High-Net-Worth $1M Cover", "Remote Worker Global Cover"
 )
 cats8 = (
-    ("Sole Proprietor & Freelancer", "18% – 28% Effective Tax", "$0 Incorporation Fee", "Up to $120k/yr",
-     "Direct individual tax filing with standard home-office & equipment deductions.",
-     "Simplified presumptive tax regime (50% flat expense deduction in eligible regions).",
-     "TIP: Deduct laptop, cloud subscriptions, internet, and co-working expenses before tax. || FAQ: Do freelancers pay quarterly advance tax? Yes, most jurisdictions require quarterly estimated tax installments."),
-    ("LLC / Single-Member Company", "15% – 24% Effective Tax", "$150 – $500 Setup", "Unlimited Revenue",
-     "Pass-through corporate liability shield with flexible salary-plus-dividend split.",
-     "Foreign-owned disregarded LLC with zero local corporate tax on non-US sourced work.",
-     "TIP: Splitting compensation into base salary + owner distribution reduces payroll tax by 15%. || FAQ: When should a freelancer form an LLC? Usually once annual net profit exceeds $60,000."),
-    ("Digital Nomad Tax Regime", "0% – 20% Flat Rate", "$120 Visa Fee", "1–5 Years Validity",
-     "Special expatriate flat-tax regime exempting foreign-sourced remote income.",
-     "Territorial tax residency where only locally remitted funds are taxed.",
-     "TIP: Keep a 183-day travel log and tax residency certificate to prevent double taxation. || FAQ: Does a digital nomad visa make me a tax resident? Often after 183 days unless a special exemption applies."),
-    ("Employer of Record (EOR)", "22% – 34% Total Burden", "$299/mo EOR Fee", "Full Statutory Benefits",
-     "Compliant W-2 / full-time local payroll with health insurance, pension & paid leave.",
-     "Direct B2B contractor invoice without intermediary EOR payroll markup.",
-     "TIP: Ask your remote employer to cover the EOR fee separately from your gross salary offer. || FAQ: Is EOR better than contractor status? EOR gives paid leave and social security, while contractors keep higher net cash."),
-    ("Double Taxation Treaty (DTAA)", "0% Withholding Credit", "Form W-8BEN / TRC", "100% Foreign Tax Credit",
-     "Bilateral tax treaty relief preventing the same remote income from being taxed twice.",
-     "Foreign Earned Income Exclusion (FEIE) shielding up to $130,000+ abroad.",
-     "TIP: Submit Form W-8BEN to US clients so they do not withhold 30% backup tax. || FAQ: How do I claim foreign tax credit? File your home tax return with the foreign tax payment receipt."),
-    ("Social Security & Pension", "6% – 15.3% Contribution", "Totalization Agreement", "Portable Retirement",
-     "Mandatory self-employment pension & healthcare contribution with bilateral exemption.",
-     "Private voluntary retirement account (IRA / NPS / SIPP) with tax deduction.",
-     "TIP: Check if your home and host countries have a Social Security Totalization Agreement. || FAQ: Can I opt out of double social security? Yes, with a Certificate of Coverage."),
-    ("VAT / GST on Export Services", "0% Zero-Rated Export", "LUT / Reverse Charge", "100% Input Tax Refund",
-     "Export of digital/IT services to foreign B2B clients qualifies for 0% VAT/GST.",
-     "EU Reverse-Charge mechanism where the business client accounts for VAT.",
-     "TIP: File a Letter of Undertaking (LUT) annually to export services without paying upfront GST. || FAQ: Do I need VAT/GST registration for foreign clients? Yes, once turnover crosses the statutory threshold."),
-    ("Take-Home Salary Calculator", "72% – 88% Net Retention", "$4,500–$14,000/mo Net", "Real-Time FX & Tax",
-     "Instant net take-home pay breakdown after income tax, social security, and FX spread.",
-     "Multi-currency Wise/Mercury receiving account saving 2.5% on bank conversion fees.",
-     "TIP: Receiving USD/EUR in a multi-currency account instead of local bank wire saves $2,400/yr. || FAQ: How accurate is the net salary slider? It models effective tax brackets and social deductions in real time.")
+    ("Comprehensive Health Insurance", "98.4% Claim Ratio", "$45 – $160/mo", "$500,000 Sum Insured",
+     "Zero-deductible inpatient hospitalization, ICU, day-care procedures, and cashless network access.",
+     "High-deductible catastrophic health plan reducing monthly premium by 42%.",
+     "TIP: Choose a plan with No Room-Rent Capping and Restoration Benefit for maximum claim payout. || FAQ: What is the waiting period for pre-existing diseases? Typically 24 to 36 months from policy inception."),
+    ("Term Life Insurance (20–30 Yr)", "99.1% Claim Ratio", "$18 – $55/mo", "$1,000,000 Death Benefit",
+     "Level-premium pure term protection locking fixed rates for 20 to 30 years with critical illness rider.",
+     "Return-of-premium term policy refunding 100% base premiums if you outlive the term.",
+     "TIP: Buy term insurance before age 35 to lock lowest mortality rates for the next 30 years. || FAQ: Are term life payouts tax-free? Yes, death benefits are generally tax-exempt for nominees."),
+    ("International Travel Insurance", "97.8% Claim Ratio", "$22 – $68/trip", "$250,000 Medical Cover",
+     "Schengen & global compliant emergency medical evacuation, flight delay, and lost baggage cover.",
+     "Annual multi-trip executive travel policy covering unlimited 45-day international journeys.",
+     "TIP: Ensure minimum €30,000 medical cover with zero deductible for Schengen visa approval. || FAQ: Does travel insurance cover trip cancellation? Yes, for covered medical emergencies or weather disruptions."),
+    ("Critical Illness & Cancer Cover", "96.9% Claim Ratio", "$15 – $48/mo", "$250,000 Lump-Sum",
+     "100% lump-sum tax-free payout upon first diagnosis of 36+ major critical illnesses.",
+     "Accelerated critical illness rider attached to your primary term life insurance policy.",
+     "TIP: A lump-sum critical illness payout covers income loss during recovery, not just hospital bills. || FAQ: How fast is the lump-sum paid? Typically within 15–30 days after survival period verification."),
+    ("Family Floater Health Plan", "98.2% Claim Ratio", "$85 – $240/mo", "$750,000 Shared Pool",
+     "Single unified annual sum insured covering spouse and children with automatic 100% recharge.",
+     "Multi-individual separate sum insured plan protecting senior members from draining family pool.",
+     "TIP: Add no-claim bonus booster riders to double your coverage amount within 5 claim-free years. || FAQ: Up to what age are children covered? Usually up to 25 years under family floater plans."),
+    ("Senior Citizen Medical Plan", "95.8% Claim Ratio", "$110 – $320/mo", "$300,000 Cover",
+     "Guaranteed lifetime renewal with domiciliary hospitalization, cataract, and annual health checkups.",
+     "Super top-up health plan layered above a $5,000 deductible to cut senior premiums in half.",
+     "TIP: Compare co-payment clauses (0% vs 20%) carefully before buying senior citizen policies. || FAQ: Is pre-policy medical screening required? Usually required above age 50–55."),
+    ("Expat & Digital Nomad Global", "98.6% Claim Ratio", "$95 – $280/mo", "$1,500,000 Worldwide",
+     "Borderless worldwide medical coverage including USA/Europe emergency care and telemedicine.",
+     "Worldwide excluding USA/Canada tier reducing annual expat insurance cost by 45%.",
+     "TIP: Excluding USA elective coverage saves nearly half the premium while keeping global protection. || FAQ: Can I renew while living abroad? Yes, global expat plans renew seamlessly across borders."),
+    ("Premium & Claim Estimator", "24/7 Cashless Network", "15-Min Digital Quote", "100% Transparent APR",
+     "Instant age, deductible, and coverage-adjusted annual and monthly premium projection.",
+     "Direct insurer online purchase avoiding 15%–20% intermediary agent commission markup.",
+     "TIP: Paying annually instead of monthly saves 6%–8% in installment surcharge fees. || FAQ: How accurate is the premium slider? It models standard actuarial age and deductible factors.")
 )
 
 all_rows, seen = list(), set()
 for h_name in hubs:
     for r_name in roles:
         for cn, m1, m2, m3, oa, ob, tf in cats8:
-            t = f"{h_name} {r_name} — {cn} Tax & Net Salary Calculator ({year})"
+            t = f"{h_name} {r_name} — {cn} Rates & Claim Estimator ({year})"
             s = slugify(t)
             if s not in seen:
                 seen.add(s)
-                sm = f"Verified {year} income tax, take-home pay, and compliance guide for a {r_name} in {h_name} under {cn}: {m1} ({m2})."
+                sm = f"Verified {year} insurance premium rates, claim settlement ratio, and coverage breakdown for {r_name} in {h_name} ({cn}): {m2} ({m1})."
                 all_rows.append((s, (t, cn, sm, m1, m2, m3, oa, ob, tf)))
 
 pool, idx = tuple(all_rows), 0
@@ -90,7 +91,7 @@ while len(all_rows) < 10000:
     if ns not in seen:
         seen.add(ns)
         rt, rc, rsm, m1, m2, m3, oa, ob, tf = orow
-        all_rows.append((ns, (f"{rt} (Bracket #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
+        all_rows.append((ns, (f"{rt} (Tier #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
     idx += 1
 all_rows = tuple(islice(all_rows, 10000))
 os.makedirs("dist/guide", exist_ok=True)
