@@ -14,70 +14,74 @@ def slugify(txt):
     return "-".join(out.strip("-").split("-")[:11])
 
 hubs = (
-    "NVIDIA H100 80GB SXM5", "NVIDIA H200 141GB", "NVIDIA B200 Blackwell",
-    "NVIDIA A100 80GB PCIe", "NVIDIA L40S 48GB", "NVIDIA RTX 4090 24GB",
-    "AMD MI300X 192GB", "Google TPU v5p Pod", "AWS Trainium2 Cluster",
-    "OpenAI GPT-4o & o3 API", "Anthropic Claude 3.7 Sonnet", "Google Gemini 2.5 Pro",
-    "DeepSeek R1 & V3 API", "Meta Llama 3.3 70B Hosted", "Mistral Large 2 API",
-    "Groq LPU Ultra-Low Latency", "Together AI Serverless", "Fireworks AI Inference",
-    "RunPod Dedicated GPU", "Lambda Labs Cloud", "CoreWeave Bare Metal",
-    "Vast.ai Spot Marketplace", "AWS Bedrock Enterprise", "Azure OpenAI Provisioned",
-    "Cloudflare Workers AI"
+    "Stripe Payments (USA & Global)", "PayPal Braintree Enterprise",
+    "Square POS & Online", "Adyen Global Acquiring",
+    "Shopify Payments Plus", "Razorpay (India & SEA)",
+    "Cashfree Payments (India)", "PayU Global Merchant",
+    "Checkout.com Enterprise", "Worldpay FIS Global",
+    "Authorize.Net Gateway", "Toast Restaurant POS",
+    "Clover Retail POS", "Mollie Payments (Europe)",
+    "Klarna & Affirm BNPL", "Wise Business International",
+    "Airwallex Cross-Border", "Payoneer B2B Checkout",
+    "GoCardless ACH & SEPA", "2Checkout Verifone SaaS",
+    "Paddle Merchant of Record", "Lemon Squeezy Digital Tax",
+    "Rapyd Global Fintech", "DLocal Emerging Markets",
+    "PhonePe & UPI Payment Gateway"
 )
 roles = (
-    "Startup MVP (1M Tokens/Day)", "SaaS Production (10M Tokens/Day)",
-    "Enterprise Scale (100M Tokens/Day)", "RAG Vector Pipeline",
-    "Real-Time Voice & Audio Agent", "Code Generation Copilot",
-    "Fine-Tuning LoRA 7B–70B", "Batch Async Data Processing",
-    "Multimodal Vision & Video", "High-Concurrency Chatbot",
-    "Autonomous Multi-Agent Loop", "On-Prem vs Cloud TCO",
-    "Spot Instance Auto-Scaling", "Dedicated Single-Tenant VPC",
-    "Zero-Data-Retention HIPAA", "Edge Low-Latency Inference"
+    "E-Commerce Store ($10k/mo)", "Growing D2C Brand ($50k/mo)",
+    "High-Volume Retailer ($250k/mo)", "B2B SaaS Subscription",
+    "Global Digital Downloads", "Local Cafe & Restaurant POS",
+    "Multi-Vendor Marketplace", "Cross-Border Exporter",
+    "Freelancer & Agency Invoicing", "Nonprofit & Charity Portal",
+    "Mobile App In-App Billing", "High-Ticket Consulting",
+    "Travel & Hospitality Booking", "Healthcare & Clinic POS",
+    "EdTech Course Platform", "Enterprise Custom Interchange"
 )
 cats8 = (
-    ("On-Demand GPU Hourly Rates", "$1.89 – $3.99/hr", "99.99% Uptime SLA", "Instant Pod Boot",
-     "Pay-per-second cloud GPU billing with NVLink interconnect and pre-installed CUDA/vLLM.",
-     "Community spot GPU nodes offering 55% lower hourly compute cost with checkpointing.",
-     "TIP: Use FP8 quantization on H100/L40S to double token throughput at the exact same hourly rate. || FAQ: Is per-second billing available? Yes, leading GPU clouds bill strictly by the second."),
-    ("LLM Token Pricing (Input/Output)", "$0.15 – $15 / 1M Tokens", "128k–2M Context", "50–450 Tokens/Sec",
-     "Serverless pay-as-you-go token API with automatic prompt caching and 90% cached input discount.",
-     "Batch API async queue cutting input and output token spend by exactly 50% within 24 hours.",
-     "TIP: Enable system-prompt prefix caching to reduce repetitive RAG context costs by up to 80%. || FAQ: How are cached tokens billed? Cached prompt prefixes typically cost 75% to 90% less."),
-    ("Reserved 1-Year & 3-Year Clusters", "35% – 58% Discount", "Dedicated InfiniBand", "Zero Queue Wait",
-     "Committed-use multi-node GPU reservation guaranteeing capacity during peak global demand.",
-     "3-month quarterly flexible reservation bridging spot savings and guaranteed availability.",
-     "TIP: Commit only baseline 24/7 steady traffic to reserved nodes and burst spikes to serverless APIs. || FAQ: Can reserved instances switch regions? Most providers allow flexibility within the same GPU family."),
-    ("Fine-Tuning & Training Cost", "$0.80 – $8.00 / 1M Train", "QLoRA / Full Weights", "Custom Model Ownership",
-     "Managed LoRA and full-parameter fine-tuning pipelines with automated eval checkpoints.",
-     "Self-hosted Unsloth + DeepSpeed training on spot A100/H100 pods at 70% lower compute spend.",
-     "TIP: Fine-tuning a compact 8B/70B model often beats frontier APIs at 1/10th the ongoing inference cost. || FAQ: Do I own fine-tuned weights? Self-hosted and open-weight fine-tunes give 100% weight ownership."),
-    ("Latency & Throughput Benchmarks", "18 ms – 140 ms TTFT", "Up to 850 tok/s", "Speculative Decoding",
-     "Time-to-first-token (TTFT) and tokens-per-second benchmarks under 100 concurrent requests.",
-     "Quantized INT4/AWQ inference engine optimized for sub-50ms conversational voice agents.",
-     "TIP: Co-locate your vector database and LLM endpoint in the same US-East or EU-Central zone. || FAQ: What matters more for chat UX? Time-to-first-token (TTFT) under 200ms feels instantaneous."),
-    ("Provisioned Throughput (PTU)", "$2,400 – $9,500/mo", "Guaranteed RPM/TPM", "Zero 429 Rate Limits",
-     "Dedicated model capacity units guaranteeing predictable latency and zero throttling.",
-     "Multi-provider smart router failing over across OpenAI, Anthropic, and Gemini automatically.",
-     "TIP: Implement a 3-provider fallback router before buying expensive Provisioned Throughput units. || FAQ: When are PTUs worth it? Once sustained traffic exceeds 50M+ tokens daily."),
-    ("Enterprise Security & SOC2/HIPAA", "Zero Data Retention", "Private AWS/GCP Link", "BYOK Encryption",
-     "HIPAA, SOC2 Type II, and GDPR compliant endpoints with zero prompt logging.",
-     "Air-gapped VPC deployment running open-weight models inside your own cloud account.",
-     "TIP: Sign a Zero Data Retention (ZDR) addendum before sending customer PII to any LLM API. || FAQ: Are API prompts used for training? Commercial enterprise API tiers do not train on customer data."),
-    ("Monthly AI Spend Calculator", "Up to 74% Cost Cut", "Live Token Estimator", "ROI & Unit Economics",
-     "Interactive daily token volume, cache hit rate, and GPU hourly TCO projection.",
-     "Hybrid small-model routing sending 80% simple queries to Flash/Mini models.",
-     "TIP: Routing simple classification tasks to lightweight models cuts total AI bills by 70%. || FAQ: How accurate is the token estimator? It models input/output ratios and monthly scaling in real time.")
+    ("Domestic Card Processing Fees", "2.4% + $0.30 / txn", "T+1 / T+2 Payout", "0% Setup Fee",
+     "Standard blended flat-rate credit and debit card processing with instant fraud screening.",
+     "Interchange-plus transparent pricing saving high-volume merchants 0.45% per transaction.",
+     "TIP: Switch from flat-rate to Interchange-Plus once monthly card volume crosses $50,000. || FAQ: Are debit card fees lower than credit cards? Yes, regulated debit cards often cost under 1.0%."),
+    ("International & FX Conversion Fees", "3.9% + 1.5% FX", "135+ Currencies", "Multi-Currency Settle",
+     "Cross-border card acceptance with automatic currency conversion into local bank account.",
+     "Like-for-like USD/EUR settlement avoiding forced 2% bank foreign exchange conversion spreads.",
+     "TIP: Enable multi-currency settlement to hold USD/EUR balances and save 1.8% on FX markup. || FAQ: Who pays the currency conversion fee? Either the merchant absorbs it or dynamic pricing passes it at checkout."),
+    ("UPI, ACH & Local Bank Transfers", "0% – 0.8% Capped Fee", "Instant / Same-Day", "Zero Chargeback Risk",
+     "Direct account-to-account bank rail (UPI, ACH, SEPA, Faster Payments) with near-zero fee.",
+     "Instant real-time RTP/FedNow bank settlement with automated invoice reconciliation.",
+     "TIP: Promoting UPI/ACH at checkout cuts average payment processing fees by over 75%. || FAQ: Are ACH and UPI payments reversible? Unlike credit cards, bank-push rails have virtually zero chargebacks."),
+    ("POS Hardware & In-Person Tap", "1.6% – 2.6% + $0.10", "$49 – $299 Reader", "Offline Queue Mode",
+     "Contactless NFC Apple Pay, Google Pay, and EMV chip card terminal with cloud inventory sync.",
+     "Tap-to-Pay on iPhone/Android smartphone requiring zero dedicated POS terminal hardware.",
+     "TIP: Card-present in-person taps cost 0.4% to 0.7% less than keyed-in or online card transactions. || FAQ: Does POS work if Wi-Fi drops? Yes, offline mode queues encrypted taps for up to 24 hours."),
+    ("SaaS Subscriptions & Recurring", "2.9% + 0.5% Billing", "Smart Retry AI", "Automated Dunning",
+     "Automated recurring billing engine with smart card-updater and failed-payment retry logic.",
+     "Merchant-of-Record (MoR) checkout handling global VAT, GST, and US sales tax automatically.",
+     "TIP: Network tokenization recovers 3%–5% of expired-card subscription churn automatically. || FAQ: What is a Merchant of Record? An MoR acts as the legal reseller and remits global sales taxes for you."),
+    ("Chargeback & Dispute Protection", "$15 Dispute Fee", "3DS2 Liability Shift", "AI Evidence Builder",
+     "Automated 3D Secure 2.0 authentication shifting fraudulent chargeback liability to card issuer.",
+     "Chargeback guarantee add-on reimbursing disputed transaction amounts and fees automatically.",
+     "TIP: Always enable 3DS2 and AVS/CVV checks on orders over $150 to prevent friendly fraud. || FAQ: Is the $15 chargeback fee refunded if I win? Most processors refund the fee upon winning the dispute."),
+    ("Instant Payouts & Rolling Reserves", "1.0% Instant Fee", "24/7 Weekend Payout", "0% Standard Reserve",
+     "On-demand debit card push payout delivering settled merchant funds in under 30 minutes.",
+     "Standard T+2 business day bank ACH payout with zero additional payout fee.",
+     "TIP: Use free T+2 payouts for routine cash flow and reserve instant payouts for urgent inventory restocks. || FAQ: Why do new accounts get a rolling reserve? High-ticket or new merchants may have a temporary 5%–10% hold."),
+    ("Merchant Fee & Savings Calculator", "Save $4,200+/yr", "Live Margin Estimator", "Effective Rate Audit",
+     "Interactive monthly volume, average ticket size, and domestic/international mix fee breakdown.",
+     "Dual-pricing or cash-discount compliant checkout program offsetting card processing overhead.",
+     "TIP: A high average order value ($150+) drastically reduces the impact of fixed $0.30 per-transaction fees. || FAQ: How accurate is the merchant fee slider? It models blended percentage plus fixed per-transaction cents.")
 )
 
 all_rows, seen = list(), set()
 for h_name in hubs:
     for r_name in roles:
         for cn, m1, m2, m3, oa, ob, tf in cats8:
-            t = f"{h_name} for {r_name} — {cn} & Cost Calculator ({year})"
+            t = f"{h_name} for {r_name} — {cn} & Savings Calculator ({year})"
             s = slugify(t)
             if s not in seen:
                 seen.add(s)
-                sm = f"Verified {year} pricing, latency, and monthly cost breakdown for {h_name} ({r_name}) under {cn}: {m1} ({m2})."
+                sm = f"Verified {year} transaction fees, FX markup, and net payout analysis for {h_name} ({r_name}) under {cn}: {m1} ({m2})."
                 all_rows.append((s, (t, cn, sm, m1, m2, m3, oa, ob, tf)))
 
 pool, idx = tuple(all_rows), 0
@@ -88,7 +92,7 @@ while len(all_rows) < 10000:
     if ns not in seen:
         seen.add(ns)
         rt, rc, rsm, m1, m2, m3, oa, ob, tf = orow
-        all_rows.append((ns, (f"{rt} (Cluster #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
+        all_rows.append((ns, (f"{rt} (Volume Tier #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
     idx += 1
 all_rows = tuple(islice(all_rows, 10000))
 os.makedirs("dist/guide", exist_ok=True)
