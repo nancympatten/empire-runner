@@ -1,0 +1,177 @@
+{
+  "registry_version": 1,
+  "project": "kingdom-21-global-rental-yield-atlas",
+  "policy": {
+    "no_fabricated_market_values": true,
+    "require_source_url": true,
+    "require_geography": true,
+    "require_reference_period": true,
+    "require_retrieved_at": true,
+    "preserve_margin_of_error": true,
+    "distinguish_survey_estimates_from_transaction_data": true,
+    "never_treat_tax_revenue_as_a_property_tax_rate": true,
+    "unverified_or_stale_data_must_not_be_presented_as_current": true
+  },
+  "sources": [
+    {
+      "id": "us_census_acs_2024_5yr",
+      "publisher": "US Census Bureau",
+      "dataset": "2020-2024 American Community Survey 5-Year Estimates",
+      "url": "https://www.census.gov/data/developers/data-sets/acs-5year/2024.html",
+      "api_base": "https://api.census.gov/data/2024/acs/acs5",
+      "data_family": "housing_survey_estimates",
+      "metrics": {
+        "median_gross_rent": "B25064_001E",
+        "median_gross_rent_margin_of_error": "B25064_001M"
+      },
+      "geography": [
+        "state",
+        "county",
+        "place",
+        "census_tract",
+        "block_group"
+      ],
+      "reference_period": "2020-2024",
+      "frequency": "annual_release_with_5_year_estimates",
+      "access": "Census API key required according to current developer documentation",
+      "limitations": [
+        "Survey estimate, not an individual property asking rent",
+        "Five-year pooled estimate, not a live 2026 market quote",
+        "Display margin of error where available"
+      ],
+      "initial_status": "registered_not_ingested"
+    },
+    {
+      "id": "uk_ons_private_rent_index",
+      "publisher": "Office for National Statistics",
+      "dataset": "Price Index of Private Rents, UK: monthly price statistics",
+      "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/datasets/priceindexofprivaterentsukmonthlypricestatistics",
+      "data_family": "official_rent_statistics",
+      "metrics": [
+        "private_rent_price_index",
+        "annual_change",
+        "price_levels"
+      ],
+      "geography": [
+        "uk",
+        "country",
+        "region",
+        "local_authority",
+        "broad_rental_market_area"
+      ],
+      "frequency": "monthly",
+      "access": "Official downloadable dataset",
+      "limitations": [
+        "Index and published price levels must retain their definitions",
+        "Do not infer an individual property rent from an area-level statistic"
+      ],
+      "initial_status": "registered_not_ingested"
+    },
+    {
+      "id": "canada_cmhc_rental_market_2025",
+      "publisher": "Canada Mortgage and Housing Corporation",
+      "dataset": "2025 Rental Market Survey Data Tables",
+      "url": "https://www.cmhc-schl.gc.ca/professionals/housing-markets-data-and-research/housing-data/data-tables/rental-market/rental-market-report-data-tables",
+      "data_family": "rental_market_survey",
+      "metrics": [
+        "average_rent",
+        "vacancy_rate",
+        "turnover_rate",
+        "universe_count"
+      ],
+      "geography": [
+        "canada",
+        "province",
+        "major_centre",
+        "selected_condominium_markets"
+      ],
+      "reference_period": "2025_survey",
+      "frequency": "annual_survey",
+      "access": "Official Excel publication",
+      "limitations": [
+        "Coverage varies by table and geography",
+        "Survey averages are not live listing prices"
+      ],
+      "initial_status": "registered_not_ingested"
+    },
+    {
+      "id": "singapore_ura_property_data",
+      "publisher": "Urban Redevelopment Authority Singapore",
+      "dataset": "Private Residential Property Data",
+      "url": "https://www.ura.gov.sg/property-data/private-residential-properties/",
+      "api_documentation": "https://eservice.ura.gov.sg/maps/api/",
+      "data_family": "property_transactions_and_rental_contracts",
+      "metrics": [
+        "rental_contracts",
+        "median_rent_per_sqft",
+        "property_transactions"
+      ],
+      "geography": [
+        "project",
+        "street",
+        "postal_district"
+      ],
+      "frequency": "service_specific_release_schedule",
+      "access": "URA API account activation and request credentials required for API services",
+      "limitations": [
+        "Some rental statistics require minimum contract counts",
+        "API service coverage and reference period must be retained",
+        "Do not scrape or bypass authenticated access"
+      ],
+      "initial_status": "registered_access_review_required"
+    },
+    {
+      "id": "india_mospi_nss_76_housing",
+      "publisher": "Ministry of Statistics and Programme Implementation, Government of India",
+      "dataset": "NSS Report No. 584: Drinking Water, Sanitation, Hygiene and Housing Condition in India",
+      "url": "https://mospi.gov.in/sites/default/files/press_release/Press%2BNote_Report%2BNo%2B584_DWS_76th%20Final.pdf",
+      "data_family": "historical_household_housing_survey",
+      "metrics": [
+        "housing_tenure",
+        "dwelling_characteristics",
+        "survey_rent_statistics_where_reported"
+      ],
+      "geography": [
+        "india",
+        "rural_urban",
+        "state_where_reported"
+      ],
+      "reference_period": "2018-07_to_2018-12",
+      "frequency": "historical_survey_release",
+      "access": "Official government PDF",
+      "limitations": [
+        "Historical 2018 survey, not current rental market data",
+        "Do not label historical values as 2026 rents",
+        "Do not infer city-level estimates from state-level results"
+      ],
+      "initial_status": "registered_not_ingested"
+    },
+    {
+      "id": "oecd_global_revenue_statistics",
+      "publisher": "Organisation for Economic Co-operation and Development",
+      "dataset": "Global Revenue Statistics Database",
+      "url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.CTP.TPS/DSD_REV_COMP_GLOBAL@DF_RSGLOBAL/2.1?references=all",
+      "data_family": "tax_revenue_aggregates",
+      "metrics": [
+        "tax_revenue_by_tax_type",
+        "tax_to_gdp",
+        "tax_structure"
+      ],
+      "geography": [
+        "participating_economies",
+        "regional_aggregates"
+      ],
+      "frequency": "periodic_database_updates",
+      "access": "Official OECD SDMX API; structure and data endpoints tested with HTTP 200",
+      "limitations": [
+        "Not a local property tax rate lookup",
+        "Not a substitute for municipal property tax rules",
+        "Use only for clearly labelled tax revenue comparisons"
+      ],
+      "initial_status": "api_endpoint_verified_not_ingested",
+      "landing_page_url": "https://www.oecd.org/en/data/datasets/global-revenue-statistics-database.html",
+      "api_structure_url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.CTP.TPS/DSD_REV_COMP_GLOBAL@DF_RSGLOBAL/2.1?references=all",
+      "api_data_url": "https://sdmx.oecd.org/public/rest/data/OECD.CTP.TPS,DSD_REV_COMP_GLOBAL@DF_RSGLOBAL,2.1/..S13._T..PT_B1GQ.A?startPeriod=2020&dimensionAtObservation=AllDimensions&format=csvfile"
+    }
+  ]
+}
