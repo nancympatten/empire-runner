@@ -222,22 +222,83 @@ with open("dist/robots.txt", "w", encoding="utf-8") as f: f.write(f"User-agent: 
 with open("dist/llms.txt", "w", encoding="utf-8") as f: f.write(f"# {sname}\n> 30-Year Verified Interactive Tax & Salary Calculator Directory for {topic}. Updated {today}.\n" + "\n".join(f"- [{next(iter(r))}]({site_url}/guide/{s}.html): {next(islice(r,2,3))}" for s, r in islice(all_rows, 100)))
 print("Total Verified SEO Pages Built:", len(all_rows))
 
-import base64, json, subprocess, urllib.request
-cf_t = base64.b64decode("Y2Z1dF80OGlNYmV3OFB5MnZxZFVtV213eUtJSXpOMlpmcHl1UXRTQWFuT0hKNGIwNzVmY2Y=").decode()
-cf_a = "54cbc23e97d4f0a2fa4b9cf608a8da82"
-os.environ["CLOUDFLARE_API_TOKEN"] = cf_t
-os.environ["CLOUDFLARE_ACCOUNT_ID"] = cf_a
-proj = next(iter(site_url.split("//")[-1].split(".")))
+import os
+import json
+import subprocess
+import urllib.request
+import urllib.error
+
+cf_t = os.environ.get("CLOUDFLARE_API_TOKEN")
+cf_a = os.environ.get("CLOUDFLARE_ACCOUNT_ID")
+
+if not cf_t or not cf_a:
+    raise RuntimeError("Cloudflare GitHub Secrets missing")
+
+proj = site_url.split("//")[-1].split(".")[0]
 site_url = "https://" + proj + ".pages.dev"
-cf_api = "https://" + ".".join(("api", "cloudflare", "com")) + f"/client/v4/accounts/{cf_a}/pages/projects"
-try:
-    req = urllib.request.Request(cf_api, data=json.dumps({"name": proj, "production_branch": "main"}).encode(), headers={"Authorization": "Bearer " + cf_t, "Content-Type": "application/json", "User-Agent": "Mozilla/5.0"}, method="POST")
-    urllib.request.urlopen(req)
-    print("Created CF Project:", proj)
-except Exception as e:
-    print("CF Project Info:", getattr(e, "code", e))
-p2 = subprocess.run(("npx", "--yes", "wrangler", "pages", "deploy", "dist", f"--project-name={proj}", "--branch=main", "--commit-dirty=true"), capture_output=True, text=True)
+
+cf_api = "https://" + ".".join(("api", "cloudflare", "com"))
+cf_api += f"/client/v4/accounts/{cf_a}/pages/projects"
+
+def cf_request(method, data=None):
+    url = cf_api
+    if method == "GET":
+        url += "/" + proj
+
+    body = json.dumps(data).encode() if data else None
+    req = urllib.request.Request(
+        url,
+        data=body,
+        headers={
+            "Authorization": "Bearer " + cf_t,
+            "Content-Type": "application/json"
+        },
+        method=method
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=30) as response:
+            result = json.loads(response.read())
+    except urllib.error.HTTPError as error:
+        detail = error.read().decode(errors="replace")
+        if method == "GET" and error.code == 404:
+            return None
+        if method == "POST" and error.code == 409:
+            return cf_request("GET")
+        raise RuntimeError("Cloudflare API error: " + detail)
+
+    if not result.get("success"):
+        raise RuntimeError("Cloudflare API rejected: " + str(result))
+    return result
+
+existing = cf_request("GET")
+
+if existing is None:
+    cf_request("POST", {
+        "name": proj,
+        "production_branch": "main"
+    })
+    existing = cf_request("GET")
+    if existing is None:
+        raise RuntimeError("Project verification failed")
+    print("PROJECT CREATED:", proj)
+else:
+    print("PROJECT EXISTS:", proj)
+
+p2 = subprocess.run(
+    (
+        "npx", "--yes", "wrangler",
+        "pages", "deploy", "dist",
+        f"--project-name={proj}",
+        "--branch=main",
+        "--commit-dirty=true"
+    ),
+    capture_output=True,
+    text=True
+)
+
 print("CF DEPLOY OUT:", p2.stdout, p2.stderr)
 if p2.returncode != 0:
-    raise RuntimeError(p2.stderr)
+    raise RuntimeError("Cloudflare deployment failed: " + p2.stderr)
+
 print("CLOUDFLARE LIVE:", site_url)
