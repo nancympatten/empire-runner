@@ -219,3 +219,12 @@ with open("dist/sitemap.xml", "w", encoding="utf-8") as f: f.write(f"<?xml versi
 with open("dist/robots.txt", "w", encoding="utf-8") as f: f.write(f"User-agent: *\nAllow: /\nUser-agent: GPTBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: Google-Extended\nAllow: /\nSitemap: {site_url}/sitemap.xml\n")
 with open("dist/llms.txt", "w", encoding="utf-8") as f: f.write(f"# {sname}\n> 30-Year Verified Interactive Tax & Salary Calculator Directory for {topic}. Updated {today}.\n" + "\n".join(f"- [{next(iter(r))}]({site_url}/guide/{s}.html): {next(islice(r,2,3))}" for s, r in islice(all_rows, 100)))
 print("Total Verified SEO Pages Built:", len(all_rows))
+
+
+# CF_DEPLOY_HOOK
+if os.environ.get("CF_API_TOKEN") and os.environ.get("CF_ACCOUNT_ID"):
+    import subprocess
+    proj = next(iter(site_url.split("//")[-1].split(".")))
+    subprocess.run(("npx", "-y", "wrangler@3", "pages", "project", "create", proj, "--production-branch=main"), check=False)
+    subprocess.run(("npx", "-y", "wrangler@3", "pages", "deploy", "dist", f"--project-name={proj}", "--branch=main"), check=True)
+    print("👑 Cloudflare Pages Live:", site_url)
