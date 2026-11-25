@@ -1,0 +1,82 @@
+name: Cloud-to-Cloud SEO Empire Factory
+
+on:
+  workflow_dispatch:
+    inputs:
+      kingdom_name:
+        description: 'Exact Subdomain (e.g. global-airport-transfers-atlas)'
+        required: true
+      kingdom_topic:
+        description: 'Empire Niche & Detailed Instructions'
+        required: true
+      dry_run:
+        description: 'true = Test & Verify Only (0 Netlify Credits) | false = Live Deploy'
+        required: false
+        default: 'true'
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Factory
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          pip install google-genai pydantic
+          if [ "${{ github.event.inputs.dry_run }}" = "false" ]; then
+            npm install -g netlify-cli
+          fi
+
+      - name: Build & Audit Full SEO Directory in Cloud (0 Netlify Credits)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SITE_URL: https://${{ github.event.inputs.kingdom_name }}.netlify.app
+          KINGDOM_TOPIC: ${{ github.event.inputs.kingdom_topic }}
+        run: |
+          python build.py
+          echo "=== 🔍 SEO & CANONICAL AUDIT ==="
+          grep -i "canonical" dist/index.html
+          head -n 12 dist/sitemap.xml
+          cat dist/robots.txt
+          echo "Total Pages Built: $(find dist -name '*.html' | wc -l)"
+
+      - name: Save Preview Bundle to GitHub (0 Credits Used)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.inputs.kingdom_name }}-audit
+          path: |
+            dist/
+            data.csv
+
+      - name: Lock Exact Subdomain & Deploy Live (Only when dry_run=false)
+        if: github.event.inputs.dry_run == 'false'
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          KINGDOM_NAME: ${{ github.event.inputs.kingdom_name }}
+        run: |
+          python3 -c '
+          import os, json, subprocess
+          name = os.environ["KINGDOM_NAME"].strip().lower()
+          sites = json.loads(subprocess.check_output(["netlify", "api", "listSites"]))
+          for s in sites:
+              if not s.get("published_deploy") and s.get("name") != name:
+                  try:
+                      subprocess.check_output(["netlify", "api", "deleteSite", "--data", json.dumps({"site_id": s["id"]})])
+                      print("🧹 Deleted empty draft site:", s.get("name"))
+                  except Exception:
+                      pass
+          existing = next((s for s in sites if s.get("name") == name), None)
+          if existing:
+              site_id = existing["id"]
+          else:
+              created = json.loads(subprocess.check_output(["netlify", "api", "createSite", "--data", json.dumps({"body": {"name": name}})]))
+              site_id = created["id"]
+          subprocess.check_call(["netlify", "deploy", "--prod", "--dir=dist", "--site=" + site_id])
+          print("👑 LIVE AT: https://" + name + ".netlify.app")
+          '
