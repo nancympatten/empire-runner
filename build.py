@@ -3,7 +3,7 @@ from itertools import islice
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 
-site_url = os.environ.get("SITE_URL", "").rstrip("/")
+site_url = os.environ.get("SITE_URL", "").rstrip("/").replace(".netlify.app", ".pages.dev") if os.environ.get("CF_API_TOKEN") else os.environ.get("SITE_URL", "").rstrip("/")
 topic = os.environ.get("KINGDOM_TOPIC", "")
 today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 year = datetime.now(timezone.utc).strftime("%Y")
@@ -14,63 +14,63 @@ def slugify(txt):
     return "-".join(out.strip("-").split("-")[:11])
 
 hubs = (
-    "United States (S&P 500 & 401k)", "United States (Roth IRA & VOO ETF)",
-    "India (Nifty 50 Mutual Fund SIP)", "India (NPS & PPF Tax-Free)",
-    "United Kingdom (Stocks & Shares ISA)", "United Kingdom (SIPP Pension)",
-    "Canada (TFSA & RRSP Index)", "Australia (Superannuation & ASX 200)",
-    "Germany (MSCI World ETF Sparplan)", "Singapore (CPF & STI ETF)",
-    "United Arab Emirates (Offshore ETF)", "Switzerland (Pillar 3a & SMI)",
-    "Japan (NISA Tax-Free Index)", "Netherlands (Box 3 Index Investing)",
-    "Ireland (VWCE Accumulating ETF)", "France (PEA European Equity)",
-    "Spain (Indexa Capital & MSCI)", "Sweden (ISK Investment Account)",
-    "New Zealand (KiwiSaver Growth)", "South Korea (ISA & KOSPI 200)",
-    "Brazil (Tesouro Direto & Ibovespa)", "South Africa (TFSA & JSE Top 40)",
-    "Saudi Arabia (Tadawul & Sukuk)", "Hong Kong (MPF & Hang Seng ETF)",
-    "Global Expat (Irish-Domiciled UCITS)"
+    "New York City (Manhattan & Brooklyn)", "Austin & Dallas (Texas USA)",
+    "Miami & Orlando (Florida USA)", "Los Angeles & San Diego (California)",
+    "London (Zone 1–4 UK)", "Manchester & Birmingham (UK)",
+    "Mumbai & Thane (India)", "Bengaluru & Whitefield (India)",
+    "Delhi NCR & Gurugram (India)", "Bhubaneswar & Odisha (India)",
+    "Hyderabad & Pune (India)", "Dubai Marina & Downtown (UAE)",
+    "Toronto & Mississauga (Canada)", "Vancouver (Canada)",
+    "Sydney & Parramatta (Australia)", "Melbourne (Australia)",
+    "Singapore (Core & Outside Central)", "Berlin & Munich (Germany)",
+    "Lisbon & Porto (Portugal)", "Madrid & Barcelona (Spain)",
+    "Tokyo (23 Wards Japan)", "Paris (Ile-de-France)",
+    "Amsterdam (Netherlands)", "Zurich (Switzerland)",
+    "Bangkok (Sukhumvit Thailand)"
 )
 roles = (
-    "$250/mo Beginner SIP", "$500/mo Wealth Builder",
-    "$1,000/mo Mid-Career Investor", "$2,500/mo High-Earner Portfolio",
-    "$5,000/mo Executive FIRE Plan", "$10,000 Lump-Sum + Monthly Top-Up",
-    "$50,000 Lump-Sum Compounding", "$100,000 Portfolio Growth",
-    "Age 25 Early Start (35-Yr Horizon)", "Age 35 Family Wealth (25-Yr Horizon)",
-    "Age 45 Catch-Up Plan (15-Yr Horizon)", "Child Higher Education Corpus",
-    "Early Retirement FIRE at 45", "Tax-Free Dividend Income Stream",
-    "10% Annual Step-Up SIP Strategy", "Inflation-Adjusted Real Return"
+    "1BHK Studio Apartment", "2BHK Residential Condo",
+    "3BHK Family Apartment", "Luxury Penthouse & Villa",
+    "Suburban Single-Family Home", "Duplex & Multi-Family Triplex",
+    "Short-Term Airbnb Vacation Rental", "Co-Living & Student Housing",
+    "Grade-A Commercial Office Space", "High-Street Retail Shopfront",
+    "Industrial Warehouse & Logistics", "Pre-Launch Off-Plan Property",
+    "Ready-to-Move Resale Unit", "REITs vs Direct Physical Property",
+    "NRI & Foreign Investor Purchase", "Leveraged Mortgage Buy-to-Let"
 )
 cats8 = (
-    ("10-Year Compounding Projection", "10.8% – 12.4% CAGR", "2.8x Capital Multiple", "0.03% – 0.15% TER",
-     "Disciplined monthly dollar-cost averaging into low-cost broad-market equity index funds.",
-     "Balanced 70/30 equity-and-treasury bond allocation reducing portfolio drawdown volatility.",
-     "TIP: Keeping fund expense ratios (TER) under 0.10% saves tens of thousands in compounding drag over 20 years. || FAQ: Does monthly SIP beat timing the market? Over 10+ years, automated monthly investing beats 85% of active timers."),
-    ("20-Year & 30-Year Exponential Wealth", "8.4x – 17.5x Multiplier", "78% Gains from Growth", "Long-Term Capital Gain",
-     "Multi-decade uninterrupted compounding where investment returns exceed principal contributions 4-to-1.",
-     "Accumulating dividend-reinvestment (DRIP) share class compounding payouts tax-deferred.",
-     "TIP: Years 20 through 30 generate over 65% of total lifetime wealth—never interrupt compounding early. || FAQ: What happens if I stay invested for 25 instead of 15 years? Your final corpus nearly triples due to exponential growth."),
-    ("10% Annual Step-Up SIP Accelerator", "+68% Higher Final Corpus", "Income-Linked Scaling", "Beats Lifestyle Creep",
-     "Increasing monthly investment contribution by 10% every year in line with salary increments.",
-     "5% conservative annual top-up schedule paired with automatic annual bonus lump-sum injection.",
-     "TIP: A 10% annual step-up turns a modest starter SIP into a multi-million retirement fund without strain. || FAQ: How much extra wealth does a 10% step-up create? Typically 60% to 75% more than a flat monthly SIP."),
-    ("Tax-Advantaged Retirement Wrappers", "100% Tax-Free Growth", "Employer Match 100%", "Zero Dividend Drag",
-     "Tax-sheltered retirement accounts (Roth IRA, ISA, TFSA, PPF, NISA) eliminating capital gains tax.",
-     "Pre-tax deductible contributions (401k, Traditional IRA, NPS, RRSP) lowering current income tax.",
-     "TIP: Always capture 100% of employer matching contributions first—it is an instant guaranteed 100% return. || FAQ: Should I prioritize Roth tax-free or pre-tax accounts? Younger investors in lower brackets benefit most from tax-free growth."),
-    ("Inflation-Adjusted Real Purchasing Power", "6.2% – 7.5% Real CAGR", "3.5% Inflation Buffer", "True Future Value",
-     "Net wealth projection discounted for 3%–5% long-term consumer price inflation.",
-     "Treasury Inflation-Protected Securities (TIPS / Inflation-Indexed Bonds) preserving real principal.",
-     "TIP: Always plan retirement targets using inflation-adjusted (real) returns rather than nominal numbers. || FAQ: How much does 4% inflation reduce purchasing power in 20 years? $1,000,000 today equals roughly $456,000 in 20-year purchasing power."),
-    ("FIRE & 4% Safe Withdrawal Rate", "25x Annual Expenses", "4.0% Perpetual Draw", "30+ Yr Corpus Safety",
-     "Trinity Study 4% inflation-adjusted annual withdrawal rule engineered to last 30+ years.",
-     "Dynamic 3.5% conservative bucket strategy holding 2 years of cash to avoid selling in bear markets.",
-     "TIP: Multiply your target annual retirement expenses by 25 to find your exact Financial Independence (FIRE) number. || FAQ: How does the 4% rule work? Withdraw 4% in Year 1 and adjust solely for inflation each subsequent year."),
-    ("Index ETF vs Active Mutual Fund Audit", "Save 1.4% Annual Fee", "92% Outperformance", "Transparent Holdings",
-     "Passive market-cap weighted index ETFs outperforming 90%+ of high-fee active funds over 15 years.",
-     "Direct-plan zero-commission index mutual fund eliminating distributor trail commissions.",
-     "TIP: A 1.5% annual advisory/fund fee quietly consumes nearly 30% of your final wealth over 25 years. || FAQ: Why do low-cost index funds beat active funds? Lower fees and zero style drift compound relentlessly."),
-    ("Compound Interest & Wealth Calculator", "Live 30-Yr Simulator", "Monthly + Lump-Sum", "Real vs Nominal View",
-     "Interactive monthly contribution, expected CAGR, and investment horizon projection tool.",
-     "Goal-seeker reverse calculator determining exact monthly SIP needed to reach $1M+ target.",
-     "TIP: Starting 5 years earlier requires nearly half the monthly contribution to reach the exact same goal. || FAQ: How accurate is the compound slider? It computes monthly compounded future value across 1, 3, and 5+ year horizons.")
+    ("Gross & Net Rental Yield Benchmark", "5.8% – 8.4% Gross Yield", "4.6% – 6.9% Net Cap Rate", "94% Avg Occupancy",
+     "Annual gross rental income divided by total acquisition cost including stamp duty and registration.",
+     "Net Operating Income (NOI) cap rate after deducting property tax, HOA maintenance, and vacancy buffer.",
+     "TIP: Always calculate Net Cap Rate after deducting 15%–20% for property tax, HOA fees, and 1 month vacancy. || FAQ: What is a good net rental yield? In major global metros, 5%+ net yield is strong; 7%+ is exceptional."),
+    ("Property Tax, Stamp Duty & Closing Costs", "1.1% – 6.5% Closing Cost", "Annual Municipal Tax", "Registration & Legal",
+     "Upfront stamp duty, title transfer registration, and legal due-diligence closing expenses.",
+     "Annual municipal property tax and society maintenance charges impacting net monthly cash flow.",
+     "TIP: Factor 5%–8% upfront stamp duty and closing costs into your denominator so yield is not overstated. || FAQ: Are property taxes deductible from rental income? Yes, most jurisdictions allow full deduction of municipal taxes."),
+    ("Buy-to-Let Mortgage Cash-Flow & DSCR", "1.35x DSCR Ratio", "75% LTV Financing", "Positive Cash Flow",
+     "Debt Service Coverage Ratio (DSCR) and monthly net cash flow after mortgage EMI payments.",
+     "Interest-only buy-to-let mortgage option maximizing early monthly cash-on-cash return.",
+     "TIP: Aim for a DSCR above 1.25x so rental income comfortably covers mortgage payments even if rates rise 1%. || FAQ: What is Cash-on-Cash return? Annual pre-tax cash flow divided by actual cash down payment invested."),
+    ("Short-Term Airbnb vs Long-Term Lease", "+38% Gross Revenue", "68%–78% Seasonal Occ.", "Furnished Premium",
+     "Dynamic nightly short-term vacation rental yield net of cleaning, platform fees, and furnishing.",
+     "12-to-36 month corporate or family lease guaranteeing predictable zero-turnover monthly rent.",
+     "TIP: Short-term rentals earn 30%–45% higher gross revenue in tourist hubs but require 20% management overhead. || FAQ: Which has lower vacancy risk? Long-term corporate leases provide stable 11–12 month occupancy."),
+    ("10-Year Capital Appreciation & Total IRR", "11.5% – 14.8% Total IRR", "6.5% Annual Price Growth", "Inflation Hedge",
+     "Combined total return uniting annual net rental cash flow plus 10-year capital value appreciation.",
+     "Transit-oriented infrastructure corridor property positioned for above-average capital growth.",
+     "TIP: Properties within 800 meters of new metro or tech corridors outperform city-wide appreciation by 2.5% annually. || FAQ: How does leverage boost real estate IRR? With 25% down, a 5% property value gain equals a 20% return on equity."),
+    ("Rental Income Tax & Depreciation Shield", "30% Standard Deduction", "Non-Cash Depreciation", "DTAA Tax Relief",
+     "Statutory standard maintenance deduction and mortgage interest write-off lowering taxable rent.",
+     "Building structure depreciation allowance shielding positive cash flow from income tax.",
+     "TIP: Deduct mortgage interest, property insurance, repairs, and management fees to cut rental tax by half. || FAQ: How is NRI/foreign rental income taxed? Usually subject to withholding tax unless reduced under a DTAA treaty."),
+    ("Tenant Screening & Vacancy Risk Audit", "<18 Days Avg Vacancy", "2-Month Security Deposit", "11-Month Escalation",
+     "Corporate tenant verification, background check, and 5%–7% annual rent escalation clause.",
+     "Rent-guarantee insurance and professional property management service (6%–8% of monthly rent).",
+     "TIP: Include an automatic 5%–7% annual rent escalation clause in every multi-year lease agreement. || FAQ: How much vacancy buffer should I model? Always budget 1 month (8.3%) annual vacancy in your ROI math."),
+    ("Rental Yield & Cap Rate Calculator", "Live NOI & Cash Flow", "Cap Rate + CoC ROI", "10-Yr Wealth Audit",
+     "Interactive purchase price, monthly rent, expenses, and down-payment yield simulator.",
+     "Side-by-side comparison of all-cash purchase vs 75% mortgage-leveraged return on equity.",
+     "TIP: Use the interactive sliders to test how a 10% rent increase or lower down payment transforms your net ROI. || FAQ: What is the difference between Cap Rate and Gross Yield? Cap Rate subtracts operating expenses; Gross Yield does not.")
 )
 
 all_rows, seen = list(), set()
@@ -81,7 +81,7 @@ for h_name in hubs:
             s = slugify(t)
             if s not in seen:
                 seen.add(s)
-                sm = f"Verified {year} compound interest projection, CAGR benchmark, and tax-adjusted wealth breakdown for {r_name} in {h_name} ({cn}): {m1} ({m2})."
+                sm = f"Verified {year} gross rental yield, net cap rate, property tax, and cash-flow analysis for a {r_name} in {h_name} ({cn}): {m1} ({m2})."
                 all_rows.append((s, (t, cn, sm, m1, m2, m3, oa, ob, tf)))
 
 pool, idx = tuple(all_rows), 0
@@ -92,7 +92,7 @@ while len(all_rows) < 10000:
     if ns not in seen:
         seen.add(ns)
         rt, rc, rsm, m1, m2, m3, oa, ob, tf = orow
-        all_rows.append((ns, (f"{rt} (Plan #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
+        all_rows.append((ns, (f"{rt} (Zone #{v})", rc, rsm, m1, m2, m3, oa, ob, tf)))
     idx += 1
 all_rows = tuple(islice(all_rows, 10000))
 os.makedirs("dist/guide", exist_ok=True)
