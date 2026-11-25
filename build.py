@@ -235,6 +235,13 @@ import base64, subprocess
 site_url = "https://" + proj + ".pages.dev"
 if p2.returncode != 0: raise RuntimeError(p2.stderr)
 import base64, json, subprocess, urllib.request
+site_url = "https://" + proj + ".pages.dev"
+try:
+    req = urllib.request.Request(cf_api, data=json.dumps({"name": proj, "production_branch": "main"}).encode(), headers={"Authorization": "Bearer " + cf_t, "Content-Type": "application/json", "User-Agent": "Mozilla/5.0"}, method="POST")
+    urllib.request.urlopen(req)
+except Exception as e:
+if p2.returncode != 0: raise RuntimeError(p2.stderr)
+import base64, json, subprocess, urllib.request
 cf_t = base64.b64decode("Y2Z1dF80OGlNYmV3OFB5MnZxZFVtV213eUtJSXpOMlpmcHl1UXRTQWFuT0hKNGIwNzVmY2Y=").decode()
 cf_a = "54cbc23e97d4f0a2fa4b9cf608a8da82"
 os.environ["CLOUDFLARE_API_TOKEN"] = cf_t
