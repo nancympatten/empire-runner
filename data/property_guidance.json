@@ -1,0 +1,82 @@
+{
+  "Studio apartment": {
+    "focus": "Assess achievable rent against usable floor area, building services, furnishing requirements, tenant turnover and the costs of maintaining a compact unit. Check whether demand comes from one clearly defined tenant group rather than assuming all small units share the same market.",
+    "documents": "Floor plan and measured area; title and occupancy documents; building service-charge schedule; comparable studio leases; furnishing inventory; inspection report; utility arrangements.",
+    "risks": "Small units can have concentrated tenant demand, frequent turnover, furnishing wear and service charges that materially affect net income. Confirm whether advertised area is carpet, internal or gross area."
+  },
+  "One-bedroom apartment": {
+    "focus": "Evaluate the balance between achievable rent, layout, storage, privacy, building amenities and recurring apartment charges. Compare like-for-like one-bedroom units with similar condition, location and lease terms.",
+    "documents": "Measured floor plan; title and occupancy records; comparable executed leases; service-charge statements; maintenance history; inspection report; lease restrictions.",
+    "risks": "Headline rent may not reflect service charges, repair obligations, parking costs or incentives. Differences in layout and building quality can make superficially similar comparables unreliable."
+  },
+  "Two-bedroom apartment": {
+    "focus": "Assess whether the second bedroom supports a genuine additional tenant use, family occupancy or flexible working arrangement. Compare rent and operating costs for the same occupancy and furnishing assumptions.",
+    "documents": "Floor plan; occupancy and title records; comparable two-bedroom leases; building rules; service-charge statements; parking allocation; inspection and maintenance records.",
+    "risks": "Do not assume a second bedroom creates proportional rental income. Shared occupancy rules, overcrowding limits, maintenance, utility arrangements and tenant suitability need separate review."
+  },
+  "Three-bedroom family apartment": {
+    "focus": "Examine family-oriented layout, usable bedroom sizes, storage, access, parking, schools or transport only where independently verified, and the likely length and terms of tenancy. Model maintenance and replacement costs across the whole unit.",
+    "documents": "Floor plan and room measurements; title and occupancy records; building rules; comparable family leases; parking documents; inspection report; appliance and fixture inventory.",
+    "risks": "Larger units may have a narrower tenant pool and higher absolute repair or furnishing costs. Confirm lawful occupancy limits and avoid treating proximity to amenities as proof of rental demand."
+  },
+  "Luxury penthouse or villa": {
+    "focus": "Separate premium features from measurable operating economics. Assess private outdoor areas, lifts, pools, security, specialist systems, staffing, insurance and irregular maintenance using property-specific quotations.",
+    "documents": "Title and boundary plans; approved building plans; equipment and pool service records; insurance quotations; maintenance contracts; security arrangements; specialist inspection reports.",
+    "risks": "High-value finishes and specialist systems can create volatile repair costs, insurance exclusions and longer periods to find a suitable tenant or buyer. Verify approvals for alterations and amenities."
+  },
+  "Single-family suburban home": {
+    "focus": "Evaluate the full building and land responsibilities, including roof, structure, drainage, utilities, garden, boundary, access and any shared or private infrastructure. Distinguish owner obligations from tenant obligations in the lease.",
+    "documents": "Title and boundary survey; building approvals; structural and pest inspections where relevant; utility records; insurance quotation; maintenance history; comparable house leases.",
+    "risks": "The owner may bear costs that apartment service charges otherwise cover. Boundary disputes, deferred maintenance, drainage, roof defects and unapproved extensions can affect costs and saleability."
+  },
+  "Duplex or small multifamily property": {
+    "focus": "Model each unit separately before consolidating property-level income. Review separate access, utilities, meters, leases, shared areas, maintenance allocation and the effect of one vacant unit on total cash flow.",
+    "documents": "Title and approved unit plans; occupancy or rental licences where applicable; unit-by-unit leases; utility and meter records; fire and safety documents; shared-area maintenance agreements.",
+    "risks": "One unit's vacancy or repair can affect the whole investment. Unauthorised conversions, inadequate fire separation, shared-meter disputes and unclear maintenance responsibilities require particular scrutiny."
+  },
+  "Short-term vacation rental": {
+    "focus": "Build a unit-economics model using nightly price assumptions, available nights, booking channels, cleaning, linen, utilities, platform charges, guest support, turnover and seasonal operating plans. Treat every occupancy input as a scenario until supported by evidence.",
+    "documents": "Written permission for the intended use; applicable licence or registration; building and lease rules; insurance confirmation; platform fee schedule; cleaning quotations; safety inspection; booking and expense records if operating.",
+    "risks": "Local restrictions, licensing, building rules, platform dependence, seasonality, cancellations, guest damage and intensive management can undermine projected income. Do not assume short-term letting is permitted."
+  },
+  "Co-living or student housing": {
+    "focus": "Analyse room-level income and shared-space costs separately. Review lawful occupancy, room configuration, common facilities, internet, utilities, cleaning, management intensity, tenant turnover and academic-calendar exposure where relevant.",
+    "documents": "Approved floor plan and occupancy permissions; room-level lease forms; fire and safety records; building rules; utility arrangements; cleaning and management contracts; relevant operating permissions.",
+    "risks": "Higher room count does not automatically mean higher lawful or sustainable income. Occupancy limits, fire safety, privacy, shared-facility wear, turnover and licensing can materially change operating costs."
+  },
+  "Grade-A commercial office": {
+    "focus": "Assess lease-level income, tenant covenants, incentives, rent-free periods, fit-out contributions, service charges, vacancy downtime and future capital requirements. Distinguish passing rent from effective rent over the lease term.",
+    "documents": "Executed leases and amendments; tenant schedule; rent ledger; floor-area measurement basis; service-charge budgets and reconciliations; building specifications; energy and safety records; capex history.",
+    "risks": "Headline rents can conceal incentives, tenant concentration, upcoming lease expiries, refurbishment obligations and substantial vacancy costs. Verify the building's actual specification rather than relying on a Grade-A label."
+  },
+  "High-street retail unit": {
+    "focus": "Examine frontage, visibility, access, permitted use, loading, footfall evidence, trading hours and tenant fit. Separate base rent from turnover-linked rent, incentives, service charges and fit-out obligations.",
+    "documents": "Retail lease and permitted-use clauses; title and frontage plans; planning or use permissions; service-charge records; fit-out approvals; loading/access arrangements; comparable retail leases.",
+    "risks": "Trading performance, access changes, competing supply, tenant failure, restrictive use clauses and costly fit-out can affect reletting. Do not infer footfall or sales from a busy-looking street."
+  },
+  "Industrial warehouse": {
+    "focus": "Review clear height, floor loading, access roads, loading bays, power supply, fire systems, yard space, drainage and permitted industrial use. Match the physical specification to the intended tenant's documented requirements.",
+    "documents": "Approved plans and permitted-use records; structural and floor specifications; fire-system inspections; environmental reports where appropriate; utility capacity records; access and loading plans; lease and repair obligations.",
+    "risks": "Specialist fit-out, environmental liabilities, heavy-duty repairs, access restrictions and limited alternative uses can increase downtime and reletting costs. Confirm the property's actual permitted use and technical capacity."
+  },
+  "Off-plan property": {
+    "focus": "Evaluate the developer, contractual milestones, payment schedule, completion conditions, handover specifications, warranties and the investor's ability to fund delays. Model cash commitments by date rather than treating the purchase as an immediately rentable asset.",
+    "documents": "Reservation and sale contract; approved project plans; developer disclosures and track record evidence; payment schedule; escrow or buyer-protection documents where applicable; completion specifications; warranty terms.",
+    "risks": "Construction delay, specification changes, developer or contractor failure, financing changes, handover defects and uncertain completion value can affect the investment. Verify protections under the actual jurisdiction and contract."
+  },
+  "Ready-to-move resale unit": {
+    "focus": "Prioritise title verification, physical inspection, actual building condition, existing tenancy obligations, unpaid charges and the distinction between advertised condition and delivered condition. Include immediate repairs and transaction costs in the acquisition model.",
+    "documents": "Title chain and encumbrance search; sale agreement; occupancy and completion records; current lease if tenanted; service-charge and utility clearances; inspection report; approved alteration records.",
+    "risks": "Hidden defects, title or lien issues, unauthorised alterations, unpaid dues, tenant possession disputes and immediate capital works can change the true acquisition cost. Obtain independent legal and technical review."
+  },
+  "REIT versus direct property investment": {
+    "focus": "Compare the legal and economic exposure rather than treating listed securities and direct ownership as interchangeable. Review portfolio concentration, fees, distributions, leverage, liquidity, governance and investor control alongside the costs of owning a specific property.",
+    "documents": "Current prospectus or offering document; audited financial statements; portfolio and debt disclosures; fee schedule; distribution policy; trading and liquidity information; direct-property title, lease and cost records for the alternative.",
+    "risks": "REIT market prices can fluctuate independently of reported property values, distributions are not guaranteed and investors generally lack direct control over assets. Direct ownership has concentration, illiquidity, management and transaction risks."
+  },
+  "Leveraged buy-to-let property": {
+    "focus": "Separate property operating performance from financing outcomes. Model loan proceeds, deposit, fees, amortisation, interest-rate scenarios, refinancing dates, lender conditions and cash reserves using written financing terms.",
+    "documents": "Written lender illustration or offer; repayment schedule; loan agreement; valuation; deposit evidence; acquisition-cost estimate; insurance conditions; tenancy and rental evidence; refinancing terms if relevant.",
+    "risks": "Leverage magnifies equity losses and cash-flow pressure. Rate changes, refinancing refusal, lender covenants, vacancy and forced-sale costs can create obligations even when the property remains owned."
+  }
+}

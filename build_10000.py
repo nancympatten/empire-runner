@@ -20,6 +20,7 @@ GOOGLE_SITE_VERIFICATION = os.environ.get("GOOGLE_SITE_VERIFICATION", "").strip(
 BING_SITE_VERIFICATION = os.environ.get("BING_SITE_VERIFICATION", "").strip()
 EXPECTED_PROJECT = "global-rental-yield-atlas"
 TODAY = datetime.now(timezone.utc).date().isoformat()
+CURRENT_YEAR = datetime.now(timezone.utc).year
 ROOT = Path.cwd()
 REGISTRY = ROOT / "data" / "source_registry.json"
 OUT = ROOT / "dist"
@@ -72,6 +73,58 @@ PROPERTY_TYPES = [
     "REIT versus direct property investment",
     "Leveraged buy-to-let property",
 ]
+
+PROPERTY_GUIDANCE = json.loads((ROOT / "data" / "property_guidance.json").read_text(encoding="utf-8"))
+if set(PROPERTY_GUIDANCE) != set(PROPERTY_TYPES):
+    raise SystemExit("ERROR: property guidance keys do not exactly match PROPERTY_TYPES.")
+for property_name, guidance in PROPERTY_GUIDANCE.items():
+    if not isinstance(guidance, dict) or any(
+        not isinstance(guidance.get(field), str) or not guidance[field].strip()
+        for field in ("focus", "documents", "risks")
+    ):
+        raise SystemExit("ERROR: incomplete property guidance for " + property_name)
+
+def _location_guidance_slug(value):
+    value = value.lower().replace("&", " and ")
+    value = re.sub(r"[^a-z0-9]+", "-", value).strip("-")
+    return value
+
+LOCATION_GUIDANCE_PATH = ROOT / "data" / "location_guidance.json"
+if not LOCATION_GUIDANCE_PATH.is_file():
+    raise SystemExit("ERROR: location_guidance.json is missing.")
+LOCATION_GUIDANCE_DATA = json.loads(LOCATION_GUIDANCE_PATH.read_text(encoding="utf-8"))
+if not isinstance(LOCATION_GUIDANCE_DATA.get("locations"), dict):
+    raise SystemExit("ERROR: location guidance locations must be an object.")
+
+LOCATION_GUIDANCE = LOCATION_GUIDANCE_DATA["locations"]
+COUNTRY_ALIASES = {"UAE": "United Arab Emirates"}
+
+expected_location_keys = {_location_guidance_slug(location) for location, _ in LOCATIONS}
+if set(LOCATION_GUIDANCE) != expected_location_keys:
+    missing = sorted(expected_location_keys - set(LOCATION_GUIDANCE))
+    extra = sorted(set(LOCATION_GUIDANCE) - expected_location_keys)
+    raise SystemExit(f"ERROR: location guidance key mismatch; missing={missing}; extra={extra}")
+
+for location, country in LOCATIONS:
+    record = LOCATION_GUIDANCE[_location_guidance_slug(location)]
+    expected_country = COUNTRY_ALIASES.get(country, country)
+    if record.get("label") != location:
+        raise SystemExit("ERROR: location guidance label mismatch for " + location)
+    if record.get("country") != expected_country:
+        raise SystemExit("ERROR: location guidance country mismatch for " + location)
+    if not isinstance(record.get("sources"), list):
+        raise SystemExit("ERROR: invalid sources list for " + location)
+    if not isinstance(record.get("required_research"), list) or not record["required_research"]:
+        raise SystemExit("ERROR: missing research checklist for " + location)
+    for source in record["sources"]:
+        if not isinstance(source, dict):
+            raise SystemExit("ERROR: malformed source record for " + location)
+        url = source.get("url", "")
+        if not isinstance(url, str) or not url.startswith("https://"):
+            raise SystemExit("ERROR: source URL must use HTTPS for " + location)
+        for field in ("name", "category", "coverage", "limitation"):
+            if not isinstance(source.get(field), str) or not source[field].strip():
+                raise SystemExit("ERROR: incomplete source metadata for " + location)
 
 # Each intent has a distinct analytical question, calculation and decision test.
 INTENTS = [
@@ -262,7 +315,7 @@ h2{{margin-top:1.8em}}.muted,.note{{color:var(--muted)}}.panel{{padding:16px;bac
 label{{display:block;font-weight:600;margin:10px 0 4px}}input{{width:100%;max-width:360px;padding:10px;border:1px solid #aab5c5;border-radius:7px}}
 button{{padding:10px 16px;border:0;border-radius:7px;background:var(--accent);color:white;margin-top:12px}}
 .grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}}
-li{{margin:7px 0}}.small{{font-size:.9rem}}footer{{font-size:.9rem;color:var(--muted)}}
+li{{margin:7px 0}}.small{{font-size:.9rem}}footer{{font-size:.9rem;color:var(--muted)}}.toc{{padding:14px 20px;background:#f5f8fc;border:1px solid var(--line);border-radius:10px}}.related a{{display:inline-block;margin:4px 8px 4px 0}}
 </style></head><body>
 <header><strong>Global Rental Yield Atlas</strong><nav>
 <a href="/">Home</a><a href="/locations.html">Locations</a>
@@ -270,7 +323,7 @@ li{{margin:7px 0}}.small{{font-size:.9rem}}footer{{font-size:.9rem;color:var(--m
 <a href="/methodology.html">Methodology</a></nav></header>
 <main>{body}</main>
 <footer><p>Educational information only. Not legal, tax, lending or investment advice. No market statistic is represented as verified unless its source, geography, reference period and limitations are explicitly documented.</p>
-<p>Updated: {TODAY}. Always verify current local rules and property-specific information independently.</p></footer>
+<p>Page generated: {TODAY}. Always verify current local rules and property-specific information independently.</p><p>© {CURRENT_YEAR} Global Rental Yield Atlas. All rights reserved.</p></footer>
 </body></html>"""
 
 
@@ -370,6 +423,35 @@ def calculator(intent):
 
 def guide_body(location, country, prop, intent, index):
     title = intent[1]
+    guidance = PROPERTY_GUIDANCE[prop]
+    location_record = LOCATION_GUIDANCE[slug(location)]
+    source_items = []
+    for source in location_record["sources"]:
+        source_items.append(
+            '<li><strong>' + esc(source["name"]) + '</strong> '
+            + '<p><strong>Evidence status:</strong> ' + esc(source.get("status", "status_not_recorded").replace("_", " ")) + '</p>'
+            + '<p><strong>Category:</strong> ' + esc(source["category"].replace("_", " ")) + '</p>'
+            + '<p><a href="' + esc(source["url"]) + '" target="_blank" rel="noopener noreferrer">Open source record</a></p>'
+            + '<p><strong>Coverage:</strong> ' + esc(source["coverage"]) + '</p>'
+            + '<p><strong>Limitation:</strong> ' + esc(source["limitation"]) + '</p></li>'
+        )
+    research_items = [
+        '<li>' + esc(item.replace("_", " ").capitalize()) + '</li>'
+        for item in location_record["required_research"]
+    ]
+    location_key, property_key, intent_key = slug(location), slug(prop), intent[0]
+    related_location = [
+        f'<li><a href="/guides/{location_key}/{property_key}/{other[0]}.html">{esc(other[1])} for {esc(prop)} in {esc(location)}</a></li>'
+        for other in INTENTS if other[0] != intent_key
+    ][:5]
+    related_property = [
+        f'<li><a href="/guides/{location_key}/{slug(other)}/{intent_key}.html">{esc(intent[1])} for {esc(other)} in {esc(location)}</a></li>'
+        for other in PROPERTY_TYPES if other != prop
+    ][:5]
+    related_geography = [
+        f'<li><a href="/guides/{slug(other_location)}/{property_key}/{intent_key}.html">{esc(intent[1])} for {esc(prop)} in {esc(other_location)}</a></li>'
+        for other_location, _ in LOCATIONS if other_location != location
+    ][:5]
     q1 = QUESTIONS[index % len(QUESTIONS)]
     q2 = QUESTIONS[(index + 3) % len(QUESTIONS)]
     q3 = QUESTIONS[(index + 7) % len(QUESTIONS)]
@@ -382,12 +464,23 @@ def guide_body(location, country, prop, intent, index):
 <h1>{esc(title)} for {esc(prop)} in {esc(location)}</h1>
 <p class="muted">{esc(country)} · Real-estate investment analysis · Assumption-based guide</p>
 <p>{esc(intro)}</p>
-<h2>What this analysis answers</h2>
+<nav class="toc" aria-label="On this page"><strong>On this page</strong><ol>
+<li><a href="#analysis">What this analysis answers</a></li>
+<li><a href="#calculation">Calculation method</a></li>
+<li><a href="#inputs">Inputs to collect</a></li>
+<li><a href="#property-review">Property-specific analysis</a></li>
+<li><a href="#location-review">Location due diligence</a></li>
+<li><a href="#risks">Risks and interpretation</a></li>
+<li><a href="#calculator">Interactive calculator</a></li>
+<li><a href="#research">Research checklist</a></li>
+<li><a href="#related-guides">Related guides</a></li>
+</ol></nav>
+<h2 id="analysis">What this analysis answers</h2>
 <p>{esc(intent[2])}</p>
-<h2>Calculation method</h2>
+<h2 id="calculation">Calculation method</h2>
 <div class="panel"><p><strong>{esc(intent[3])}</strong></p>
 <p>Use consistent time periods and currency units. Record whether each input is quoted, contracted, estimated or hypothetical.</p></div>
-<h2>Inputs to collect</h2>
+<h2 id="inputs">Inputs to collect</h2>
 <p>{esc(intent[4])}</p>
 <ul>
 <li>Obtain property-specific documents and current written quotations.</li>
@@ -395,18 +488,31 @@ def guide_body(location, country, prop, intent, index):
 <li>Keep financing assumptions separate from property operating performance.</li>
 <li>Record the date, geography, definition and source for every external figure.</li>
 </ul>
-<h2>Location and property due diligence</h2>
+<h2 id="property-review">Property-specific operating analysis: {esc(prop)}</h2>
+<p>{esc(guidance["focus"])}</p>
+<h3>Documents to verify</h3><p>{esc(guidance["documents"])}</p>
+<h3>Property-specific risks</h3><p>{esc(guidance["risks"])}</p>
+<h2 id="location-review">Location due diligence</h2>
 <p>For a {esc(prop.lower())} in {esc(location)}, verify the exact neighbourhood, building, tenure, permitted use, lease terms, condition, comparable evidence and local transaction costs. A city or regional label alone is not enough to establish a property's achievable rent or expenses.</p>
+<div class="panel"><h3>Geographic research status</h3>
+<p><strong>{esc(location_record["research_status"])}</strong> — this is a research-ledger status, not proof that current market data has been verified.</p>
+<p>Named areas: {esc(", ".join(location_record["cities_or_areas"]))}</p>
+<p>{esc(location_record["jurisdiction_policy"])}</p>
+<h3>Official-source register</h3>
+{"<ul>" + "".join(source_items) + "</ul>" if source_items else "<p>No official source has yet been entered for this location. Research is required.</p>"}
+<p class="small">Source links and descriptions are recorded for research. Check the live official page, reference period, definitions and geographic coverage before using any data. No market value is inferred from this register.</p>
+<h3>Research still required</h3>
+<ul>{"".join(research_items)}</ul></div>
 <ul>
 <li>{esc(q1)}</li><li>{esc(q2)}</li><li>{esc(q3)}</li>
 </ul>
-<h2>Risks and interpretation</h2>
+<h2 id="risks">Risks and interpretation</h2>
 <p>{esc(intent[5])}</p>
 <p>Run conservative, base and upside cases using your own documented assumptions. Do not treat a scenario as a forecast, guarantee, appraisal or investment recommendation.</p>
-<h2>Assumption-based calculator</h2>
+<h2 id="calculator">Assumption-based calculator</h2>
 <p>The calculator below is a general screening aid. Its outputs are not a substitute for a property-specific model or professional review.</p>
 {calculator(intent)}
-<h2>Research checklist for {esc(location)}</h2>
+<h2 id="research">Research checklist for {esc(location)}</h2>
 <ul>
 <li>Check the relevant official land, planning, tenancy and property-tax authority for the precise jurisdiction.</li>
 <li>Use current local transaction documents, comparable leases and property inspections where available.</li>
@@ -414,9 +520,13 @@ def guide_body(location, country, prop, intent, index):
 <li>Preserve published uncertainty measures and limitations, including margins of error where supplied.</li>
 <li>Do not infer an individual property's rent from an area-level average or survey estimate.</li>
 </ul>
+<h2 id="related-guides">Continue exploring related guides</h2>
+<div class="panel related"><h3>More investment topics for this property in {esc(location)}</h3><ul>{"".join(related_location)}</ul>
+<h3>Other property types for {esc(intent[1])}</h3><ul>{"".join(related_property)}</ul>
+<h3>Same property and topic in other locations</h3><ul>{"".join(related_geography)}</ul></div>
 <h2>Methodology and limitations</h2>
 <p>This page provides a calculation framework using investor-supplied inputs. No un-ingested source-registry entry is used as a current market value. No tax rate, legal rule, occupancy rate, rent, appreciation rate or expected return is invented. Local professional advice may be necessary before a transaction.</p>
-<p class="small">Page topic: {esc(title)} · Property: {esc(prop)} · Geography: {esc(location)}, {esc(country)} · Methodology review date: {TODAY}</p>
+<p class="small">Page topic: {esc(title)} · Property: {esc(prop)} · Geography: {esc(location)}, {esc(country)} · Page generation date: {TODAY}</p>
 """
     return body
 

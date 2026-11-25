@@ -1,0 +1,787 @@
+{
+  "schema_version": 1,
+  "project": "Global Rental Yield Atlas",
+  "created_for": "auditable_location_research",
+  "policy": {
+    "official_sources_only": true,
+    "no_fabricated_market_values": true,
+    "no_cross_jurisdiction_assumptions": true,
+    "require_reference_period": true,
+    "require_geographic_coverage": true,
+    "unverified_sources_must_not_be_presented_as_verified": true
+  },
+  "locations": {
+    "new-york-city": {
+      "label": "New York City",
+      "country": "United States",
+      "cities_or_areas": [
+        "New York City"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "US Census Bureau American Community Survey Data",
+          "url": "https://www.census.gov/programs-surveys/acs/data.html",
+          "category": "official_housing_survey",
+          "status": "verified_official",
+          "coverage": "ACS table B25064 median gross rent estimates for qualifying US city, county and other geographic areas.",
+          "limitation": "Survey estimates with margins of error; not current asking rents or property-level investment yields. Record survey vintage and geography."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "austin-and-dallas": {
+      "label": "Austin and Dallas",
+      "country": "United States",
+      "cities_or_areas": [
+        "Austin",
+        "Dallas"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "US Census Bureau American Community Survey Data",
+          "url": "https://www.census.gov/programs-surveys/acs/data.html",
+          "category": "official_housing_survey",
+          "status": "verified_official",
+          "coverage": "ACS table B25064 median gross rent estimates for qualifying US city, county and other geographic areas.",
+          "limitation": "Survey estimates with margins of error; not current asking rents or property-level investment yields. Record survey vintage and geography."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "miami-and-orlando": {
+      "label": "Miami and Orlando",
+      "country": "United States",
+      "cities_or_areas": [
+        "Miami",
+        "Orlando"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "US Census Bureau American Community Survey Data",
+          "url": "https://www.census.gov/programs-surveys/acs/data.html",
+          "category": "official_housing_survey",
+          "status": "verified_official",
+          "coverage": "ACS table B25064 median gross rent estimates for qualifying US city, county and other geographic areas.",
+          "limitation": "Survey estimates with margins of error; not current asking rents or property-level investment yields. Record survey vintage and geography."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "los-angeles-and-san-diego": {
+      "label": "Los Angeles and San Diego",
+      "country": "United States",
+      "cities_or_areas": [
+        "Los Angeles",
+        "San Diego"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "US Census Bureau American Community Survey Data",
+          "url": "https://www.census.gov/programs-surveys/acs/data.html",
+          "category": "official_housing_survey",
+          "status": "verified_official",
+          "coverage": "ACS table B25064 median gross rent estimates for qualifying US city, county and other geographic areas.",
+          "limitation": "Survey estimates with margins of error; not current asking rents or property-level investment yields. Record survey vintage and geography."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "london": {
+      "label": "London",
+      "country": "United Kingdom",
+      "cities_or_areas": [
+        "London"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "HMRC Property Rental Income Statistics",
+          "url": "https://www.gov.uk/government/statistics/property-rental-income-statistics",
+          "category": "rental_tax_statistics",
+          "status": "verified_context_only",
+          "coverage": "UK taxpayer-reported rental income and expenses",
+          "limitation": "Geography is landlord registered address, not necessarily property location; not a city-level rent index."
+        },
+        {
+          "name": "Office for National Statistics Private Rent and House Prices",
+          "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/bulletins/privaterentandhousepricesuk/latest",
+          "category": "official_local_rental_statistics",
+          "status": "verified_official",
+          "coverage": "Private rents and annual changes by local authority and wider UK geographies; check the selected local authority and release.",
+          "limitation": "Verify reference month, revisions and geographic definitions; these estimates are not property-level asking prices or investment yields."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "manchester-and-birmingham": {
+      "label": "Manchester and Birmingham",
+      "country": "United Kingdom",
+      "cities_or_areas": [
+        "Manchester",
+        "Birmingham"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "HMRC Property Rental Income Statistics",
+          "url": "https://www.gov.uk/government/statistics/property-rental-income-statistics",
+          "category": "rental_tax_statistics",
+          "status": "verified_context_only",
+          "coverage": "UK taxpayer-reported rental income and expenses",
+          "limitation": "Geography is landlord registered address, not necessarily property location; not a city-level rent index."
+        },
+        {
+          "name": "Office for National Statistics Private Rent and House Prices",
+          "url": "https://www.ons.gov.uk/economy/inflationandpriceindices/bulletins/privaterentandhousepricesuk/latest",
+          "category": "official_local_rental_statistics",
+          "status": "verified_official",
+          "coverage": "Private rents and annual changes by local authority and wider UK geographies; check the selected local authority and release.",
+          "limitation": "Verify reference month, revisions and geographic definitions; these estimates are not property-level asking prices or investment yields."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "mumbai-and-thane": {
+      "label": "Mumbai and Thane",
+      "country": "India",
+      "cities_or_areas": [
+        "Mumbai",
+        "Thane"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "National Grievance Redressal and Registration System dashboard",
+          "url": "https://ngdrs.gov.in/NGDRS_Website/data-grid.php",
+          "category": "property_registration_context",
+          "status": "verified_context_only",
+          "coverage": "State-wise document registration statistics and related figures from participating State registration systems; not a verified city-level dataset.",
+          "limitation": "Registration counts and government revenue are not rents, asking prices, property valuations, vacancy rates or rental yields. State participation and reporting periods may vary. Use only as broad administrative context, never as local rental-market evidence."
+        },
+        {
+          "name": "Maharashtra Government Land Records",
+          "url": "https://mumbaisuburban.gov.in/en/land-records/",
+          "category": "land_records",
+          "status": "verified_regional_only",
+          "coverage": "Mumbai Suburban district land records and linked record services",
+          "limitation": "Coverage is Mumbai Suburban district only; does not establish coverage for Thane or all Mumbai districts."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "bengaluru-and-whitefield": {
+      "label": "Bengaluru and Whitefield",
+      "country": "India",
+      "cities_or_areas": [
+        "Bengaluru",
+        "Whitefield"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "National Grievance Redressal and Registration System dashboard",
+          "url": "https://ngdrs.gov.in/NGDRS_Website/data-grid.php",
+          "category": "property_registration_context",
+          "status": "verified_context_only",
+          "coverage": "State-wise document registration statistics and related figures from participating State registration systems; not a verified city-level dataset.",
+          "limitation": "Registration counts and government revenue are not rents, asking prices, property valuations, vacancy rates or rental yields. State participation and reporting periods may vary. Use only as broad administrative context, never as local rental-market evidence."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "delhi-ncr-and-gurugram": {
+      "label": "Delhi NCR and Gurugram",
+      "country": "India",
+      "cities_or_areas": [
+        "Delhi NCR",
+        "Gurugram"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "National Grievance Redressal and Registration System dashboard",
+          "url": "https://ngdrs.gov.in/NGDRS_Website/data-grid.php",
+          "category": "property_registration_context",
+          "status": "verified_context_only",
+          "coverage": "State-wise document registration statistics and related figures from participating State registration systems; not a verified city-level dataset.",
+          "limitation": "Registration counts and government revenue are not rents, asking prices, property valuations, vacancy rates or rental yields. State participation and reporting periods may vary. Use only as broad administrative context, never as local rental-market evidence."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "bhubaneswar-and-odisha": {
+      "label": "Bhubaneswar and Odisha",
+      "country": "India",
+      "cities_or_areas": [
+        "Bhubaneswar",
+        "Odisha"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "National Grievance Redressal and Registration System dashboard",
+          "url": "https://ngdrs.gov.in/NGDRS_Website/data-grid.php",
+          "category": "property_registration_context",
+          "status": "verified_context_only",
+          "coverage": "State-wise document registration statistics and related figures from participating State registration systems; not a verified city-level dataset.",
+          "limitation": "Registration counts and government revenue are not rents, asking prices, property valuations, vacancy rates or rental yields. State participation and reporting periods may vary. Use only as broad administrative context, never as local rental-market evidence."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "hyderabad-and-pune": {
+      "label": "Hyderabad and Pune",
+      "country": "India",
+      "cities_or_areas": [
+        "Hyderabad",
+        "Pune"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "National Grievance Redressal and Registration System dashboard",
+          "url": "https://ngdrs.gov.in/NGDRS_Website/data-grid.php",
+          "category": "property_registration_context",
+          "status": "verified_context_only",
+          "coverage": "State-wise document registration statistics and related figures from participating State registration systems; not a verified city-level dataset.",
+          "limitation": "Registration counts and government revenue are not rents, asking prices, property valuations, vacancy rates or rental yields. State participation and reporting periods may vary. Use only as broad administrative context, never as local rental-market evidence."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "dubai-marina-and-downtown-dubai": {
+      "label": "Dubai Marina and Downtown Dubai",
+      "country": "United Arab Emirates",
+      "cities_or_areas": [
+        "Dubai Marina",
+        "Downtown Dubai"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "Dubai Land Department Rental Index",
+          "url": "https://dubailand.gov.ae/en/eservices/rental-index-overview/rental-index/",
+          "category": "rental_index",
+          "status": "verified_city_level",
+          "coverage": "Dubai rental index lookup by property and area",
+          "limitation": "A lookup service; do not treat it as a bulk downloadable dataset."
+        },
+        {
+          "name": "Dubai Land Department Real Estate Data",
+          "url": "https://dubailand.gov.ae/en/open-data/real-estate-data",
+          "category": "property_transactions_and_rents",
+          "status": "verified_dataset_endpoint",
+          "coverage": "Dubai transactions, rents, land, buildings and units",
+          "limitation": "Check actual dataset availability, fields and reporting period before using values."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "toronto-and-mississauga": {
+      "label": "Toronto and Mississauga",
+      "country": "Canada",
+      "cities_or_areas": [
+        "Toronto",
+        "Mississauga"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "Statistics Canada Quarterly Rent Statistics",
+          "url": "https://www23.statcan.gc.ca/imdb/p2SV.pl?Function=getSurvey&SDDS=5427",
+          "category": "national_rental_statistics",
+          "status": "verified_official",
+          "coverage": "Quarterly asking-rent estimates for available units and paid-rent estimates for occupied apartments in Canadian census metropolitan areas; confirm Toronto CMA tables and period.",
+          "limitation": "Asking rents are listing-platform estimates; paid rents cover occupied units and have different definitions. CMA geography is not identical to each municipality."
+        },
+        {
+          "name": "CMHC Rental Market Survey Data Tables",
+          "url": "https://www.cmhc-schl.gc.ca/professionals/housing-markets-data-and-research/housing-data/data-tables/rental-market/rental-market-report-data-tables",
+          "category": "national_rental_statistics",
+          "status": "verified_official",
+          "coverage": "Rental Market Survey tables for Canada, provinces and major centres, including vacancy rates, average rents, turnover rates and universe counts.",
+          "limitation": "Purpose-built rental and condominium survey coverage differs; verify Toronto/GTA geography, survey universe and reference year."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "vancouver": {
+      "label": "Vancouver",
+      "country": "Canada",
+      "cities_or_areas": [
+        "Vancouver"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "Statistics Canada Quarterly Rent Statistics",
+          "url": "https://www23.statcan.gc.ca/imdb/p2SV.pl?Function=getSurvey&SDDS=5427",
+          "category": "national_rental_statistics",
+          "status": "verified_official",
+          "coverage": "Quarterly asking-rent estimates for available units and paid-rent estimates for occupied apartments in Canadian census metropolitan areas; confirm Vancouver CMA tables and period.",
+          "limitation": "Asking rents are listing-platform estimates; paid rents cover occupied units and have different definitions. CMA geography is not identical to every municipality."
+        },
+        {
+          "name": "CMHC Rental Market Survey Data Tables",
+          "url": "https://www.cmhc-schl.gc.ca/professionals/housing-markets-data-and-research/housing-data/data-tables/rental-market/rental-market-report-data-tables",
+          "category": "national_rental_statistics",
+          "status": "verified_official",
+          "coverage": "Rental Market Survey tables for Canada, provinces and major centres, including vacancy rates, average rents, turnover rates and universe counts.",
+          "limitation": "Purpose-built rental and condominium survey coverage differs; verify Vancouver CMA geography, survey universe and reference year."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "sydney-and-parramatta": {
+      "label": "Sydney and Parramatta",
+      "country": "Australia",
+      "cities_or_areas": [
+        "Sydney",
+        "Parramatta"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "NSW Government Rent and Sales Report",
+          "url": "https://dcj.nsw.gov.au/about-us/families-and-communities-statistics/housing-rent-and-sales/rent-and-sales-report.html",
+          "category": "government_rental_statistics",
+          "status": "verified_official",
+          "coverage": "New South Wales private-market rent statistics, downloadable tables and geographic reporting aligned to ABS and non-ABS structures; check Sydney and Parramatta geography in the selected release.",
+          "limitation": "Does not include social-housing rental bonds; verify the exact geography, dwelling coverage and reference quarter before using figures."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "melbourne": {
+      "label": "Melbourne",
+      "country": "Australia",
+      "cities_or_areas": [
+        "Melbourne"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "Homes Victoria Rental Report",
+          "url": "https://www.dffh.vic.gov.au/publications/rental-report",
+          "category": "government_rental_statistics",
+          "status": "verified_official",
+          "coverage": "Victoria rental statistics including metropolitan Melbourne, quarterly median rents, rent indices and downloadable time series.",
+          "limitation": "Median new-letting rents and rental-bond-based measures are not the same as all occupied rents or investment yields; inspect definitions and reference quarter."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "singapore": {
+      "label": "Singapore",
+      "country": "Singapore",
+      "cities_or_areas": [
+        "Singapore"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "Singapore Land Authority Statistics",
+          "url": "https://www.sla.gov.sg/news/statistics/",
+          "category": "land_and_state_property_statistics",
+          "status": "verified_official",
+          "coverage": "SLA land-area, state-property rental tender and title-transfer statistics",
+          "limitation": "State-property tender results are not a complete private residential rental-market index."
+        },
+        {
+          "name": "Housing and Development Board Rental Statistics",
+          "url": "https://www.hdb.gov.sg/managing-my-home/home-ownership/renting-out-a-flat-or-bedrooms/renting-out-a-flat/rental-statistics",
+          "category": "official_public_housing_rental_statistics",
+          "status": "verified_official",
+          "coverage": "Median rents by HDB town and flat type, based on approved rental applications and declared rents.",
+          "limitation": "HDB flats only; not private condominiums or the entire Singapore private rental market."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "berlin-and-munich": {
+      "label": "Berlin and Munich",
+      "country": "Germany",
+      "cities_or_areas": [
+        "Berlin",
+        "Munich"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "Eurostat city rent dataset",
+          "url": "https://ec.europa.eu/eurostat/databrowser/view/prc_colc_rents/default/table?lang=en",
+          "category": "comparative_city_rents",
+          "status": "verified_dataset",
+          "coverage": "Annual average rent by dwelling type for listed European cities, including Berlin and Munich",
+          "limitation": "Comparative dataset; inspect definitions, dwelling types, missing values and year before use."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "lisbon-and-porto": {
+      "label": "Lisbon and Porto",
+      "country": "Portugal",
+      "cities_or_areas": [
+        "Lisbon",
+        "Porto"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "Eurostat city rent dataset",
+          "url": "https://ec.europa.eu/eurostat/databrowser/view/prc_colc_rents/default/table?lang=en",
+          "category": "comparative_city_rents",
+          "status": "verified_dataset",
+          "coverage": "Annual average rent by dwelling type for listed European cities, including Lisbon",
+          "limitation": "Confirm Porto coverage and city observations in the selected year before using."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "madrid-and-barcelona": {
+      "label": "Madrid and Barcelona",
+      "country": "Spain",
+      "cities_or_areas": [
+        "Madrid",
+        "Barcelona"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "Spanish Tax Agency housing statistics",
+          "url": "https://sede.agenciatributaria.gob.es/Sede/en_gb/estadisticas/estadisticas-impuesto/estadistica-viviendas-declaradas-irpf.html",
+          "category": "rental_housing_statistics",
+          "status": "verified_regional_and_municipal",
+          "coverage": "Rental housing statistics by autonomous community, province and qualifying municipalities",
+          "limitation": "Common Tax Regime territory only; check municipality thresholds and reference year."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "tokyo": {
+      "label": "Tokyo",
+      "country": "Japan",
+      "cities_or_areas": [
+        "Tokyo"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "Japan Government e-Stat: 2023 Housing and Land Survey",
+          "url": "https://www.e-stat.go.jp/index.php/en/stat-search/database?layout=datalist&stat_infid=000040210061",
+          "category": "official_national_housing_survey",
+          "status": "verified_official",
+          "coverage": "Government statistical tables for rent per square metre in rented dwellings, including Japan, prefectures and 21 major cities; survey reference October 2023.",
+          "limitation": "Survey reference is 2023, not a live asking-rent feed. Confirm the Tokyo table row, dwelling definitions and sample limitations before using values."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "paris-and-ile-de-france": {
+      "label": "Paris and Ile-de-France",
+      "country": "France",
+      "cities_or_areas": [
+        "Paris",
+        "Ile-de-France"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "Eurostat city rent dataset",
+          "url": "https://ec.europa.eu/eurostat/databrowser/view/prc_colc_rents/default/table?lang=en",
+          "category": "comparative_city_rents",
+          "status": "verified_dataset",
+          "coverage": "Annual average rent by dwelling type for listed European cities, including Paris",
+          "limitation": "Does not automatically represent all of Ile-de-France."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "amsterdam": {
+      "label": "Amsterdam",
+      "country": "Netherlands",
+      "cities_or_areas": [
+        "Amsterdam"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "Statistics Netherlands (CBS): Rent Increase Dwellings by Region",
+          "url": "https://www.cbs.nl/en-gb/figures/detail/83162ENG",
+          "category": "official_city_rental_statistics",
+          "status": "verified_official",
+          "coverage": "Annual average rent increases for Amsterdam municipality, including and excluding rent harmonisation; regional series available from 2015.",
+          "limitation": "Measures percentage rent increases, not rent levels, asking rents or investment yields. Amsterdam municipality only; not the entire metropolitan region."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "zurich": {
+      "label": "Zurich",
+      "country": "Switzerland",
+      "cities_or_areas": [
+        "Zurich"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "Swiss Federal Statistical Office Structural Survey: Rent in the Ten Largest Cities",
+          "url": "https://www.bfs.admin.ch/asset/de/je-d-09.03.03.42_2022-2024",
+          "category": "official_city_rental_statistics",
+          "status": "verified_official",
+          "coverage": "Average monthly net rent by number of rooms for Zurich and nine other major Swiss cities; pooled 2022–2024 Structural Survey data.",
+          "limitation": "Pooled three-year survey estimates, not current asking rents. Confidence intervals and small-sample warnings apply; do not mix with 2024 canton-only estimates."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    },
+    "bangkok": {
+      "label": "Bangkok",
+      "country": "Thailand",
+      "cities_or_areas": [
+        "Bangkok"
+      ],
+      "jurisdiction_policy": "Treat each named city or area as a separate jurisdiction until its competent authorities and boundaries are verified.",
+      "research_status": "partial",
+      "sources": [
+        {
+          "name": "Thailand National Statistical Office: 2025 Household Socio-Economic Survey",
+          "url": "https://www.nso.go.th/nsoweb/downloadFile/survey/fZl/20260505141117_55523.pdf",
+          "category": "official_household_expenditure_survey",
+          "status": "verified_official",
+          "coverage": "2025 household survey includes average monthly household expenditure on dwelling rent for Greater Bangkok.",
+          "limitation": "Greater Bangkok includes Bangkok and three other provinces; the cited regional figure is not Bangkok-city-only. Household rent expenditure is not an asking-rent index, property valuation or investment yield."
+        }
+      ],
+      "required_research": [
+        "official_land_registry_and_title_search",
+        "planning_zoning_and_building_authority",
+        "current_tenancy_and_lease_law",
+        "property_tax_and_transaction_tax_authority",
+        "official_rental_or_housing_statistics",
+        "geographic_coverage_and_reference_period"
+      ],
+      "publication_rule": "Do not publish local market values or legal conclusions until city-specific official evidence, reference period and limitations are verified."
+    }
+  }
+}
