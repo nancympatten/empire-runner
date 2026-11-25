@@ -46,6 +46,8 @@ jobs:
           KINGDOM_NAME: ${{ github.event.inputs.kingdom_name }}
           KINGDOM_TOPIC: ${{ github.event.inputs.kingdom_topic }}
           SITE_URL: https://${{ github.event.inputs.kingdom_name }}.pages.dev
+          GOOGLE_SITE_VERIFICATION: ${{ secrets.GOOGLE_SITE_VERIFICATION }}
+          BING_SITE_VERIFICATION: ${{ secrets.BING_SITE_VERIFICATION }}
         run: |
           python - <<'PY'
           import os, re, sys

@@ -16,6 +16,8 @@ from urllib.parse import urlparse
 
 SITE_URL = os.environ.get("SITE_URL", "").strip().rstrip("/")
 KINGDOM_NAME = os.environ.get("KINGDOM_NAME", "").strip().lower()
+GOOGLE_SITE_VERIFICATION = os.environ.get("GOOGLE_SITE_VERIFICATION", "").strip()
+BING_SITE_VERIFICATION = os.environ.get("BING_SITE_VERIFICATION", "").strip()
 EXPECTED_PROJECT = "global-rental-yield-atlas"
 TODAY = datetime.now(timezone.utc).date().isoformat()
 ROOT = Path.cwd()
@@ -235,11 +237,18 @@ def page(title, description, canonical, body):
         "dateModified": TODAY,
         "inLanguage": "en"
     }
+    verification_tags = ""
+    if canonical == SITE_URL + "/":
+        if GOOGLE_SITE_VERIFICATION:
+            verification_tags += f'<meta name="google-site-verification" content="{esc(GOOGLE_SITE_VERIFICATION)}">\n'
+        if BING_SITE_VERIFICATION:
+            verification_tags += f'<meta name="msvalidate.01" content="{esc(BING_SITE_VERIFICATION)}">\n'
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(description)}">
+{verification_tags}
 <link rel="canonical" href="{esc(canonical)}">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False).replace("</", "<\\/")}</script>
