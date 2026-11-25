@@ -1,0 +1,8 @@
+{
+  "dataset": "ACS 2024 California Counties",
+  "total": 58,
+  "available": 56,
+  "not_available": 2,
+  "unique_county_fips": 58,
+  "audit": "passed"
+}

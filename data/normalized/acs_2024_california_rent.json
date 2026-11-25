@@ -1,0 +1,19 @@
+{
+  "source": "US Census Bureau",
+  "dataset": "ACS 2024 5-Year Estimates",
+  "reference_period": "2020-2024",
+  "retrieved_on": "2026-11-25",
+  "geography": {
+    "level": "state",
+    "name": "California",
+    "state_fips": "06"
+  },
+  "metric": {
+    "name": "median_gross_rent",
+    "estimate": 2036,
+    "margin_of_error": 5,
+    "currency": "USD",
+    "unit": "month"
+  },
+  "source_url": "https://api.census.gov/data/2024/acs/acs5"
+}

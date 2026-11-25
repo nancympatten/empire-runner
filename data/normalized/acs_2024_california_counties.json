@@ -1,0 +1,1104 @@
+[
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Alameda County, California",
+      "state_fips": "06",
+      "county_fips": "001"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2357,
+      "margin_of_error": 16,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Alpine County, California",
+      "state_fips": "06",
+      "county_fips": "003"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "not_available",
+      "estimate": null,
+      "margin_of_error": null,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Amador County, California",
+      "state_fips": "06",
+      "county_fips": "005"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1421,
+      "margin_of_error": 96,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Butte County, California",
+      "state_fips": "06",
+      "county_fips": "007"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1414,
+      "margin_of_error": 26,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Calaveras County, California",
+      "state_fips": "06",
+      "county_fips": "009"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1625,
+      "margin_of_error": 146,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Colusa County, California",
+      "state_fips": "06",
+      "county_fips": "011"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1157,
+      "margin_of_error": 69,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Contra Costa County, California",
+      "state_fips": "06",
+      "county_fips": "013"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2375,
+      "margin_of_error": 22,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Del Norte County, California",
+      "state_fips": "06",
+      "county_fips": "015"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1233,
+      "margin_of_error": 64,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "El Dorado County, California",
+      "state_fips": "06",
+      "county_fips": "017"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1715,
+      "margin_of_error": 65,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Fresno County, California",
+      "state_fips": "06",
+      "county_fips": "019"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1392,
+      "margin_of_error": 16,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Glenn County, California",
+      "state_fips": "06",
+      "county_fips": "021"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1120,
+      "margin_of_error": 85,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Humboldt County, California",
+      "state_fips": "06",
+      "county_fips": "023"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1287,
+      "margin_of_error": 52,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Imperial County, California",
+      "state_fips": "06",
+      "county_fips": "025"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1056,
+      "margin_of_error": 30,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Inyo County, California",
+      "state_fips": "06",
+      "county_fips": "027"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1189,
+      "margin_of_error": 112,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Kern County, California",
+      "state_fips": "06",
+      "county_fips": "029"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1300,
+      "margin_of_error": 21,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Kings County, California",
+      "state_fips": "06",
+      "county_fips": "031"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1331,
+      "margin_of_error": 49,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Lake County, California",
+      "state_fips": "06",
+      "county_fips": "033"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1368,
+      "margin_of_error": 81,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Lassen County, California",
+      "state_fips": "06",
+      "county_fips": "035"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1000,
+      "margin_of_error": 100,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Los Angeles County, California",
+      "state_fips": "06",
+      "county_fips": "037"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1954,
+      "margin_of_error": 6,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Madera County, California",
+      "state_fips": "06",
+      "county_fips": "039"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1390,
+      "margin_of_error": 42,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Marin County, California",
+      "state_fips": "06",
+      "county_fips": "041"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2668,
+      "margin_of_error": 83,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Mariposa County, California",
+      "state_fips": "06",
+      "county_fips": "043"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1305,
+      "margin_of_error": 164,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Mendocino County, California",
+      "state_fips": "06",
+      "county_fips": "045"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1317,
+      "margin_of_error": 51,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Merced County, California",
+      "state_fips": "06",
+      "county_fips": "047"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1343,
+      "margin_of_error": 27,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Modoc County, California",
+      "state_fips": "06",
+      "county_fips": "049"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 836,
+      "margin_of_error": 48,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Mono County, California",
+      "state_fips": "06",
+      "county_fips": "051"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1629,
+      "margin_of_error": 211,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Monterey County, California",
+      "state_fips": "06",
+      "county_fips": "053"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2055,
+      "margin_of_error": 32,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Napa County, California",
+      "state_fips": "06",
+      "county_fips": "055"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2237,
+      "margin_of_error": 56,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Nevada County, California",
+      "state_fips": "06",
+      "county_fips": "057"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1677,
+      "margin_of_error": 96,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Orange County, California",
+      "state_fips": "06",
+      "county_fips": "059"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2434,
+      "margin_of_error": 13,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Placer County, California",
+      "state_fips": "06",
+      "county_fips": "061"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2069,
+      "margin_of_error": 44,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Plumas County, California",
+      "state_fips": "06",
+      "county_fips": "063"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1194,
+      "margin_of_error": 85,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Riverside County, California",
+      "state_fips": "06",
+      "county_fips": "065"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1901,
+      "margin_of_error": 17,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Sacramento County, California",
+      "state_fips": "06",
+      "county_fips": "067"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1790,
+      "margin_of_error": 12,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "San Benito County, California",
+      "state_fips": "06",
+      "county_fips": "069"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1992,
+      "margin_of_error": 113,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "San Bernardino County, California",
+      "state_fips": "06",
+      "county_fips": "071"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1801,
+      "margin_of_error": 15,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "San Diego County, California",
+      "state_fips": "06",
+      "county_fips": "073"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2246,
+      "margin_of_error": 11,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "San Francisco County, California",
+      "state_fips": "06",
+      "county_fips": "075"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2476,
+      "margin_of_error": 30,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "San Joaquin County, California",
+      "state_fips": "06",
+      "county_fips": "077"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1734,
+      "margin_of_error": 23,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "San Luis Obispo County, California",
+      "state_fips": "06",
+      "county_fips": "079"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1992,
+      "margin_of_error": 45,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "San Mateo County, California",
+      "state_fips": "06",
+      "county_fips": "081"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2922,
+      "margin_of_error": 40,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Santa Barbara County, California",
+      "state_fips": "06",
+      "county_fips": "083"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2131,
+      "margin_of_error": 35,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Santa Clara County, California",
+      "state_fips": "06",
+      "county_fips": "085"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2857,
+      "margin_of_error": 19,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Santa Cruz County, California",
+      "state_fips": "06",
+      "county_fips": "087"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2264,
+      "margin_of_error": 51,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Shasta County, California",
+      "state_fips": "06",
+      "county_fips": "089"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1317,
+      "margin_of_error": 39,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Sierra County, California",
+      "state_fips": "06",
+      "county_fips": "091"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "not_available",
+      "estimate": null,
+      "margin_of_error": null,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Siskiyou County, California",
+      "state_fips": "06",
+      "county_fips": "093"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1091,
+      "margin_of_error": 73,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Solano County, California",
+      "state_fips": "06",
+      "county_fips": "095"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2163,
+      "margin_of_error": 31,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Sonoma County, California",
+      "state_fips": "06",
+      "county_fips": "097"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2158,
+      "margin_of_error": 30,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Stanislaus County, California",
+      "state_fips": "06",
+      "county_fips": "099"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1623,
+      "margin_of_error": 24,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Sutter County, California",
+      "state_fips": "06",
+      "county_fips": "101"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1439,
+      "margin_of_error": 44,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Tehama County, California",
+      "state_fips": "06",
+      "county_fips": "103"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1184,
+      "margin_of_error": 71,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Trinity County, California",
+      "state_fips": "06",
+      "county_fips": "105"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1073,
+      "margin_of_error": 210,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Tulare County, California",
+      "state_fips": "06",
+      "county_fips": "107"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1280,
+      "margin_of_error": 25,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Tuolumne County, California",
+      "state_fips": "06",
+      "county_fips": "109"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1302,
+      "margin_of_error": 95,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Ventura County, California",
+      "state_fips": "06",
+      "county_fips": "111"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 2317,
+      "margin_of_error": 25,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Yolo County, California",
+      "state_fips": "06",
+      "county_fips": "113"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1857,
+      "margin_of_error": 42,
+      "currency": "USD",
+      "unit": "month"
+    }
+  },
+  {
+    "source": "US Census Bureau",
+    "dataset": "ACS 2024 5-Year Estimates",
+    "reference_period": "2020-2024",
+    "geography": {
+      "level": "county",
+      "name": "Yuba County, California",
+      "state_fips": "06",
+      "county_fips": "115"
+    },
+    "metric": {
+      "name": "median_gross_rent",
+      "status": "available",
+      "estimate": 1311,
+      "margin_of_error": 54,
+      "currency": "USD",
+      "unit": "month"
+    }
+  }
+]
