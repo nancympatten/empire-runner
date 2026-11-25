@@ -1,94 +1,151 @@
-name: Cloud-to-Cloud SEO Empire Factory
+name: Kingdom 21 - Cloudflare Pages
 
 on:
   workflow_dispatch:
     inputs:
       kingdom_name:
-        description: 'Exact Subdomain (e.g. global-airport-transfers-atlas)'
+        description: "Exact Cloudflare Pages project name"
         required: true
+        type: string
+        default: "global-rental-yield-atlas"
       kingdom_topic:
-        description: 'Empire Niche & Detailed Instructions'
+        description: "Site topic"
         required: true
+        type: string
+        default: "Global Real Estate Rental Yield, Property Tax & Cap Rate Calculator Directory"
       dry_run:
-        description: 'true = Test & Verify Only (0 Netlify Credits) | false = Live Deploy'
-        required: false
-        default: 'true'
+        description: "true = build and audit only; false = deploy to Cloudflare Pages"
+        required: true
+        type: choice
+        options:
+          - "true"
+          - "false"
+        default: "true"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kingdom-21-${{ github.event.inputs.kingdom_name }}
+  cancel-in-progress: false
 
 jobs:
-  build-and-verify:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Factory
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
-      - name: Install Dependencies
-        run: |
-          pip install google-genai pydantic
-          if [ "${{ github.event.inputs.dry_run }}" = "false" ]; then
-            npm install -g netlify-cli
-          fi
-
-      - name: Verify Cloudflare API Token
+      - name: Validate inputs and build static site
         env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-        run: |
-          CODE=$(curl -sS -o /tmp/cf-token.json -w '%{http_code}' \
-            -H "Authorization: Bearer $CF_API_TOKEN" \
-            https://api.cloudflare.com/client/v4/user/tokens/verify)
-          echo "Cloudflare Token Verification HTTP: $CODE"
-          python -c "import json; d=json.load(open('/tmp/cf-token.json')); print('Success:', d.get('success')); print('Status:', d.get('result',{}).get('status')); print('Errors:', d.get('errors'))"
-
-      - name: Build & Audit Full SEO Directory in Cloud (0 Netlify Credits)
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-          SITE_URL: https://${{ github.event.inputs.kingdom_name }}.pages.dev
+          KINGDOM_NAME: ${{ github.event.inputs.kingdom_name }}
           KINGDOM_TOPIC: ${{ github.event.inputs.kingdom_topic }}
+          SITE_URL: https://${{ github.event.inputs.kingdom_name }}.pages.dev
         run: |
+          python - <<'PY'
+          import os, re, sys
+          name = os.environ["KINGDOM_NAME"].strip().lower()
+          if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,61}[a-z0-9]", name):
+              raise SystemExit("Invalid Cloudflare Pages project name.")
+          if name != "global-rental-yield-atlas":
+              raise SystemExit("This workflow is locked to Kingdom 21: global-rental-yield-atlas.")
+          print("Validated project:", name)
+          PY
           python build.py
-          echo "=== 🔍 SEO & CANONICAL AUDIT ==="
-          grep -i "canonical" dist/index.html
-          head -n 12 dist/sitemap.xml
+          echo "=== BUILD SUMMARY ==="
+          find dist -type f | sort | head -80
+          echo "HTML pages: $(find dist -name '*.html' | wc -l)"
+          echo "Canonical URL:"
+          grep -o 'rel="canonical" href="[^"]*"' dist/index.html
+          echo "Sitemap:"
+          head -c 500 dist/sitemap.xml
+          echo
           cat dist/robots.txt
-          echo "Total Pages Built: $(find dist -name '*.html' | wc -l)"
 
-      - name: Save Preview Bundle to GitHub (0 Credits Used)
+      - name: Upload audited preview bundle
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.inputs.kingdom_name }}-audit
-          path: |
-            dist/
-            data.csv
+          name: kingdom-21-rental-yield-audit
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
 
-      - name: Lock Exact Subdomain & Deploy Live (Only when dry_run=false)
+      - name: Verify Cloudflare API token
         if: github.event.inputs.dry_run == 'false'
         env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN"
+          CODE=$(curl --silent --show-error --output /tmp/cf-token.json --write-out '%{http_code}' \
+            --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            https://api.cloudflare.com/client/v4/user/tokens/verify)
+          echo "Cloudflare token verification HTTP: $CODE"
+          python - <<'PY'
+          import json
+          d=json.load(open("/tmp/cf-token.json", encoding="utf-8"))
+          if not d.get("success") or d.get("result",{}).get("status") != "active":
+              raise SystemExit("Cloudflare token is not active or verification failed.")
+          print("Cloudflare token is active.")
+          PY
+
+      - name: Ensure Cloudflare Pages project exists
+        if: github.event.inputs.dry_run == 'false'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
           KINGDOM_NAME: ${{ github.event.inputs.kingdom_name }}
         run: |
-          python3 -c '
-          import os, json, subprocess
-          name = os.environ["KINGDOM_NAME"].strip().lower()
-          sites = json.loads(subprocess.check_output(["netlify", "api", "listSites"]))
-          for s in sites:
-              if not s.get("published_deploy") and s.get("name") != name:
-                  try:
-                      subprocess.check_output(["netlify", "api", "deleteSite", "--data", json.dumps({"site_id": s["id"]})])
-                      print("🧹 Deleted empty draft site:", s.get("name"))
-                  except Exception:
-                      pass
-          existing = next((s for s in sites if s.get("name") == name), None)
-          if existing:
-              site_id = existing["id"]
-          else:
-              created = json.loads(subprocess.check_output(["netlify", "api", "createSite", "--data", json.dumps({"body": {"name": name}})]))
-              site_id = created["id"]
-          subprocess.check_call(["netlify", "deploy", "--prod", "--dir=dist", "--site=" + site_id])
-          print("👑 LIVE AT: https://" + name + ".netlify.app")
-          '
+          python - <<'PY'
+          import json, os, urllib.error, urllib.request
+          token=os.environ["CLOUDFLARE_API_TOKEN"]
+          account=os.environ["CLOUDFLARE_ACCOUNT_ID"]
+          name=os.environ["KINGDOM_NAME"]
+          if not account:
+              raise SystemExit("Cloudflare account ID is missing.")
+          base=f"https://api.cloudflare.com/client/v4/accounts/{account}/pages/projects"
+          def request(method, url, payload=None):
+              data=json.dumps(payload).encode() if payload is not None else None
+              req=urllib.request.Request(url, data=data, method=method, headers={
+                  "Authorization":"Bearer "+token, "Content-Type":"application/json"})
+              try:
+                  with urllib.request.urlopen(req, timeout=30) as response:
+                      result=json.loads(response.read())
+              except urllib.error.HTTPError as exc:
+                  if exc.code == 404 and method == "GET":
+                      return None
+                  if exc.code == 409 and method == "POST":
+                      return request("GET", base+"/"+name)
+                  raise SystemExit(f"Cloudflare project API returned HTTP {exc.code}; response body suppressed.")
+              if not result.get("success"):
+                  raise SystemExit("Cloudflare project API rejected the request; response body suppressed.")
+              return result
+          project=request("GET", base+"/"+name)
+          if project is None:
+              request("POST", base, {"name":name,"production_branch":"main"})
+              project=request("GET", base+"/"+name)
+          if project is None:
+              raise SystemExit("Cloudflare Pages project could not be confirmed.")
+          print("Cloudflare Pages project confirmed:", name)
+          PY
+
+      - name: Deploy to Cloudflare Pages
+        if: github.event.inputs.dry_run == 'false'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+          KINGDOM_NAME: ${{ github.event.inputs.kingdom_name }}
+        run: |
+          npx --yes wrangler@4 pages deploy dist \
+            --project-name "$KINGDOM_NAME" \
+            --branch main \
+            --commit-dirty=true
+          echo "Cloudflare Pages deployment command completed."
+
+      - name: Dry run confirmation
+        if: github.event.inputs.dry_run == 'true'
+        run: echo "DRY RUN COMPLETE - build and audit only; no Cloudflare deployment was attempted."

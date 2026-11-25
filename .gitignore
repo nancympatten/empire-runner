@@ -1,0 +1,13 @@
+# Generated website output
+dist/
+
+# Local repair package
+repair_package/
+
+# Local backups
+*.backup-*
+*.pre-repair-*
+
+# Python cache
+__pycache__/
+*.py[cod]
