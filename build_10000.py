@@ -296,6 +296,7 @@ def page(title, description, canonical, body):
             verification_tags += f'<meta name="google-site-verification" content="{esc(GOOGLE_SITE_VERIFICATION)}">\n'
         if BING_SITE_VERIFICATION:
             verification_tags += f'<meta name="msvalidate.01" content="{esc(BING_SITE_VERIFICATION)}">\n'
+    schema_json = json.dumps(schema, ensure_ascii=False).replace("</", r"<\/")
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -304,7 +305,7 @@ def page(title, description, canonical, body):
 {verification_tags}
 <link rel="canonical" href="{esc(canonical)}">
 <meta name="robots" content="index,follow,max-image-preview:large">
-<script type="application/ld+json">{json.dumps(schema, ensure_ascii=False).replace("</", "<\\/")}</script>
+<script type="application/ld+json">{schema_json}</script>
 <style>
 :root{{color-scheme:light;--ink:#172033;--muted:#566174;--line:#dce2ea;--bg:#f5f7fa;--accent:#2457a7}}
 *{{box-sizing:border-box}}body{{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}}
