@@ -222,25 +222,6 @@ with open("dist/robots.txt", "w", encoding="utf-8") as f: f.write(f"User-agent: 
 with open("dist/llms.txt", "w", encoding="utf-8") as f: f.write(f"# {sname}\n> 30-Year Verified Interactive Tax & Salary Calculator Directory for {topic}. Updated {today}.\n" + "\n".join(f"- [{next(iter(r))}]({site_url}/guide/{s}.html): {next(islice(r,2,3))}" for s, r in islice(all_rows, 100)))
 print("Total Verified SEO Pages Built:", len(all_rows))
 
-
-# CF_DEPLOY_HOOK
-if True:
-    import subprocess
-
-# CF_DIRECT_V2
-
-import os, subprocess
-import base64, subprocess
-import base64, subprocess
-site_url = "https://" + proj + ".pages.dev"
-if p2.returncode != 0: raise RuntimeError(p2.stderr)
-import base64, json, subprocess, urllib.request
-site_url = "https://" + proj + ".pages.dev"
-try:
-    req = urllib.request.Request(cf_api, data=json.dumps({"name": proj, "production_branch": "main"}).encode(), headers={"Authorization": "Bearer " + cf_t, "Content-Type": "application/json", "User-Agent": "Mozilla/5.0"}, method="POST")
-    urllib.request.urlopen(req)
-except Exception as e:
-if p2.returncode != 0: raise RuntimeError(p2.stderr)
 import base64, json, subprocess, urllib.request
 cf_t = base64.b64decode("Y2Z1dF80OGlNYmV3OFB5MnZxZFVtV213eUtJSXpOMlpmcHl1UXRTQWFuT0hKNGIwNzVmY2Y=").decode()
 cf_a = "54cbc23e97d4f0a2fa4b9cf608a8da82"
@@ -252,10 +233,11 @@ cf_api = "https://" + ".".join(("api", "cloudflare", "com")) + f"/client/v4/acco
 try:
     req = urllib.request.Request(cf_api, data=json.dumps({"name": proj, "production_branch": "main"}).encode(), headers={"Authorization": "Bearer " + cf_t, "Content-Type": "application/json", "User-Agent": "Mozilla/5.0"}, method="POST")
     urllib.request.urlopen(req)
-    print("✅ Created Cloudflare Pages Project:", proj)
+    print("Created CF Project:", proj)
 except Exception as e:
-    print("ℹ️ Project status:", getattr(e, "code", e))
+    print("CF Project Info:", getattr(e, "code", e))
 p2 = subprocess.run(("npx", "--yes", "wrangler", "pages", "deploy", "dist", f"--project-name={proj}", "--branch=main", "--commit-dirty=true"), capture_output=True, text=True)
-print("DEPLOY:", p2.stdout, p2.stderr)
-if p2.returncode != 0: raise RuntimeError(p2.stderr)
-print("👑 CLOUDFLARE LIVE:", site_url)
+print("CF DEPLOY OUT:", p2.stdout, p2.stderr)
+if p2.returncode != 0:
+    raise RuntimeError(p2.stderr)
+print("CLOUDFLARE LIVE:", site_url)
