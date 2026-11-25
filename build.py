@@ -226,20 +226,20 @@ print("Total Verified SEO Pages Built:", len(all_rows))
 # CF_DEPLOY_HOOK
 if True:
     import subprocess
-    proj = next(iter(site_url.split("//")[-1].split(".")))
-    print("👑 Cloudflare Pages Live:", site_url)
 
 # CF_DIRECT_V2
-proj = next(iter(site_url.split("//")[-1].split(".")))
-print("🚀 Cloudflare Pages Direct Deploy Starting:", proj)
 
 import os, subprocess
-proj = next(iter(site_url.split("//")[-1].split(".")))
+import base64, subprocess
 import base64, subprocess
 os.environ["CLOUDFLARE_API_TOKEN"] = base64.b64decode("Y2Z1dF80OGlNYmV3OFB5MnZxZFVtV213eUtJSXpOMlpmcHl1UXRTQWFuT0hKNGIwNzVmY2Y=").decode()
 os.environ["CLOUDFLARE_ACCOUNT_ID"] = "54cbc23e97d4f0a2fa4b9cf608a8da82"
 proj = next(iter(site_url.split("//")[-1].split(".")))
-print("🚀 CLOUDFLARE PAGES DEPLOYING:", proj)
-subprocess.run(("npx", "--yes", "wrangler@3", "pages", "project", "create", proj, "--production-branch=main"), check=False)
-subprocess.run(("npx", "--yes", "wrangler@3", "pages", "deploy", "dist", f"--project-name={proj}", "--branch=main", "--commit-dirty=true"), check=True)
+site_url = "https://" + proj + ".pages.dev"
+print("🚀 CLOUDFLARE PAGES DEPLOYING:", site_url)
+p1 = subprocess.run(("npx", "--yes", "wrangler", "pages", "project", "create", proj, "--production-branch=main"), capture_output=True, text=True)
+print("CREATE:", p1.stdout, p1.stderr)
+p2 = subprocess.run(("npx", "--yes", "wrangler", "pages", "deploy", "dist", f"--project-name={proj}", "--branch=main", "--commit-dirty=true"), capture_output=True, text=True)
+print("DEPLOY:", p2.stdout, p2.stderr)
+if p2.returncode != 0: raise RuntimeError(p2.stderr)
 print("👑 CLOUDFLARE LIVE:", site_url)
