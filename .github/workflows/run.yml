@@ -56,7 +56,12 @@ jobs:
               raise SystemExit("This workflow is locked to Kingdom 21: global-rental-yield-atlas.")
           print("Validated project:", name)
           PY
-          python build.py
+          python build_10000.py
+          HTML_COUNT=$(find dist -type f -name '*.html' | wc -l)
+          echo "Verified HTML pages: $HTML_COUNT"
+          test "$HTML_COUNT" -eq 10074
+          test -s dist/assets/calculators.js
+          test -s dist/sitemap.xml
           echo "=== BUILD SUMMARY ==="
           find dist -type f | sort | head -80
           echo "HTML pages: $(find dist -name '*.html' | wc -l)"
