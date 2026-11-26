@@ -1,0 +1,154 @@
+name: Kingdom 22 - Global Remittance Fees Atlas
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Deploy to Cloudflare Pages after a successful build and audit'
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kingdom-22-global-remittance-fees-atlas
+  cancel-in-progress: false
+
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout Kingdom 22 only
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout: |
+            kingdom22
+          sparse-checkout-cone-mode: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate source data
+        working-directory: kingdom22
+        run: |
+          python - <<'PYCODE'
+          import csv, re
+          from pathlib import Path
+
+          with Path("corridors.csv").open(encoding="utf-8-sig", newline="") as f:
+              rows = list(csv.DictReader(f))
+
+          if len(rows) != 20:
+              raise SystemExit(f"FAIL: expected 20 corridors, found {len(rows)}")
+
+          slugs = [r["slug"] for r in rows]
+          pairs = [(r["origin_country"], r["destination_country"]) for r in rows]
+          if len(set(slugs)) != 20:
+              raise SystemExit("FAIL: duplicate corridor slugs")
+          if len(set(pairs)) != 20:
+              raise SystemExit("FAIL: duplicate origin-destination pairs")
+
+          required = ("slug", "origin_country", "destination_country",
+                      "origin_currency", "destination_currency")
+          for r in rows:
+              for key in required:
+                  if not r.get(key, "").strip():
+                      raise SystemExit(f"FAIL: blank {key}")
+              if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", r["slug"]):
+                  raise SystemExit(f"FAIL: invalid slug {r['slug']}")
+
+          expected = len(rows) * 20 * 5 * 5
+          if expected != 10000:
+              raise SystemExit(f"FAIL: unexpected scenario count {expected}")
+          print("PASS: 20 unique corridors; 10000 expected scenarios")
+          PYCODE
+
+      - name: Build static staging site
+        working-directory: kingdom22
+        run: |
+          python -m py_compile build_10k.py
+          python build_10k.py
+
+      - name: Audit generated site
+        working-directory: kingdom22
+        run: |
+          python - <<'PYCODE'
+          from pathlib import Path
+          import re
+          import xml.etree.ElementTree as ET
+
+          root = Path("dist.staging-quality")
+          pages = root.glob("*/index.html")
+          page_count = 0
+          canonicals = set()
+          required = ["<title>", 'name="description"', 'rel="canonical"',
+                      "function calc()", 'id="rate"', 'id="fee"']
+          for page in pages:
+              page_count += 1
+              html = page.read_text(encoding="utf-8")
+              if any(token not in html for token in required):
+                  raise SystemExit(f"FAIL: required content missing: {page}")
+              match = re.search(r'<link rel="canonical" href="([^"]+)"', html)
+              expected = "https://global-remittance-fees-atlas.pages.dev/" + page.parent.name + "/"
+              if not match or match.group(1) != expected or match.group(1) in canonicals:
+                  raise SystemExit(f"FAIL: missing, incorrect or duplicate canonical: {page}")
+              canonicals.add(match.group(1))
+          if page_count != 10000:
+              raise SystemExit(f"FAIL: expected 10000 pages, found {page_count}")
+
+          home = root / "index.html"
+          if not home.is_file():
+              raise SystemExit("FAIL: homepage missing")
+          html = home.read_text(encoding="utf-8")
+          for token in ["SEO verification readiness", "Google Search Console",
+                        "Bing Webmaster Tools", "sitemap.xml", "robots.txt"]:
+              if token not in html:
+                  raise SystemExit(f"FAIL: homepage missing {token}")
+
+          sitemap = ET.parse(root / "sitemap.xml").getroot()
+          urls = [x.findtext("{http://www.sitemaps.org/schemas/sitemap/0.9}loc")
+                  for x in sitemap.findall("{http://www.sitemaps.org/schemas/sitemap/0.9}url")]
+          expected_urls = canonicals | {"https://global-remittance-fees-atlas.pages.dev/"}
+          if len(urls) != 10001 or len(set(urls)) != 10001:
+              raise SystemExit("FAIL: sitemap URL count or uniqueness error")
+          if set(urls) != expected_urls:
+              raise SystemExit("FAIL: sitemap does not exactly match page canonicals")
+          if not (root / "robots.txt").is_file():
+              raise SystemExit("FAIL: robots.txt missing")
+
+          print("PASS: 10000 calculator pages")
+          print("PASS: unique canonicals and metadata")
+          print("PASS: homepage SEO panel")
+          print("PASS: 10001 unique sitemap URLs")
+          print("PASS: robots.txt")
+          print("AUDIT PASS: deployment remains behind manual approval")
+          PYCODE
+
+      - name: Verify production source branch
+        if: ${{ inputs.deploy }}
+        run: |
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "Deployment is allowed only from the main branch."
+            exit 1
+          fi
+
+      - name: Deploy to Cloudflare Pages
+        if: ${{ inputs.deploy }}
+        working-directory: kingdom22
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN"
+          test -n "$CLOUDFLARE_ACCOUNT_ID"
+          npx --yes wrangler@4 pages deploy dist.staging-quality \
+            --project-name global-remittance-fees-atlas \
+            --branch main \
+            --commit-dirty=true
+          echo "Kingdom 22 Cloudflare Pages deployment command completed."

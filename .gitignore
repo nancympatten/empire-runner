@@ -11,3 +11,17 @@ repair_package/
 # Python cache
 __pycache__/
 *.py[cod]
+
+# Kingdom 22 generated output and backups
+/kingdom22/dist/
+/kingdom22/dist.pre-10k/
+/kingdom22/dist.staging-10k/
+/kingdom22/dist.staging-quality/
+/kingdom22/dist.staging-quality-meta-backup/
+/kingdom22/__pycache__/
+
+# Kingdom 22 local source backups
+/kingdom22/*.before-*/
+/kingdom22/*.before-*
+/kingdom22/*.pre-*/
+/kingdom22/*.pre-*
