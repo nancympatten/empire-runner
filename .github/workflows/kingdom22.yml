@@ -182,6 +182,9 @@ jobs:
               raise SystemExit("FAIL: Cloudflare API token is not active")
           print("PASS: Cloudflare API token is active")
 
+          account_info = get("accounts/" + account)
+          print("PASS: Cloudflare account recognized:", account_info.get("name") or "Name unavailable")
+
           project = get(
               "accounts/" + account +
               "/pages/projects/global-remittance-fees-atlas"
