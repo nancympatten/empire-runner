@@ -158,9 +158,22 @@ jobs:
               try:
                   with urllib.request.urlopen(req, timeout=20) as response:
                       data = json.load(response)
+              except urllib.error.HTTPError as exc:
+                  print("Cloudflare HTTP status:", exc.code)
+                  try:
+                      body = json.loads(exc.read().decode("utf-8"))
+                      for item in body.get("errors", []):
+                          if "code" in item:
+                              print("Cloudflare error code:", item["code"])
+                  except Exception:
+                      pass
+                  raise SystemExit("FAIL: Cloudflare API rejected the request")
               except Exception:
-                  raise SystemExit("FAIL: Cloudflare API request failed")
+                  raise SystemExit("FAIL: Cloudflare API network or response error")
               if not data.get("success"):
+                  for item in data.get("errors", []):
+                      if "code" in item:
+                          print("Cloudflare error code:", item["code"])
                   raise SystemExit("FAIL: Cloudflare API rejected the request")
               return data.get("result") or {}
 
