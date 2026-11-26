@@ -8,6 +8,11 @@ on:
         required: true
         type: boolean
         default: false
+      verify_cloudflare:
+        description: 'Verify Cloudflare token and Kingdom 22 Pages project access'
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -128,6 +133,49 @@ jobs:
           print("PASS: 10001 unique sitemap URLs")
           print("PASS: robots.txt")
           print("AUDIT PASS: deployment remains behind manual approval")
+          PYCODE
+
+      - name: Verify Cloudflare credentials and Pages project access
+        if: ${{ inputs.verify_cloudflare }}
+        working-directory: kingdom22
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: |
+          python - <<'PYCODE'
+          import json, os, urllib.request, urllib.error
+
+          token = os.environ.get("CLOUDFLARE_API_TOKEN", "")
+          account = os.environ.get("CLOUDFLARE_ACCOUNT_ID", "")
+          if not token or not account:
+              raise SystemExit("FAIL: required Cloudflare secrets are missing")
+
+          def get(path):
+              req = urllib.request.Request(
+                  "https://api.cloudflare.com/client/v4/" + path,
+                  headers={"Authorization": "Bearer " + token}
+              )
+              try:
+                  with urllib.request.urlopen(req, timeout=20) as response:
+                      data = json.load(response)
+              except Exception:
+                  raise SystemExit("FAIL: Cloudflare API request failed")
+              if not data.get("success"):
+                  raise SystemExit("FAIL: Cloudflare API rejected the request")
+              return data.get("result") or {}
+
+          verified = get("user/tokens/verify")
+          if verified.get("status") != "active":
+              raise SystemExit("FAIL: Cloudflare API token is not active")
+          print("PASS: Cloudflare API token is active")
+
+          project = get(
+              "accounts/" + account +
+              "/pages/projects/global-remittance-fees-atlas"
+          )
+          if project.get("name") != "global-remittance-fees-atlas":
+              raise SystemExit("FAIL: Kingdom 22 Pages project access not confirmed")
+          print("PASS: Kingdom 22 Pages project access confirmed")
           PYCODE
 
       - name: Verify production source branch
