@@ -192,6 +192,45 @@ jobs:
           for item in projects if isinstance(projects, list) else []:
               print("-", item.get("name", "Unnamed project"))
 
+          project_name = "global-remittance-fees-atlas"
+          project_names = {
+              item.get("name")
+              for item in projects if isinstance(projects, list)
+          }
+
+          if project_name not in project_names:
+              print("Creating Cloudflare Pages project:", project_name)
+              payload = json.dumps({
+                  "name": project_name,
+                  "production_branch": "main"
+              }).encode("utf-8")
+              req = urllib.request.Request(
+                  "https://api.cloudflare.com/client/v4/accounts/" + account + "/pages/projects",
+                  data=payload,
+                  headers={
+                      "Authorization": "Bearer " + token,
+                      "Content-Type": "application/json"
+                  },
+                  method="POST"
+              )
+              try:
+                  with urllib.request.urlopen(req, timeout=30) as response:
+                      created = json.load(response)
+              except urllib.error.HTTPError as exc:
+                  print("Project creation HTTP status:", exc.code)
+                  try:
+                      body = json.loads(exc.read().decode("utf-8"))
+                      for item in body.get("errors", []):
+                          print("Cloudflare error:", item.get("code"), item.get("message"))
+                  except Exception:
+                      pass
+                  raise SystemExit("FAIL: Cloudflare Pages project creation failed")
+
+              if not created.get("success"):
+                  for item in created.get("errors", []):
+                      print("Cloudflare error:", item.get("code"), item.get("message"))
+                  raise SystemExit("FAIL: Cloudflare rejected project creation")
+              print("PASS: Cloudflare Pages project created")
           project = get(
               "accounts/" + account +
               "/pages/projects/global-remittance-fees-atlas"
