@@ -187,7 +187,7 @@ jobs:
           account_info = get("accounts/" + account)
           print("PASS: Cloudflare account recognized:", account_info.get("name") or "Name unavailable")
 
-          projects = get("accounts/" + account + "/pages/projects?per_page=100")
+          projects = get("accounts/" + account + "/pages/projects")
           print("Cloudflare Pages projects:")
           for item in projects if isinstance(projects, list) else []:
               print("-", item.get("name", "Unnamed project"))
