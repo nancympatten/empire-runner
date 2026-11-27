@@ -51,6 +51,25 @@ jobs:
           print("Cloudflare token is active.")
           PYTOKEN
 
+      - name: Diagnose Cloudflare Pages account access
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: |
+          CODE=$(curl --silent --show-error --output /tmp/cf-pages.json --write-out '%{http_code}' \
+            --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects")
+          echo "Cloudflare Pages list HTTP: $CODE"
+          python - <<'PYDIAG'
+          import json
+          d = json.load(open("/tmp/cf-pages.json", encoding="utf-8"))
+          print("API success:", d.get("success"))
+          print("API errors:", d.get("errors"))
+          if d.get("success"):
+              for project in d.get("result", []):
+                  print("Existing Pages project:", project.get("name"))
+          PYDIAG
+
       - name: Create Kingdom23 Cloudflare Pages project
         working-directory: kingdom23
         env:
