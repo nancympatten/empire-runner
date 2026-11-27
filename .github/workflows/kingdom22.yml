@@ -165,6 +165,7 @@ jobs:
                       for item in body.get("errors", []):
                           if "code" in item:
                               print("Cloudflare error code:", item["code"])
+                          print("Cloudflare error message:", item.get("message", "Not provided"))
                   except Exception:
                       pass
                   raise SystemExit("FAIL: Cloudflare API rejected the request")
@@ -174,6 +175,7 @@ jobs:
                   for item in data.get("errors", []):
                       if "code" in item:
                           print("Cloudflare error code:", item["code"])
+                          print("Cloudflare error message:", item.get("message", "Not provided"))
                   raise SystemExit("FAIL: Cloudflare API rejected the request")
               return data.get("result") or {}
 
