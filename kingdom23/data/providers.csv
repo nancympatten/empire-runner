@@ -1,0 +1,6 @@
+provider_slug,provider_name,official_url,headquarters_country,support_url,source_slug,source_checked_date,evidence_status,notes
+airalo,Airalo,https://www.airalo.com/,,,airalo-official-catalog,2026-11-27,partially_verified,Official catalog identified; destination-specific plans and policies not yet audited.
+holafly,Holafly,https://esim.holafly.com/,,https://esim.holafly.com/faq/,holafly-official-catalog,2026-11-27,partially_verified,Official catalog identified; destination-specific plans and policies not yet audited.
+nomad,Nomad,https://www.nomadesim.com/,,https://www.nomadesim.com/help-center/,nomad-official-catalog,2026-11-27,partially_verified,Official catalog identified; destination-specific plans and policies not yet audited.
+ubigi,Ubigi,https://cellulardata.ubigi.com/,,https://cellulardata.ubigi.com/help-center/,ubigi-official-catalog,2026-11-27,partially_verified,Official catalog and Help Center identified; destination-specific plans and policies require separate audit.
+saily,Saily,https://saily.com/,,https://support.saily.com/hc/en-us,saily-official-catalog,2026-11-27,partially_verified,Official catalog and Help Center identified; destination-specific plans and policies require separate audit.
