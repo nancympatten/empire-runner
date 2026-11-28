@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
 OUT = ROOT / "research_output"
-MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.8-flash")
+MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite")
 API_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 
 CLUSTERS = [

@@ -45,7 +45,7 @@ jobs:
         working-directory: kingdom23
         env:
           GEMINI_KEYS_8: ${{ secrets.GEMINI_KEYS_8 }}
-          GEMINI_MODEL: gemini-3.8-flash
+          GEMINI_MODEL: gemini-3.5-flash-lite
         run: |
           python gemini_research.py
 
