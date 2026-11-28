@@ -25,3 +25,8 @@ __pycache__/
 /kingdom22/*.before-*
 /kingdom22/*.pre-*/
 /kingdom22/*.pre-*
+
+# Kingdom 23 generated output and cache
+/kingdom23/dist/
+/kingdom23/dist.staging-quality/
+/kingdom23/__pycache__/

@@ -128,6 +128,93 @@ function calc(){
     ]
 
 
+
+def destination_pages(data):
+    sources = {r["source_slug"]: r for r in data["source_registry.csv"]}
+    eligible = [
+        r for r in data["destinations.csv"]
+        if r["currency_code"].strip()
+        and r["currency_source_slug"].strip()
+        and r["currency_source_slug"] in sources
+    ]
+    pages = []
+    directory_links = []
+
+    for r in sorted(eligible, key=lambda x: x["country_name"].casefold()):
+        name = esc(r["country_name"])
+        currency = esc(r["currency_code"])
+        region = esc(r["region"])
+        capital = esc(r["capital_city"]) or "Not available in this dataset"
+        iso2, iso3 = esc(r["iso2"]), esc(r["iso3"])
+        income, lending = esc(r["income_level"]), esc(r["lending_type"])
+        checked = esc(r["source_checked_date"])
+        primary = sources[r["source_slug"]]
+        currency_source = sources[r["currency_source_slug"]]
+
+        body = f"""
+<section class="hero">
+<h1>{name} eSIM and Travel Connectivity Reference</h1>
+<p>A country reference for travellers researching mobile data and international connectivity in {name}. This page provides country metadata and a practical research checklist. It does not confirm that any eSIM provider currently supports this destination.</p>
+</section>
+<section class="grid">
+<article class="card"><h2>Country profile</h2>
+<p><strong>Country or area:</strong> {name}</p>
+<p><strong>Region:</strong> {region}</p>
+<p><strong>Capital listed in the dataset:</strong> {capital}</p>
+<p><strong>ISO alpha-2:</strong> {iso2}</p>
+<p><strong>ISO alpha-3:</strong> {iso3}</p></article>
+<article class="card"><h2>Currency reference</h2>
+<p><strong>Currency code:</strong> {currency}</p>
+<p>This is a currency-code reference, not a live exchange rate, price quote or guarantee about local payment acceptance. Check current exchange rates and payment requirements before travelling.</p></article>
+<article class="card"><h2>World Bank classification</h2>
+<p><strong>Income group:</strong> {income}</p>
+<p><strong>Lending classification:</strong> {lending}</p>
+<p>These are country metadata classifications, not measures of mobile network quality, tourism costs or eSIM availability.</p></article>
+</section>
+<section class="card">
+<h2>How to research mobile connectivity in {name}</h2>
+<p>Before choosing a travel eSIM, check whether the exact destination appears in the provider's current coverage list. A general international catalogue does not prove that a particular country is supported. Look for a destination-specific product page and confirm supported local network operators, data allowance, validity period and total price.</p>
+<p>Check whether your phone is carrier-unlocked and supports eSIM. Compatibility can depend on the exact model, regional variant and carrier restrictions. Confirm installation requirements, when validity begins, whether activation requires an internet connection and whether hotspot use is permitted.</p>
+<p>Review fair-use limits, speed restrictions, top-up options, refunds and customer support before purchase. Save installation instructions while you have reliable internet access. Keep an alternative connectivity plan in case installation or network registration is delayed.</p>
+</section>
+<section class="card">
+<h2>Evidence, limitations and sources</h2>
+<p>Country name, region and World Bank classifications are drawn from the registered World Bank country metadata source: <a href="{esc(primary['source_url'])}" rel="nofollow">{esc(primary['organization'])}</a>.</p>
+<p>The currency code is drawn from the registered Unicode CLDR territory-currency source: <a href="{esc(currency_source['source_url'])}" rel="nofollow">{esc(currency_source['organization'])}</a>.</p>
+<p><strong>Dataset observation date:</strong> {checked}. <strong>Evidence status:</strong> Partially verified. Source registration does not mean every field has been independently re-audited for this publication.</p>
+<p>No provider-specific coverage, price, data allowance, speed, local network, hotspot policy or activation condition is asserted. No live availability check is performed. Confirm current details directly with providers before purchase.</p>
+</section>
+"""
+        pages.append((
+            f"destinations/{r['slug']}.html",
+            f"{r['country_name']} eSIM and Travel Connectivity Reference",
+            f"Country, currency and travel connectivity research reference for {r['country_name']}. Verify provider coverage and plan terms independently.",
+            body
+        ))
+        directory_links.append(
+            f'<li><a href="/destinations/{esc(r["slug"])}.html">{name}</a> '
+            f'<span class="muted">({region}; {currency})</span></li>'
+        )
+
+    directory_body = """
+<section class="hero">
+<h1>Country Travel Connectivity Directory</h1>
+<p>Browse country reference pages for travel connectivity research. These pages provide country metadata and a checklist for evaluating eSIM plans; they do not represent confirmed provider coverage or current plan availability.</p>
+</section>
+<section class="card">
+<h2>Destination reference pages</h2>
+<p>Use country and currency information as a starting point. Confirm current coverage, network partners, prices, validity and usage conditions with the provider before purchase.</p>
+<ul>
+""" + "\n".join(directory_links) + """
+</ul></section>
+"""
+    return [
+        ("destinations/index.html",
+         "Country Travel Connectivity Directory | Global Travel eSIM Atlas",
+         "Browse country reference pages with country metadata, currency codes and eSIM research checklists.",
+         directory_body)
+    ] + pages
+
 def main():
     validate_build_config()
     data = validate_all()
@@ -169,13 +256,19 @@ def main():
 <article class="card"><h3><a href="/tools/esim-cost-per-gb-calculator.html">eSIM Cost per GB Calculator</a></h3><p>Compare user-entered plan prices and data allowances.</p></article>
 </div>
 <h2>Destination and provider research</h2>
-<p class="muted">Destination and plan guides will appear as source-backed observations are added and validated. No unverified coverage or pricing claims are published.</p>
+<p><a href="/destinations/index.html">Browse country travel connectivity references</a></p>
+<p class="muted">Country reference pages use registered metadata sources. Provider-specific availability and pricing are not asserted without destination-level evidence.</p>
 """
     write_page("index.html", "Global Travel eSIM Atlas | Travel Data Tools", "Plan travel data needs and compare eSIM costs with independent calculators.", home_body)
 
     for relative, title, description, body in calculator_pages():
         write_page(relative, title, description, body)
 
+
+    country_records = destination_pages(data)
+    for relative, title, description, body in country_records:
+        write_page(relative, title, description, body)
+    print(f"Eligible country reference pages: {len(country_records) - 1}")
 
     shards = [
         urls[i:i + SITEMAP_SHARD_LIMIT]
