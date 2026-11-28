@@ -119,8 +119,22 @@ def request_gemini(key, cluster, description, destinations, providers):
             if not isinstance(parsed, list):
                 raise ValueError("Model response was not a JSON array.")
             return cluster, parsed
+        except urllib.error.HTTPError as exc:
+            try:
+                detail = exc.read().decode("utf-8", errors="replace")
+            except Exception:
+                detail = ""
+            detail = detail.replace(key, "[REDACTED]")
+            try:
+                error_data = json.loads(detail)
+                message = error_data.get("error", {}).get("message", detail)
+            except (ValueError, AttributeError):
+                message = detail
+            last_error = f"HTTP {exc.code} {exc.reason}: {str(message)[:500]}"
+            if attempt < 2:
+                time.sleep(2 ** attempt)
         except (urllib.error.URLError, TimeoutError, KeyError, IndexError, ValueError, json.JSONDecodeError) as exc:
-            last_error = type(exc).__name__
+            last_error = f"{type(exc).__name__}: {str(exc)[:300]}"
             if attempt < 2:
                 time.sleep(2 ** attempt)
     raise RuntimeError(f"Cluster {cluster} failed after retries ({last_error}).")
