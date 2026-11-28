@@ -1,6 +1,8 @@
 import csv
 import json
 import os
+import random
+import threading
 import re
 import sys
 import time
@@ -91,7 +93,20 @@ Critical accuracy rules:
 - Suggest a page only when it could answer a distinct user need with substantial original value.
 """.strip()
 
-def request_gemini(key, cluster, description, destinations, providers):
+class KeyRotator:
+    def __init__(self, keys):
+        self.keys = keys
+        self.index = 0
+        self.lock = threading.Lock()
+
+    def next(self):
+        with self.lock:
+            key = self.keys[self.index % len(self.keys)]
+            self.index += 1
+            return key
+
+
+def request_gemini(key_rotator, cluster, description, destinations, providers):
     body = {
         "contents": [{"parts": [{"text": prompt_for(cluster, description, destinations, providers)}]}],
         "generationConfig": {
@@ -99,19 +114,22 @@ def request_gemini(key, cluster, description, destinations, providers):
             "responseMimeType": "application/json"
         }
     }
-    request = urllib.request.Request(
-        API_URL.format(model=MODEL),
-        data=json.dumps(body).encode("utf-8"),
-        headers={
-            "Content-Type": "application/json",
-            "x-goog-api-key": key,
-        },
-        method="POST"
-    )
     last_error = None
+    retryable = {429, 500, 502, 503, 504}
+
     for attempt in range(3):
+        key = key_rotator.next()
+        request = urllib.request.Request(
+            API_URL.format(model=MODEL),
+            data=json.dumps(body).encode("utf-8"),
+            headers={
+                "Content-Type": "application/json",
+                "x-goog-api-key": key,
+            },
+            method="POST"
+        )
         try:
-            with urllib.request.urlopen(request, timeout=100) as response:
+            with urllib.request.urlopen(request, timeout=120) as response:
                 payload = json.loads(response.read().decode("utf-8"))
             parts = payload["candidates"][0]["content"]["parts"]
             raw_text = "".join(part.get("text", "") for part in parts)
@@ -119,6 +137,7 @@ def request_gemini(key, cluster, description, destinations, providers):
             if not isinstance(parsed, list):
                 raise ValueError("Model response was not a JSON array.")
             return cluster, parsed
+
         except urllib.error.HTTPError as exc:
             try:
                 detail = exc.read().decode("utf-8", errors="replace")
@@ -131,13 +150,24 @@ def request_gemini(key, cluster, description, destinations, providers):
             except (ValueError, AttributeError):
                 message = detail
             last_error = f"HTTP {exc.code} {exc.reason}: {str(message)[:500]}"
-            if attempt < 2:
-                time.sleep(2 ** attempt)
-        except (urllib.error.URLError, TimeoutError, KeyError, IndexError, ValueError, json.JSONDecodeError) as exc:
+
+            if exc.code not in retryable or attempt == 2:
+                break
+            retry_after = exc.headers.get("Retry-After") if exc.headers else None
+            try:
+                delay = min(90, max(1, float(retry_after)))
+            except (TypeError, ValueError):
+                delay = min(60, 10 * (2 ** attempt))
+            time.sleep(delay + random.uniform(0, 2))
+
+        except (urllib.error.URLError, TimeoutError, KeyError, IndexError, ValueError) as exc:
             last_error = f"{type(exc).__name__}: {str(exc)[:300]}"
-            if attempt < 2:
-                time.sleep(2 ** attempt)
+            if attempt == 2:
+                break
+            time.sleep(min(60, 10 * (2 ** attempt)) + random.uniform(0, 2))
+
     raise RuntimeError(f"Cluster {cluster} failed after retries ({last_error}).")
+
 
 def main():
     keys = parse_keys(os.environ.get("GEMINI_KEYS_8"))
@@ -149,9 +179,10 @@ def main():
 
     results = []
     errors = []
-    with ThreadPoolExecutor(max_workers=8) as pool:
+    key_rotator = KeyRotator(keys)
+    with ThreadPoolExecutor(max_workers=2) as pool:
         futures = {
-            pool.submit(request_gemini, keys[i], cluster, description, destinations, providers): cluster
+            pool.submit(request_gemini, key_rotator, cluster, description, destinations, providers): cluster
             for i, (cluster, description) in enumerate(CLUSTERS)
         }
         for future in as_completed(futures):
@@ -204,7 +235,7 @@ def main():
     report = {
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "model": MODEL,
-        "workers": 8,
+        "workers": 2,
         "clusters_requested": len(CLUSTERS),
         "unique_candidates": len(rows),
         "csv_file": output_file.name,
