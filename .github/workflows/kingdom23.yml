@@ -70,13 +70,31 @@ jobs:
                   print("Existing Pages project:", project.get("name"))
           PYDIAG
 
-      - name: Create Kingdom23 Cloudflare Pages project
-        working-directory: kingdom23
+      - name: Ensure Kingdom23 Cloudflare Pages project exists
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
         run: |
-          npx --yes wrangler@4 pages project create global-travel-esim-atlas --production-branch main
+          CODE=$(curl --silent --show-error --output /tmp/cf-pages-projects.json --write-out '%{http_code}' \
+            --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects")
+          echo "Cloudflare Pages list HTTP: $CODE"
+          python - <<'PYPROJECT'
+          import json
+          from pathlib import Path
+          d = json.loads(Path("/tmp/cf-pages-projects.json").read_text(encoding="utf-8"))
+          if not d.get("success"):
+              raise SystemExit("Unable to verify Cloudflare Pages projects: " + str(d.get("errors")))
+          names = {p.get("name") for p in d.get("result", [])}
+          if "global-travel-esim-atlas" in names:
+              print("Kingdom23 Pages project already exists; creation skipped.")
+          else:
+              print("Kingdom23 Pages project does not exist; it will be created.")
+              Path("/tmp/kingdom23-create-project").write_text("create", encoding="utf-8")
+          PYPROJECT
+          if [ -f /tmp/kingdom23-create-project ]; then
+            npx --yes wrangler@4 pages project create global-travel-esim-atlas --production-branch main
+          fi
 
       - name: Deploy Kingdom23 to Cloudflare Pages
         working-directory: kingdom23
