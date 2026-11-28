@@ -30,3 +30,10 @@ __pycache__/
 /kingdom23/dist/
 /kingdom23/dist.staging-quality/
 /kingdom23/__pycache__/
+
+# Kingdom 23 local backups, staging archives and private research outputs
+/kingdom23/*.before-*
+/kingdom23/*.pre-*
+/kingdom23/data/*.before-*
+/kingdom23/dist.staging-quality.*
+/kingdom23/research_output/

@@ -1,0 +1,59 @@
+name: Kingdom23 - Gemini Parallel Keyword Research
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kingdom23-gemini-keyword-research
+  cancel-in-progress: false
+
+jobs:
+  keyword-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate research engine
+        working-directory: kingdom23
+        run: |
+          python -m py_compile gemini_research.py
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          with Path("data/destinations.csv").open(encoding="utf-8-sig", newline="") as f:
+              assert "slug" in (csv.DictReader(f).fieldnames or [])
+
+          with Path("data/providers.csv").open(encoding="utf-8-sig", newline="") as f:
+              assert "provider_slug" in (csv.DictReader(f).fieldnames or [])
+
+          print("RESEARCH_INPUT_VALIDATION_OK")
+          PY
+
+      - name: Run eight-worker Gemini research
+        working-directory: kingdom23
+        env:
+          GEMINI_KEYS_8: ${{ secrets.GEMINI_KEYS_8 }}
+          GEMINI_MODEL: gemini-2.5-flash
+        run: |
+          python gemini_research.py
+
+      - name: Upload keyword research results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kingdom23-keyword-research
+          path: kingdom23/research_output/
+          if-no-files-found: warn
+          retention-days: 30
